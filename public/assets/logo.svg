@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 180" role="img" aria-labelledby="title">
+  <title id="title">ELV.art</title>
+  <rect width="760" height="180" fill="#ffffff"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M38 52h108M38 90h92M38 128h108M38 154h286" stroke="#0a3f98" stroke-width="16"/>
+    <path d="M38 90h92" stroke="#28a928" stroke-width="16"/>
+    <path d="M184 42v74c0 23 15 36 39 36h70" stroke="#0a3f98" stroke-width="20"/>
+    <path d="M318 42l60 107 63-107" stroke="#0a3f98" stroke-width="22"/>
+    <path d="M420 70c0-32 27-45 58-38-10 30-30 52-58 59z" fill="#28b62c" stroke="#28b62c" stroke-width="3"/>
+    <path d="M446 49l-38 56" stroke="#ffffff" stroke-width="7"/>
+    <path d="M503 154h276" stroke="#28a928" stroke-width="14"/>
+  </g>
+  <g fill="#25a925">
+    <circle cx="500" cy="113" r="19"/>
+    <path d="M574 136c-34 0-57-23-57-55s23-55 57-55h45c13 0 22 9 22 22v88h-30V57h-32c-18 0-31 10-31 24s13 25 31 25h21v30z"/>
+    <path d="M667 136V51c0-15 9-24 24-24h56c10 0 18 8 18 18s-8 18-18 18h-42v73z"/>
+    <path d="M704 78h48c10 0 18 8 18 18s-8 18-18 18h-48z"/>
+  </g>
+</svg>

@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ELV.art Admin</title>
+    <link rel="icon" href="/assets/logo.jpeg">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/admin.css">
+  </head>
+  <body class="admin-body">
+    <main class="admin-shell">
+      <aside class="admin-sidebar">
+        <a class="brand" href="/"><img src="/assets/logo-nav.jpeg" alt="ELV.art"></a>
+        <nav class="admin-tabs" aria-label="Admin sections">
+          <button data-tab="superCategories" class="active">Products</button>
+          <button data-tab="solutions">Solutions</button>
+          <button data-tab="projects">Case Study</button>
+          <button data-tab="trainings">Training</button>
+          <button data-tab="downloads">Downloads</button>
+          <button data-tab="blogs">Blogs</button>
+          <button data-tab="users">Users</button>
+          <button data-tab="leads">Leads</button>
+          <button data-tab="settings">Settings</button>
+        </nav>
+        <a class="button secondary" href="/">View Website</a>
+      </aside>
+
+      <section class="admin-main">
+        <div id="loginPanel" class="admin-login">
+          <h1>Admin Login</h1>
+          <p>Use the server admin password to manage website content.</p>
+          <form id="loginForm">
+            <label>Password<input name="password" type="password" required placeholder="Admin password"></label>
+            <button class="button primary" type="submit">Login</button>
+            <p id="loginStatus" role="status"></p>
+          </form>
+        </div>
+
+        <div id="adminPanel" class="hidden">
+          <div class="admin-topbar">
+            <div>
+              <p class="eyebrow">Dashboard</p>
+              <h1 id="adminTitle">Products</h1>
+            </div>
+            <div class="admin-search">
+              <input id="catalogSearch" placeholder="Search products, categories, models, accessories">
+              <div id="catalogSearchResults" class="search-results hidden"></div>
+            </div>
+            <button id="logoutButton" class="button secondary">Logout</button>
+          </div>
+
+          <section data-panel="settings" class="admin-panel">
+            <form id="settingsForm" class="admin-form two-col"></form>
+          </section>
+
+          <section data-panel="superCategories" class="admin-panel active">
+            <div class="panel-toolbar">
+              <div>
+                <p class="eyebrow">Catalog</p>
+                <h2>Products</h2>
+              </div>
+              <button id="addSuperCategoryButton" class="button primary add-icon" type="button" title="Add Product">+</button>
+            </div>
+            <div id="superCategoryList" class="admin-card-grid"></div>
+          </section>
+
+          <section data-panel="categories" class="admin-panel">
+            <div class="panel-toolbar">
+              <div>
+                <p id="categoryCrumb" class="eyebrow">Product Categories</p>
+                <h2 id="categoryPanelTitle">Select a product</h2>
+              </div>
+              <div class="toolbar-actions">
+                <button id="backToSuperCategoriesButton" class="button secondary" type="button">Back</button>
+                <button id="addCategoryButton" class="button primary add-icon" type="button" title="Add Product Category">+</button>
+              </div>
+            </div>
+            <div id="categoryList" class="admin-card-grid"></div>
+          </section>
+
+          <section data-panel="products" class="admin-panel">
+            <div class="panel-toolbar">
+              <div>
+                <p id="productCrumb" class="eyebrow">Models Groups</p>
+                <h2 id="productPanelTitle">Select a product category</h2>
+              </div>
+              <div class="toolbar-actions">
+                <button id="backToCategoriesButton" class="button secondary" type="button">Back</button>
+                <button id="addProductButton" class="button primary add-icon" type="button" title="Add Models Group">+</button>
+              </div>
+            </div>
+            <div id="productList" class="admin-card-grid"></div>
+          </section>
+
+          <section data-panel="models" class="admin-panel">
+            <div class="panel-toolbar">
+              <div>
+                <p id="modelCrumb" class="eyebrow">Models</p>
+                <h2 id="modelPanelTitle">Select a product</h2>
+              </div>
+              <div class="toolbar-actions">
+                <button id="backToProductFamiliesButton" class="button secondary" type="button">Back</button>
+                <button id="addModelButton" class="button primary add-icon" type="button" title="Add Model">+</button>
+              </div>
+            </div>
+            <div id="modelList" class="admin-card-grid"></div>
+          </section>
+
+          <section data-panel="parts" class="admin-panel">
+            <div class="panel-toolbar">
+              <div>
+                <p id="partCrumb" class="eyebrow">Accessories</p>
+                <h2 id="partPanelTitle">Select a model</h2>
+              </div>
+              <div class="toolbar-actions">
+                <button id="backToModelsButton" class="button secondary" type="button">Back</button>
+                <button id="addPartButton" class="button primary add-icon" type="button" title="Add Accessory">+</button>
+              </div>
+            </div>
+            <div id="partList" class="admin-card-grid"></div>
+          </section>
+
+          <section data-panel="solutions" class="admin-panel">
+            <form id="solutionForm" class="admin-form two-col"></form>
+            <div id="solutionListAdmin" class="admin-list"></div>
+          </section>
+
+          <section data-panel="projects" class="admin-panel">
+            <div class="panel-toolbar">
+              <div>
+                <p class="eyebrow">Case Study</p>
+                <h2>Case Studies</h2>
+              </div>
+              <button id="addCaseStudyButton" class="button primary add-icon" type="button" title="Add Case Study">+</button>
+            </div>
+            <div id="projectList" class="admin-card-grid"></div>
+          </section>
+
+          <section data-panel="trainings" class="admin-panel">
+            <div class="panel-toolbar">
+              <div>
+                <p class="eyebrow">Training</p>
+                <h2>Training Library</h2>
+              </div>
+              <button id="addTrainingButton" class="button primary add-icon" type="button" title="Add Training">+</button>
+            </div>
+            <div id="trainingList" class="admin-card-grid"></div>
+          </section>
+
+          <section data-panel="downloads" class="admin-panel">
+            <div class="panel-toolbar">
+              <div>
+                <p class="eyebrow">Downloads</p>
+                <h2>Download Library</h2>
+              </div>
+              <button id="addDownloadButton" class="button primary add-icon" type="button" title="Add Download">+</button>
+            </div>
+            <div id="downloadList" class="admin-card-grid"></div>
+          </section>
+
+          <section data-panel="blogs" class="admin-panel">
+            <div class="panel-toolbar">
+              <div>
+                <p class="eyebrow">Blogs</p>
+                <h2>Blog Articles</h2>
+              </div>
+              <button id="addBlogButton" class="button primary add-icon" type="button" title="Add Blog">+</button>
+            </div>
+            <div id="blogList" class="admin-card-grid"></div>
+          </section>
+
+          <section data-panel="users" class="admin-panel">
+            <div class="admin-tools">
+              <input id="userSearch" placeholder="Search company, city, domain, access level">
+            </div>
+            <div id="userList" class="admin-list"></div>
+          </section>
+
+          <section data-panel="leads" class="admin-panel">
+            <div id="leadList" class="admin-list"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+    <div id="adminModal" class="admin-modal hidden" aria-hidden="true">
+      <div class="admin-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="adminModalTitle">
+        <div class="admin-modal-head">
+          <div>
+            <p class="eyebrow">Catalog Editor</p>
+            <h2 id="adminModalTitle">Add Item</h2>
+          </div>
+          <button id="closeAdminModal" class="modal-close" type="button" aria-label="Close">X</button>
+        </div>
+        <div id="adminModalBody"></div>
+      </div>
+    </div>
+    <script src="/admin.js"></script>
+  </body>
+</html>

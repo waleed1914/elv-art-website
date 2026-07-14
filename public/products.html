@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Products | ELV.art</title>
+    <link rel="icon" href="/assets/logo.jpeg">
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/"><img src="/assets/logo-nav.jpeg" alt="ELV.art"></a>
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">Menu</button>
+      <nav class="site-nav"><a href="/">Home</a>
+        <a href="/solutions.html">Solutions</a><a href="/products.html">Products</a><a href="/case-studies.html">Case Study</a><a href="/training.html">Training</a><a href="/downloads.html">Download</a><a href="/blogs.html">Blogs</a><a href="/about.html">About Us</a><a class="nav-admin" href="/dashboard.html">Signup / Login</a>
+      </nav>
+    </header>
+    <main>
+      <section class="page-hero">
+        <p class="eyebrow">Products</p>
+        <h1>Products.</h1>
+        <p>Start with a product family, open its product categories, then view model groups, models, and accessories.</p>
+      </section>
+      <section class="section product-band">
+        <div class="section-head"><div><p class="eyebrow">Products</p><h2 data-product-page-title>Products</h2></div></div>
+        <button class="filter-toggle" type="button" data-filter-toggle="catalogFilterPanel" aria-expanded="false">Show Search & Filters</button>
+        <div id="catalogFilterPanel" class="catalog-toolbar">
+          <label>Search<input id="productFamilySearch" type="search" placeholder="Search product categories"></label>
+          <label>Search In<select id="productFamilyScope"><option value="">All Levels</option><option value="super">Products</option><option value="category">Product Categories</option><option value="product">Model Groups</option><option value="model">Models</option><option value="part">Accessories</option></select></label>
+          <label>Product<select id="productFamilyType"><option value="">All Products</option></select></label>
+          <label>Filter<select id="productFamilyFile"><option value="">Any</option><option value="with-image">With Picture</option><option value="with-files">With Files</option><option value="with-price">With Price</option></select></label>
+          <p id="productFamilyStats" class="catalog-result-count"></p>
+        </div>
+        <div id="categoryGrid" class="product-grid"></div>
+      </section>
+    </main>
+    <footer class="site-footer"><img src="/assets/logo-nav.jpeg" alt="ELV.art"><p>Integrated ELV solutions.</p><a href="/contact.html">Contact</a></footer>
+    <div id="productModal" class="modal" aria-hidden="true"><div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-head"><div><p class="eyebrow">Product Details</p><h2 id="modalTitle">Product</h2></div><button class="modal-close" type="button" aria-label="Close product details">X</button></div><div id="modalBody" class="modal-body"></div></div></div>
+    <script src="/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+ELV.art Access Control Training Checklist
+
+- Confirm lock type and power requirements.
+- Verify reader wiring before energizing the controller.
+- Test emergency release and request-to-exit behavior.
+- Label controller inputs and door relays before handover.

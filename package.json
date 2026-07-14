@@ -1,0 +1,20 @@
+{
+  "name": "elv-art-website",
+  "version": "1.0.0",
+  "description": "ELV.art website with admin-managed products, categories, solutions, and enquiries.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "elv",
+    "security",
+    "website",
+    "admin"
+  ],
+  "author": "ELV.art",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "lucide-static": "^1.24.0"
+  }
+}

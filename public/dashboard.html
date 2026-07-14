@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Signup / Login | ELV.art</title><link rel="icon" href="/assets/logo.jpeg"><link rel="stylesheet" href="/styles.css"></head>
+  <body>
+    <header class="site-header"><a class="brand" href="/"><img src="/assets/logo-nav.jpeg" alt="ELV.art"></a><button class="nav-toggle" aria-label="Open menu" aria-expanded="false">Menu</button><nav class="site-nav"><a href="/">Home</a><a href="/solutions.html">Solutions</a><a href="/products.html">Products</a><a href="/case-studies.html">Case Study</a><a href="/training.html">Training</a><a href="/downloads.html">Download</a><a href="/blogs.html">Blogs</a><a href="/about.html">About Us</a><a class="nav-admin" href="/dashboard.html">Signup / Login</a></nav></header>
+    <main>
+      <section class="page-hero auth-page-hero"><p class="eyebrow">Signup / Login</p><h1>Your ELV.art project account.</h1><p>Login or create your company account to manage quotation items, download project resources, and keep product selections organized.</p></section>
+      <section class="section auth-layout">
+        <div class="auth-visual-card">
+          <img src="/assets/generated/product-cctv-system.png" alt="ELV control room and security products">
+          <div class="auth-visual-content">
+            <p class="eyebrow">Partner Portal</p>
+            <h2>A smoother workspace for installers, consultants, and project buyers.</h2>
+            <div class="auth-benefits">
+              <span>Project quotation cart</span>
+              <span>Saved account access</span>
+              <span>Product files and training</span>
+            </div>
+            <div id="accountBox" class="partner-session-card"></div>
+          </div>
+        </div>
+        <div class="auth-card">
+          <div class="auth-card-head">
+            <p class="eyebrow">Secure Access</p>
+            <h2>Welcome back.</h2>
+            <p>Login to continue, or create a company account to start saving your project activity.</p>
+          </div>
+          <div class="auth-actions auth-tabs"><button class="button primary" data-auth-tab="login" type="button">Login</button><button class="button secondary" data-auth-tab="register" type="button">Register</button></div>
+          <form id="loginUserForm" class="auth-form"><label>Email<input name="email" type="email" autocomplete="email" required></label><label>Password<input name="password" type="password" autocomplete="current-password" required></label><button class="button primary" type="submit">Login</button><p id="loginUserStatus" class="form-status" role="status"></p></form>
+          <form id="registerForm" class="auth-form hidden"><label>Full Name<input name="fullName" autocomplete="name" required></label><label>Company Name<input name="company" required></label><label>City<input name="city" required></label><label>Country<input name="country"></label><label>Business Domain / Industry<input name="domain" required></label><label>Years of Experience<input name="experience" required></label><label>Email Address<input name="email" type="email" autocomplete="email" required></label><label>Mobile Number<input name="mobile" autocomplete="tel" required></label><label>Password<input name="password" type="password" autocomplete="new-password" required></label><button class="button primary" type="submit">Submit Registration</button><p id="registerStatus" class="form-status" role="status"></p></form>
+        </div>
+      </section>
+      <section id="account-info" class="section account-info-section">
+        <div class="auth-card account-info-card">
+          <div class="auth-card-head">
+            <p class="eyebrow">Account Info</p>
+            <h2>Change your information.</h2>
+            <p>Update your company profile details used for quotations and project communication.</p>
+          </div>
+          <form id="accountInfoForm" class="auth-form account-info-form"></form>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer"><img src="/assets/logo-nav.jpeg" alt="ELV.art"><p>Integrated ELV solutions.</p><a href="/admin.html">Admin Panel</a></footer>
+    <script src="/app.js"></script>
+  </body>
+</html>

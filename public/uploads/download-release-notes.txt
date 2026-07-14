@@ -1,0 +1,3 @@
+ELV.art Download Release Notes
+
+Use this sample text document to show a non-PDF support file in the download detail page.
