@@ -707,11 +707,9 @@ function quoteText(rows) {
   const settings = state.content?.settings || {};
   const customer = quoteCustomerDetails();
   const total = rows.reduce((sum, row) => sum + row.lineTotal, 0);
-  const access = pricingLabelForRows(rows);
   return [
     `${settings.brand || "ELV.art"} Quotation`,
     `Date: ${new Date().toLocaleDateString()}`,
-    `Pricing: ${access}`,
     `Customer: ${customer.name}`,
     customer.company ? `Company: ${customer.company}` : "",
     customer.email ? `Email: ${customer.email}` : "",
@@ -730,7 +728,6 @@ function quoteHtml(rows) {
   const settings = state.content?.settings || {};
   const customer = quoteCustomerDetails();
   const total = rows.reduce((sum, row) => sum + row.lineTotal, 0);
-  const access = pricingLabelForRows(rows);
   return `<!doctype html>
 <html>
 <head>
@@ -748,7 +745,7 @@ function quoteHtml(rows) {
 </head>
 <body>
   <header>
-    <div><h1>${escapeHtml(settings.brand || "ELV.art")} Quotation</h1><p class="muted">${escapeHtml(access)}</p><p><strong>Customer:</strong> ${escapeHtml(customer.name)}${customer.company ? `, ${escapeHtml(customer.company)}` : ""}</p></div>
+    <div><h1>${escapeHtml(settings.brand || "ELV.art")} Quotation</h1><p><strong>Customer:</strong> ${escapeHtml(customer.name)}${customer.company ? `, ${escapeHtml(customer.company)}` : ""}</p></div>
     <div class="right"><strong>${new Date().toLocaleDateString()}</strong><br>${escapeHtml(settings.phone || "")}<br>${escapeHtml(settings.email || "")}</div>
   </header>
   <table>
@@ -847,17 +844,17 @@ function makeQuotePdf(rows) {
     const until = validUntil.toLocaleDateString();
     return [
       color(0.96, 0.98, 1),
-      rect(32, 758, 531, 54, "f"),
+      rect(32, 742, 531, 70, "f"),
       color(0.08, 0.28, 0.62),
-      rect(32, 758, 531, 54, "S"),
-      fillText("ELV", 50, 780, 28, "F2", 0.08, 0.28, 0.62),
-      fillText(".art", 105, 780, 28, "F2", 0.17, 0.64, 0.22),
-      fillText("Integrated ELV Solutions", 50, 766, 8, "F1", 0.36, 0.43, 0.52),
-      fillText("QUOTATION", 416, 782, 21, "F2", 0.08, 0.28, 0.62),
-      fillText(`Quote #: ${quoteNumber}`, 416, 766, 8, "F1", 0.08, 0.13, 0.22),
-      fillText(`Date: ${today}`, 416, 754, 8, "F1", 0.08, 0.13, 0.22),
-      fillText(`Valid until: ${until}`, 416, 742, 8, "F1", 0.08, 0.13, 0.22),
-      fillText(`Page ${pageNumber} of ${totalPages}`, 502, 724, 8, "F1", 0.36, 0.43, 0.52)
+      rect(32, 742, 531, 70, "S"),
+      fillText("ELV", 50, 782, 28, "F2", 0.08, 0.28, 0.62),
+      fillText(".art", 105, 782, 28, "F2", 0.17, 0.64, 0.22),
+      fillText("Integrated ELV Solutions", 50, 764, 8, "F1", 0.36, 0.43, 0.52),
+      fillText("QUOTATION", 406, 786, 21, "F2", 0.08, 0.28, 0.62),
+      fillText(`Quote #: ${quoteNumber}`, 406, 768, 8, "F1", 0.08, 0.13, 0.22),
+      fillText(`Date: ${today}`, 406, 752, 8, "F1", 0.08, 0.13, 0.22),
+      fillText(`Valid until: ${until}`, 406, 736, 8, "F1", 0.08, 0.13, 0.22),
+      fillText(`Page ${pageNumber} of ${totalPages}`, 500, 716, 8, "F1", 0.36, 0.43, 0.52)
     ].join("\n");
   }
 
@@ -865,35 +862,34 @@ function makeQuotePdf(rows) {
     const address = [customer.city, customer.country].filter(Boolean).join(", ");
     return [
       color(0.08, 0.28, 0.62),
-      rect(32, 626, 250, 84, "S"),
-      rect(32, 694, 250, 16, "f"),
-      fillText("CUSTOMER", 42, 698, 9, "F2", 1, 1, 1),
-      fillText(customer.name, 42, 674, 11, "F2", 0.08, 0.13, 0.22),
-      customer.company ? fillText(customer.company, 42, 660, 9, "F1", 0.2, 0.28, 0.38) : "",
-      address ? fillText(address, 42, 647, 9, "F1", 0.2, 0.28, 0.38) : "",
-      customer.email ? fillText(customer.email, 42, 634, 9, "F1", 0.2, 0.28, 0.38) : "",
-      customer.mobile ? fillText(customer.mobile, 160, 634, 9, "F1", 0.2, 0.28, 0.38) : "",
+      rect(32, 620, 250, 82, "S"),
+      rect(32, 686, 250, 16, "f"),
+      fillText("CUSTOMER", 42, 690, 9, "F2", 1, 1, 1),
+      fillText(customer.name, 42, 668, 11, "F2", 0.08, 0.13, 0.22),
+      customer.company ? fillText(customer.company, 42, 654, 9, "F1", 0.2, 0.28, 0.38) : "",
+      address ? fillText(address, 42, 641, 9, "F1", 0.2, 0.28, 0.38) : "",
+      customer.email ? fillText(customer.email, 42, 628, 9, "F1", 0.2, 0.28, 0.38) : "",
+      customer.mobile ? fillText(customer.mobile, 160, 628, 9, "F1", 0.2, 0.28, 0.38) : "",
       color(0.88, 0.93, 0.99),
-      rect(306, 626, 257, 84, "f"),
+      rect(306, 620, 257, 82, "f"),
       color(0.7, 0.79, 0.9),
-      rect(306, 626, 257, 84, "S"),
-      fillText("Prepared by ELV.art", 322, 684, 12, "F2", 0.08, 0.13, 0.22),
-      fillText(settings.phone ? `Phone: ${settings.phone}` : "Phone: +92 332 4816433", 322, 666, 9, "F1", 0.2, 0.28, 0.38),
-      fillText(settings.email ? `Email: ${settings.email}` : "Email: info@elv.art", 322, 652, 9, "F1", 0.2, 0.28, 0.38),
-      fillText(`Pricing: ${pricingLabelForRows(rows)}`, 322, 638, 9, "F1", 0.2, 0.28, 0.38)
+      rect(306, 620, 257, 82, "S"),
+      fillText("Prepared by ELV.art", 322, 676, 12, "F2", 0.08, 0.13, 0.22),
+      fillText(settings.phone ? `Phone: ${settings.phone}` : "Phone: +92 332 4816433", 322, 658, 9, "F1", 0.2, 0.28, 0.38),
+      fillText(settings.email ? `Email: ${settings.email}` : "Email: info@elv.art", 322, 644, 9, "F1", 0.2, 0.28, 0.38),
+      fillText("Prepared from website quotation cart", 322, 630, 9, "F1", 0.2, 0.28, 0.38)
     ].filter(Boolean).join("\n");
   }
 
   function drawTableHeader(y) {
     return [
       color(0.08, 0.28, 0.62),
-      rect(32, y, 531, 20, "f"),
-      fillText("#", 40, y + 7, 8, "F2", 1, 1, 1),
-      fillText("DESCRIPTION", 62, y + 7, 8, "F2", 1, 1, 1),
-      fillText("TYPE", 304, y + 7, 8, "F2", 1, 1, 1),
-      fillText("UNIT PRICE", 386, y + 7, 8, "F2", 1, 1, 1),
-      fillText("QTY", 462, y + 7, 8, "F2", 1, 1, 1),
-      fillText("AMOUNT", 508, y + 7, 8, "F2", 1, 1, 1)
+      rect(32, y, 531, 24, "f"),
+      fillText("#", 42, y + 9, 8, "F2", 1, 1, 1),
+      fillText("PRODUCT / DESCRIPTION", 72, y + 9, 8, "F2", 1, 1, 1),
+      fillText("UNIT PRICE", 364, y + 9, 8, "F2", 1, 1, 1),
+      fillText("QTY", 456, y + 9, 8, "F2", 1, 1, 1),
+      fillText("AMOUNT", 508, y + 9, 8, "F2", 1, 1, 1)
     ].join("\n");
   }
 
@@ -902,16 +898,17 @@ function makeQuotePdf(rows) {
     let y = startY;
     chunk.forEach((item, index) => {
       const fill = index % 2 === 0 ? "0.97 0.98 1 rg" : "1 1 1 rg";
-      ops.push(fill, rect(32, y - 19, 531, 20, "f"));
-      ops.push(color(0.75, 0.82, 0.9), line(32, y - 19, 563, y - 19));
-      ops.push(fillText(String(item.index), 40, y - 6, 8, "F1", 0.08, 0.13, 0.22));
-      ops.push(fillText(String(item.name).slice(0, 44), 62, y - 6, 8, "F2", 0.08, 0.13, 0.22));
-      ops.push(fillText(String(item.type).slice(0, 18), 304, y - 6, 8, "F1", 0.2, 0.28, 0.38));
-      ops.push(fillText(item.unit === "Ask" ? "Ask" : `Rs ${item.unit}`, 386, y - 6, 8, "F1", 0.08, 0.13, 0.22));
-      ops.push(fillText(String(item.qty), 468, y - 6, 8, "F1", 0.08, 0.13, 0.22));
-      ops.push(fillText(item.amount === "Ask" ? "Ask" : `Rs ${item.amount}`, 508, y - 6, 8, "F1", 0.08, 0.13, 0.22));
-      y -= 20;
+      ops.push(fill, rect(32, y - 27, 531, 28, "f"));
+      ops.push(color(0.75, 0.82, 0.9), line(32, y - 27, 563, y - 27));
+      ops.push(fillText(String(item.index), 42, y - 9, 8, "F1", 0.08, 0.13, 0.22));
+      ops.push(fillText(String(item.name).slice(0, 48), 72, y - 8, 8, "F2", 0.08, 0.13, 0.22));
+      ops.push(fillText(String(item.type).slice(0, 42), 72, y - 21, 7, "F1", 0.38, 0.45, 0.55));
+      ops.push(fillText(item.unit === "Ask" ? "On Request" : `Rs ${item.unit}`, 364, y - 9, 8, "F1", 0.08, 0.13, 0.22));
+      ops.push(fillText(String(item.qty), 462, y - 9, 8, "F1", 0.08, 0.13, 0.22));
+      ops.push(fillText(item.amount === "Ask" ? "On Request" : `Rs ${item.amount}`, 508, y - 9, 8, "F1", 0.08, 0.13, 0.22));
+      y -= 28;
     });
+    ops.push(color(0.75, 0.82, 0.9), line(62, startY, 62, y), line(350, startY, 350, y), line(444, startY, 444, y), line(492, startY, 492, y));
     ops.push(color(0.08, 0.28, 0.62), rect(32, y, 531, startY - y, "S"));
     return ops.join("\n");
   }
@@ -947,9 +944,9 @@ function makeQuotePdf(rows) {
 
   const pageContents = chunks.map((chunk, index) => {
     const firstPage = index === 0;
-    const tableHeaderY = firstPage ? 584 : 672;
-    const rowStartY = tableHeaderY - 20;
-    const rowsBottom = rowStartY - chunk.length * 20;
+    const tableHeaderY = firstPage ? 570 : 672;
+    const rowStartY = tableHeaderY - 28;
+    const rowsBottom = rowStartY - chunk.length * 28;
     return [
       drawHeader(index + 1, chunks.length),
       firstPage ? drawCustomerBlock() : "",
