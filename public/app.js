@@ -80,7 +80,7 @@ function seoDescription(value) {
 
 function setSeo({ title, description, image = "/assets/logo.jpeg", url = location.pathname + location.search, type = "website", schema = null }) {
   const fullTitle = title?.includes("ELV.art") ? title : `${title || "ELV.art"} | ELV.art Pakistan`;
-  const desc = seoDescription(description || "ELV.art supplies and installs CCTV, access control, vehicle barriers, intercom, networking, fire alarm, AV, and ELV automation systems across Pakistan.");
+  const desc = seoDescription(description || "ELV.art designs, supplies, installs, and supports CCTV cameras, access control, ANPR, vehicle barriers, intercom, structured cabling, fire alarm, AV, and ELV automation systems in major Pakistan cities.");
   const canonical = absoluteUrl(url);
   const imageUrl = absoluteUrl(image);
   document.title = fullTitle;
@@ -123,7 +123,6 @@ function organizationSchema() {
       "Faisalabad",
       "Multan",
       "Peshawar",
-      "Quetta",
       "Sialkot",
       "Gujranwala",
       "Hyderabad"
@@ -137,6 +136,34 @@ function organizationSchema() {
       "Intercom systems",
       "Fire alarm systems",
       "ELV automation"
+    ],
+    "sameAs": [
+      "https://elv.art"
+    ]
+  };
+}
+
+function websiteSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "ELV.art",
+    "url": location.origin,
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": `${location.origin}/products.html?q={search_term_string}`,
+      "query-input": "required name=search_term_string"
+    }
+  };
+}
+
+function pageSchemaGraph(extra = []) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      organizationSchema(),
+      websiteSchema(),
+      ...extra
     ]
   };
 }
@@ -146,18 +173,18 @@ function applyDefaultSeo() {
   if (["/admin.html", "/dashboard.html", "/cart.html", "/verify.html", "/reset-password.html"].includes(path)) return;
   const defaults = {
     "/": {
-      title: "ELV Systems, CCTV, Access Control & Automation in Pakistan",
-      description: "ELV.art supplies, installs, and supports CCTV cameras, access control, vehicle barriers, ANPR, intercom, structured cabling, fire alarm, AV, and automation systems across Pakistan.",
+      title: "CCTV Installation, Access Control & ELV Systems in Pakistan",
+      description: "ELV.art designs, supplies, installs, and supports CCTV cameras, access control, ANPR, vehicle barriers, intercom, structured cabling, fire alarm, AV, and automation systems in Karachi, Lahore, Islamabad, Rawalpindi, Faisalabad, Multan, Peshawar, Sialkot, Gujranwala, Hyderabad, Sukkur, and Bahawalpur.",
       image: "/assets/generated/hero-elv-control-room.webp"
     },
     "/products.html": {
-      title: "ELV Products in Pakistan - CCTV, Access Control, Barriers, Networks",
-      description: "Browse ELV.art product families for CCTV, IP cameras, NVRs, access control, vehicle barriers, ANPR, PoE switches, intercom, fire alarm, and automation projects in Pakistan.",
+      title: "ELV Products Pakistan - CCTV, Access Control, ANPR, Barriers",
+      description: "Browse ELV.art product families for CCTV cameras, IP cameras, NVRs, access control, ANPR, vehicle barriers, PoE switches, intercom, fire alarm, AV, and automation projects in Pakistan.",
       image: "/assets/generated/product-cctv-system.webp"
     },
     "/solutions.html": {
-      title: "ELV Solutions in Pakistan - Security, Vehicle Access, Monitoring",
-      description: "Explore interactive ELV solution scenes for CCTV monitoring, vehicle e-tag lanes, pedestrian access, VMS command views, access control, and automation across Pakistan.",
+      title: "ELV Solutions Pakistan - CCTV, Access Control, Vehicle Access",
+      description: "Explore interactive ELV solution scenes for CCTV monitoring, e-tag lanes, ANPR, pedestrian access, VMS command rooms, access control, and automation projects in Pakistan.",
       image: "/assets/bick etag.webp"
     },
     "/about.html": {
@@ -166,8 +193,8 @@ function applyDefaultSeo() {
       image: "/assets/generated/hero-elv-control-room.webp"
     },
     "/contact.html": {
-      title: "Contact ELV.art Pakistan - CCTV & ELV Project Quotations",
-      description: "Contact ELV.art for CCTV installation, access control, vehicle barriers, ANPR, networking, intercom, fire alarm, and ELV automation project quotations in Pakistan.",
+      title: "Contact ELV.art Pakistan - CCTV, Access Control & ELV Quote",
+      description: "Contact ELV.art for CCTV installation, access control, ANPR, vehicle barriers, structured cabling, networking, intercom, fire alarm, AV, and ELV automation quotations in Pakistan.",
       image: "/assets/logo.jpeg"
     },
     "/case-studies.html": {
@@ -192,7 +219,7 @@ function applyDefaultSeo() {
     }
   };
   const meta = defaults[path] || defaults["/"];
-  setSeo({ ...meta, url: path, schema: organizationSchema() });
+  setSeo({ ...meta, url: path, schema: pageSchemaGraph() });
 }
 
 function formData(form) {
@@ -3076,7 +3103,7 @@ function setupHeroSlider() {
       image: "/assets/generated/hero-elv-control-room.webp",
       kicker: "Security - Networks - Automation",
       title: "Integrated ELV systems for secure, intelligent buildings in Pakistan.",
-      copy: "ELV.art delivers CCTV, access control, vehicle barriers, ANPR, structured cabling, fire alarm, intercom, AV, and automation solutions across Karachi, Lahore, Islamabad, Rawalpindi, Faisalabad, Multan, Peshawar, Quetta, Sialkot, and other major Pakistan cities."
+      copy: "ELV.art delivers CCTV, access control, vehicle barriers, ANPR, structured cabling, fire alarm, intercom, AV, and automation solutions across Karachi, Lahore, Islamabad, Rawalpindi, Faisalabad, Multan, Peshawar, Sialkot, and other major Pakistan cities."
     },
     {
       image: "/assets/generated/hero-elv-lobby-command.webp",

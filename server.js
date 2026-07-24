@@ -82,7 +82,7 @@ function ensureStore() {
         tagline: "Integrated low-voltage systems for secure, intelligent spaces.",
         phone: "+92 332 4816433",
         email: "hello@elv.art",
-        location: "Pakistan - Karachi, Lahore, Islamabad, Rawalpindi, Faisalabad, Multan, Peshawar, Quetta, Sialkot",
+        location: "Pakistan - Karachi, Lahore, Islamabad, Rawalpindi, Faisalabad, Multan, Peshawar, Sialkot",
         whatsapp: "+923324816433"
       },
       categories: [
@@ -290,6 +290,15 @@ function ensureStore() {
 function readDb() {
   ensureStore();
   const db = JSON.parse(fs.readFileSync(dbPath, "utf8").replace(/^\uFEFF/, ""));
+  const removedServiceAreas = ["Quetta", "Balochistan", "Baluchistan", "Gwadar", "Turbat", "Khuzdar", "Sibi", "Zhob", "Chaman"];
+  if (db.settings?.location) {
+    let location = String(db.settings.location);
+    removedServiceAreas.forEach(area => {
+      location = location.replace(new RegExp(`,?\\s*${area}`, "gi"), "");
+    });
+    location = location.replace(/\s+,/g, ",").replace(/,\s*,/g, ",").replace(/-\s*,/, "-").trim();
+    db.settings.location = location;
+  }
   if (!Array.isArray(db.superCategories)) {
     db.superCategories = [
       { id: "super-camera-products", name: "Camera Products", summary: "Network cameras, PTZ cameras, AI cameras, and low-light surveillance products.", image: "/assets/generated/product-cctv-system.png" },
@@ -930,6 +939,7 @@ function xmlEscape(value) {
 }
 
 function publicOrigin(req) {
+  if (PUBLIC_SITE_URL) return PUBLIC_SITE_URL.replace(/\/$/, "");
   const proto = req.headers["x-forwarded-proto"] || "http";
   return `${proto}://${req.headers.host}`;
 }
