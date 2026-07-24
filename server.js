@@ -2,14 +2,35 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
+const nodemailer = require("nodemailer");
+const { optimizeImageBuffer } = require("./lib/imageOptimizer");
+
+loadEnvFile();
 
 const PORT = process.env.PORT || 3000;
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || "elv-admin-2026";
+const PUBLIC_SITE_URL = process.env.PUBLIC_SITE_URL || "";
 const root = __dirname;
 const publicDir = path.join(root, "public");
 const dataDir = path.join(root, "data");
 const uploadsDir = path.join(publicDir, "uploads");
 const dbPath = path.join(dataDir, "db.json");
+
+function loadEnvFile() {
+  const envPath = path.join(__dirname, ".env");
+  if (!fs.existsSync(envPath)) return;
+  fs.readFileSync(envPath, "utf8").split(/\r?\n/).forEach(line => {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#") || !trimmed.includes("=")) return;
+    const index = trimmed.indexOf("=");
+    const key = trimmed.slice(0, index).trim();
+    let value = trimmed.slice(index + 1).trim();
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+      value = value.slice(1, -1);
+    }
+    if (key && process.env[key] === undefined) process.env[key] = value;
+  });
+}
 
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",
@@ -42,10 +63,10 @@ function ensureStore() {
       settings: {
         brand: "ELV.art",
         tagline: "Integrated low-voltage systems for secure, intelligent spaces.",
-        phone: "+971 50 000 0000",
+        phone: "+92 332 4816433",
         email: "hello@elv.art",
-        location: "Dubai, UAE",
-        whatsapp: "+971500000000"
+        location: "Pakistan - Karachi, Lahore, Islamabad, Rawalpindi, Faisalabad, Multan, Peshawar, Quetta, Sialkot",
+        whatsapp: "+923324816433"
       },
       categories: [
         {
@@ -288,6 +309,7 @@ function readDb() {
     manual: product.manual || "",
     model3d: product.model3d || "",
     cad: product.cad || "",
+    homeFeatured: Boolean(product.homeFeatured || String(product.status || "").toLowerCase().includes("featured")),
     ...product
   }));
   db.models = db.models.map(model => ({
@@ -314,6 +336,10 @@ function readDb() {
     }
     return part;
   });
+  db.users = (db.users || []).map(user => ({
+    emailVerified: user.status === "Approved",
+    ...user
+  }));
   db.projects = (db.projects || []).map(project => ({
     bodyHtml: project.bodyHtml || project.summaryHtml || project.summary || "",
     summaryHtml: project.summaryHtml || `<p>${project.summary || ""}</p>`,
@@ -418,6 +444,253 @@ function cleanId(prefix) {
   return `${prefix}-${crypto.randomBytes(6).toString("hex")}`;
 }
 
+function isLocalHost(hostname) {
+  const host = String(hostname || "").split(":")[0].toLowerCase();
+  return host === "localhost" || host === "127.0.0.1" || host.startsWith("192.168.") || host.startsWith("10.") || host.endsWith(".local");
+}
+
+function requestOrigin(req) {
+  const proto = req.headers["x-forwarded-proto"] || "http";
+  return `${proto}://${req.headers.host}`;
+}
+
+function publicSiteUrl(req) {
+  const requestHost = String(req.headers.host || "");
+  if (isLocalHost(requestHost)) return requestOrigin(req);
+  if (PUBLIC_SITE_URL) return PUBLIC_SITE_URL.replace(/\/$/, "");
+  return requestOrigin(req);
+}
+
+function showLocalVerificationLink(req) {
+  return isLocalHost(req.headers.host);
+}
+
+function verificationToken() {
+  return crypto.randomBytes(32).toString("hex");
+}
+
+function hashToken(token) {
+  return crypto.createHash("sha256").update(String(token)).digest("hex");
+}
+
+function verifyEmailToken(token) {
+  const cleanToken = String(token || "").trim();
+  if (!cleanToken) return { statusCode: 400, error: "Verification token is required" };
+  const db = readDb();
+  const tokenHash = hashToken(cleanToken);
+  const index = db.users.findIndex(user => user.emailVerificationTokenHash === tokenHash);
+  if (index < 0) return { statusCode: 400, error: "This verification link is invalid or has already been used" };
+  const user = db.users[index];
+  if (user.emailVerificationExpiresAt && Date.parse(user.emailVerificationExpiresAt) < Date.now()) {
+    return { statusCode: 400, error: "This verification link has expired. Please register again or ask ELV.art support to resend it" };
+  }
+  db.users[index] = {
+    ...user,
+    status: "Approved",
+    emailVerified: true,
+    emailVerifiedAt: new Date().toISOString()
+  };
+  delete db.users[index].emailVerificationTokenHash;
+  delete db.users[index].emailVerificationExpiresAt;
+  writeDb(db);
+  return { ok: true, message: "Email verified. You can now login to your ELV.art account." };
+}
+
+function passwordResetToken() {
+  return verificationToken();
+}
+
+function resetEmailToken(token, password) {
+  const cleanToken = String(token || "").trim();
+  const cleanPassword = String(password || "");
+  if (!cleanToken) return { statusCode: 400, error: "Reset token is required" };
+  if (cleanPassword.length < 8) return { statusCode: 400, error: "Password must be at least 8 characters" };
+  const db = readDb();
+  const tokenHash = hashToken(cleanToken);
+  const index = db.users.findIndex(user => user.passwordResetTokenHash === tokenHash);
+  if (index < 0) return { statusCode: 400, error: "This password reset link is invalid or has already been used" };
+  const user = db.users[index];
+  if (user.passwordResetExpiresAt && Date.parse(user.passwordResetExpiresAt) < Date.now()) {
+    return { statusCode: 400, error: "This password reset link has expired. Please request a new password reset email." };
+  }
+  db.users[index] = {
+    ...user,
+    passwordHash: crypto.createHash("sha256").update(cleanPassword).digest("hex"),
+    passwordUpdatedAt: new Date().toISOString()
+  };
+  delete db.users[index].passwordResetTokenHash;
+  delete db.users[index].passwordResetExpiresAt;
+  writeDb(db);
+  return { ok: true, message: "Your password has been changed. You can now login with your new password." };
+}
+
+function smtpConfigured() {
+  return Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS);
+}
+
+function mailTransport() {
+  const port = Number(process.env.SMTP_PORT || 465);
+  return nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port,
+    secure: String(process.env.SMTP_SECURE || "true") === "true" || port === 465,
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS
+    }
+  });
+}
+
+async function sendVerificationEmail(req, user, token) {
+  const baseUrl = publicSiteUrl(req);
+  const verifyUrl = `${baseUrl}/verify.html?token=${encodeURIComponent(token)}`;
+  const from = process.env.MAIL_FROM || `ELV.art <${process.env.SMTP_USER || "info@elv.art"}>`;
+  const subject = "Verify your ELV.art account";
+  const safeName = escapeEmailHtml(user.fullName || user.email);
+  const safeUrl = escapeEmailHtml(verifyUrl);
+  const text = [
+    `Hello ${user.fullName || user.email},`,
+    "",
+    "Welcome to ELV.art. Please verify your email address to activate your account.",
+    "",
+    verifyUrl,
+    "",
+    "This link expires in 24 hours. If you did not create this account, please ignore this email.",
+    "",
+    "ELV.art - Integrated ELV, security, automation, and low-voltage solutions"
+  ].join("\n");
+  const html = `
+    <div style="margin:0;padding:0;background:#f2f6fb;font-family:Arial,Helvetica,sans-serif;color:#17253a">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;background:#f2f6fb;padding:28px 0">
+        <tr>
+          <td align="center" style="padding:28px 14px">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:640px;border-collapse:collapse;background:#ffffff;border:1px solid #c7d7ea;border-radius:14px;overflow:hidden">
+              <tr>
+                <td style="padding:26px 30px;background:#ffffff;border-bottom:1px solid #e4edf7">
+                  <div style="font-size:28px;font-weight:800;letter-spacing:.4px;color:#15469b">ELV<span style="color:#20a73f">.art</span></div>
+                  <div style="margin-top:6px;font-size:13px;color:#65758b">Security, automation, and low-voltage systems</div>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:34px 30px 10px">
+                  <div style="display:inline-block;background:#e8f8ec;color:#168334;border:1px solid #bde9c8;border-radius:999px;padding:7px 11px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.7px">Account Verification</div>
+                  <h1 style="margin:18px 0 10px;font-size:28px;line-height:1.2;color:#10213a">Verify your ELV.art account</h1>
+                  <p style="margin:0;font-size:16px;line-height:1.7;color:#53647a">Hello ${safeName}, welcome to ELV.art. Please confirm your email address so you can login and continue using your project account.</p>
+                </td>
+              </tr>
+              <tr>
+                <td align="center" style="padding:24px 30px">
+                  <a href="${safeUrl}" style="display:inline-block;background:#1f4ca3;color:#ffffff;text-decoration:none;padding:15px 24px;border-radius:10px;font-weight:800;font-size:15px;box-shadow:0 12px 24px rgba(31,76,163,.22)">Verify Email Address</a>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:0 30px 26px">
+                  <div style="background:#f6f9fd;border:1px solid #d9e5f3;border-radius:10px;padding:16px">
+                    <p style="margin:0 0 8px;font-size:13px;line-height:1.6;color:#65758b">If the button does not work, copy and paste this link into your browser:</p>
+                    <p style="margin:0;font-size:12px;line-height:1.6;word-break:break-all;color:#16499a">${safeUrl}</p>
+                  </div>
+                  <p style="margin:18px 0 0;font-size:13px;line-height:1.6;color:#65758b">This verification link expires in 24 hours. If you did not create this account, you can safely ignore this email.</p>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:18px 30px;background:#10213a;color:#dce8f7;font-size:12px;line-height:1.6">
+                  ELV.art<br>
+                  Integrated ELV, CCTV, access control, automation, and low-voltage solutions across Pakistan.
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </div>
+  `;
+  if (!smtpConfigured()) {
+    console.log(`Email verification link for ${user.email}: ${verifyUrl}`);
+    return { sent: false, verifyUrl };
+  }
+  await mailTransport().sendMail({ from, to: user.email, subject, text, html });
+  return { sent: true, verifyUrl };
+}
+
+async function sendPasswordResetEmail(req, user, token) {
+  const baseUrl = publicSiteUrl(req);
+  const resetUrl = `${baseUrl}/reset-password.html?token=${encodeURIComponent(token)}`;
+  const from = process.env.MAIL_FROM || `ELV.art <${process.env.SMTP_USER || "info@elv.art"}>`;
+  const subject = "Reset your ELV.art password";
+  const safeName = escapeEmailHtml(user.fullName || user.email);
+  const safeUrl = escapeEmailHtml(resetUrl);
+  const text = [
+    `Hello ${user.fullName || user.email},`,
+    "",
+    "We received a request to reset your ELV.art account password.",
+    "",
+    resetUrl,
+    "",
+    "This link expires in 1 hour. If you did not request this, please ignore this email.",
+    "",
+    "ELV.art"
+  ].join("\n");
+  const html = `
+    <div style="margin:0;padding:0;background:#f2f6fb;font-family:Arial,Helvetica,sans-serif;color:#17253a">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;background:#f2f6fb;padding:28px 0">
+        <tr>
+          <td align="center" style="padding:28px 14px">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:640px;border-collapse:collapse;background:#ffffff;border:1px solid #c7d7ea;border-radius:14px;overflow:hidden">
+              <tr>
+                <td style="padding:26px 30px;background:#ffffff;border-bottom:1px solid #e4edf7">
+                  <div style="font-size:28px;font-weight:800;letter-spacing:.4px;color:#15469b">ELV<span style="color:#20a73f">.art</span></div>
+                  <div style="margin-top:6px;font-size:13px;color:#65758b">Project account security</div>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:34px 30px 10px">
+                  <div style="display:inline-block;background:#edf4ff;color:#16499a;border:1px solid #c7d7ea;border-radius:999px;padding:7px 11px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.7px">Password Reset</div>
+                  <h1 style="margin:18px 0 10px;font-size:28px;line-height:1.2;color:#10213a">Create a new password</h1>
+                  <p style="margin:0;font-size:16px;line-height:1.7;color:#53647a">Hello ${safeName}, use the secure button below to reset your ELV.art account password.</p>
+                </td>
+              </tr>
+              <tr>
+                <td align="center" style="padding:24px 30px">
+                  <a href="${safeUrl}" style="display:inline-block;background:#1f4ca3;color:#ffffff;text-decoration:none;padding:15px 24px;border-radius:10px;font-weight:800;font-size:15px;box-shadow:0 12px 24px rgba(31,76,163,.22)">Reset Password</a>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:0 30px 26px">
+                  <div style="background:#f6f9fd;border:1px solid #d9e5f3;border-radius:10px;padding:16px">
+                    <p style="margin:0 0 8px;font-size:13px;line-height:1.6;color:#65758b">If the button does not work, copy and paste this link into your browser:</p>
+                    <p style="margin:0;font-size:12px;line-height:1.6;word-break:break-all;color:#16499a">${safeUrl}</p>
+                  </div>
+                  <p style="margin:18px 0 0;font-size:13px;line-height:1.6;color:#65758b">This reset link expires in 1 hour. If you did not request it, you can safely ignore this email.</p>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:18px 30px;background:#10213a;color:#dce8f7;font-size:12px;line-height:1.6">
+                  ELV.art<br>
+                  Integrated ELV, CCTV, access control, automation, and low-voltage solutions across Pakistan.
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </div>
+  `;
+  if (!smtpConfigured()) {
+    console.log(`Password reset link for ${user.email}: ${resetUrl}`);
+    return { sent: false, resetUrl };
+  }
+  await mailTransport().sendMail({ from, to: user.email, subject, text, html });
+  return { sent: true, resetUrl };
+}
+
+function escapeEmailHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 function sanitizeItem(item) {
   const clone = { ...item };
   delete clone.createdAt;
@@ -425,28 +698,26 @@ function sanitizeItem(item) {
   return clone;
 }
 
-function saveImage(dataUrl) {
+async function saveImage(dataUrl) {
   if (!dataUrl || typeof dataUrl !== "string" || !dataUrl.startsWith("data:image/")) return "";
   const match = dataUrl.match(/^data:image\/(png|jpeg|jpg|webp|svg\+xml);base64,(.+)$/);
   if (!match) return "";
-  const ext = match[1] === "jpeg" ? "jpg" : match[1].replace("+xml", "");
+  const isSvg = match[1] === "svg+xml";
+  const ext = isSvg ? "svg" : "webp";
   const fileName = `${cleanId("upload")}.${ext}`;
   const filePath = path.join(uploadsDir, fileName);
-  fs.writeFileSync(filePath, Buffer.from(match[2], "base64"));
+  const input = Buffer.from(match[2], "base64");
+  fs.writeFileSync(filePath, isSvg ? input : await optimizeImageBuffer(input));
   return `/uploads/${fileName}`;
 }
 
-function saveUpload(dataUrl) {
+async function saveUpload(dataUrl) {
   if (!dataUrl || typeof dataUrl !== "string" || !dataUrl.startsWith("data:")) return "";
   const match = dataUrl.match(/^data:([^;]+);base64,(.+)$/);
   if (!match) return "";
   const mime = match[1].toLowerCase();
+  if (mime.startsWith("image/")) return saveImage(dataUrl);
   const extByMime = {
-    "image/png": "png",
-    "image/jpeg": "jpg",
-    "image/jpg": "jpg",
-    "image/webp": "webp",
-    "image/svg+xml": "svg",
     "application/pdf": "pdf",
     "application/zip": "zip",
     "application/x-zip-compressed": "zip",
@@ -466,38 +737,54 @@ function saveUpload(dataUrl) {
   return `/uploads/${fileName}`;
 }
 
-function normalizeUploads(item) {
+async function normalizeUploads(item) {
   const uploadFields = ["image", "datasheet", "manual", "model3d", "cad"];
   for (const field of uploadFields) {
     if (item[field] && typeof item[field] === "string" && item[field].startsWith("data:")) {
-      item[field] = saveUpload(item[field]);
+      item[field] = await saveUpload(item[field]);
     }
   }
   if (Array.isArray(item.gallery)) {
-    item.gallery = item.gallery.map(file => (typeof file === "string" && file.startsWith("data:") ? saveUpload(file) : file)).filter(Boolean);
+    item.gallery = (await Promise.all(item.gallery.map(file => (typeof file === "string" && file.startsWith("data:") ? saveUpload(file) : file)))).filter(Boolean);
+  }
+  if (Array.isArray(item.hotspots)) {
+    item.hotspots = item.hotspots.map(hotspot => ({
+      title: String(hotspot.title || "").slice(0, 120),
+      message: String(hotspot.message || "").slice(0, 220),
+      x: Math.max(0, Math.min(100, Number(hotspot.x || 0))),
+      y: Math.max(0, Math.min(100, Number(hotspot.y || 0))),
+      target: String(hotspot.target || "").slice(0, 160)
+    })).filter(hotspot => hotspot.title && hotspot.message && hotspot.target);
   }
   if (Array.isArray(item.sections)) {
     item.sections = item.sections.map(section => ({
       ...section,
-      image: section.image && typeof section.image === "string" && section.image.startsWith("data:") ? saveUpload(section.image) : section.image
-    }));
+      heading: String(section.heading || "").slice(0, 160),
+      paragraph: String(section.paragraph || "").slice(0, 2200),
+      image: section.image
+    })).filter(section => section.paragraph || section.image);
+    for (const section of item.sections) {
+      if (section.image && typeof section.image === "string" && section.image.startsWith("data:")) {
+        section.image = await saveUpload(section.image);
+      }
+    }
   }
   if (Array.isArray(item.documents)) {
-    item.documents = item.documents.map(document => {
+    item.documents = (await Promise.all(item.documents.map(async document => {
       const file = typeof document === "string" ? { name: path.basename(document), url: document } : { ...document };
       if (file.url && typeof file.url === "string" && file.url.startsWith("data:")) {
-        file.url = saveUpload(file.url);
+        file.url = await saveUpload(file.url);
       }
       file.name = String(file.name || path.basename(file.url || "Training document")).slice(0, 180);
       return file;
-    }).filter(document => document.url);
+    }))).filter(document => document.url);
   }
   return item;
 }
 
-function upsert(collection, payload, prefix) {
+async function upsert(collection, payload, prefix) {
   const db = readDb();
-  const item = normalizeUploads(sanitizeItem(payload));
+  const item = await normalizeUploads(sanitizeItem(payload));
   if (!item.id) item.id = cleanId(prefix);
   const existing = db[collection]?.find(entry => entry.id === item.id) || {};
   const merged = { ...existing, ...item };
@@ -551,10 +838,81 @@ function hasText(value, min = 1) {
   return typeof value === "string" && value.trim().length >= min;
 }
 
+function isValidEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || "").trim());
+}
+
 function validPrice(value) {
   if (value === undefined || value === null || value === "") return false;
   const number = Number(value);
   return Number.isFinite(number) && number >= 0;
+}
+
+function xmlEscape(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function publicOrigin(req) {
+  const proto = req.headers["x-forwarded-proto"] || "http";
+  return `${proto}://${req.headers.host}`;
+}
+
+function sitemapUrl(origin, pathName, lastmod, priority = "0.7") {
+  return [
+    "  <url>",
+    `    <loc>${xmlEscape(`${origin}${pathName}`)}</loc>`,
+    `    <lastmod>${xmlEscape(lastmod)}</lastmod>`,
+    "    <changefreq>weekly</changefreq>",
+    `    <priority>${priority}</priority>`,
+    "  </url>"
+  ].join("\n");
+}
+
+function buildSitemap(req) {
+  const db = readDb();
+  const origin = publicOrigin(req);
+  const lastmod = (db.updatedAt || new Date().toISOString()).slice(0, 10);
+  const urls = [
+    sitemapUrl(origin, "/", lastmod, "1.0"),
+    sitemapUrl(origin, "/solutions.html", lastmod, "0.9"),
+    sitemapUrl(origin, "/products.html", lastmod, "0.9"),
+    sitemapUrl(origin, "/case-studies.html", lastmod, "0.7"),
+    sitemapUrl(origin, "/training.html", lastmod, "0.6"),
+    sitemapUrl(origin, "/downloads.html", lastmod, "0.6"),
+    sitemapUrl(origin, "/blogs.html", lastmod, "0.7"),
+    sitemapUrl(origin, "/about.html", lastmod, "0.7"),
+    sitemapUrl(origin, "/contact.html", lastmod, "0.6")
+  ];
+  (db.superCategories || []).forEach(item => urls.push(sitemapUrl(origin, `/products.html#${encodeURIComponent(item.id)}`, lastmod, "0.8")));
+  (db.categories || []).forEach(item => urls.push(sitemapUrl(origin, `/category.html?id=${encodeURIComponent(item.id)}`, lastmod, "0.8")));
+  (db.products || []).forEach(item => urls.push(sitemapUrl(origin, `/product.html?id=${encodeURIComponent(item.id)}`, lastmod, "0.8")));
+  (db.models || []).forEach(item => urls.push(sitemapUrl(origin, `/model.html?id=${encodeURIComponent(item.id)}`, lastmod, "0.8")));
+  (db.parts || []).forEach(item => urls.push(sitemapUrl(origin, `/part.html?id=${encodeURIComponent(item.id)}`, lastmod, "0.7")));
+  (db.solutions || []).forEach(item => urls.push(sitemapUrl(origin, `/solution.html?id=${encodeURIComponent(item.id)}`, lastmod, "0.8")));
+  (db.projects || []).forEach(item => urls.push(sitemapUrl(origin, `/case-study.html?id=${encodeURIComponent(item.id)}`, lastmod, "0.6")));
+  (db.trainings || []).forEach(item => urls.push(sitemapUrl(origin, `/training-detail.html?id=${encodeURIComponent(item.id)}`, lastmod, "0.5")));
+  (db.downloads || []).forEach(item => urls.push(sitemapUrl(origin, `/download-detail.html?id=${encodeURIComponent(item.id)}`, lastmod, "0.5")));
+  (db.blogs || []).forEach(item => urls.push(sitemapUrl(origin, `/blog-detail.html?id=${encodeURIComponent(item.id)}`, lastmod, "0.6")));
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`;
+}
+
+function buildRobots(req) {
+  const origin = publicOrigin(req);
+  return [
+    "User-agent: *",
+    "Allow: /",
+    "Disallow: /admin.html",
+    "Disallow: /dashboard.html",
+    "Disallow: /cart.html",
+    "Disallow: /api/",
+    "",
+    `Sitemap: ${origin}/sitemap.xml`,
+    ""
+  ].join("\n");
 }
 
 function validateCatalogItem(db, collection, item) {
@@ -570,6 +928,21 @@ function validateCatalogItem(db, collection, item) {
     if (!hasText(item.image, 1)) return "Category picture is required";
     if (!db.superCategories.some(superCategory => superCategory.id === item.superCategoryId)) {
       return "Category must belong to an existing super category";
+    }
+  }
+
+  if (collection === "solutions") {
+    if (!hasText(item.title, 2)) return "Solution title is required";
+    if (!hasText(item.summary, 10)) return "Solution summary must be at least 10 characters";
+    if (!hasText(item.image, 1)) return "Main solution image is required";
+    if (Array.isArray(item.hotspots)) {
+      for (const hotspot of item.hotspots) {
+        const [type, id] = String(hotspot.target || "").split(":");
+        const collectionName = type === "product" ? "products" : type === "model" ? "models" : type === "part" ? "parts" : "";
+        if (!collectionName || !db[collectionName]?.some(entry => entry.id === id)) {
+          return "Each solution hotspot must link to an existing product, model, or accessory";
+        }
+      }
     }
   }
 
@@ -624,7 +997,8 @@ async function handleApi(req, res, url) {
         domain: user.domain,
         experience: user.experience,
         mobile: user.mobile,
-        accessLevel: user.accessLevel
+        accessLevel: user.accessLevel,
+        emailVerified: Boolean(user.emailVerified)
       };
     }
     publicContent.products = publicContent.products.map(product => ({
@@ -672,8 +1046,45 @@ async function handleApi(req, res, url) {
     if (!email || !body.password || !body.fullName || !body.company) {
       return send(res, 400, { error: "Full name, company, email, and password are required" });
     }
-    if (db.users.some(user => user.email === email)) {
-      return send(res, 409, { error: "This email is already registered" });
+    if (!isValidEmail(email)) return send(res, 400, { error: "Please enter a valid email address" });
+    if (String(body.password || "").length < 8) return send(res, 400, { error: "Password must be at least 8 characters" });
+    if (!hasText(body.city, 2) || !hasText(body.domain, 2) || !hasText(body.mobile, 6)) {
+      return send(res, 400, { error: "City, business domain, and mobile number are required" });
+    }
+    const token = verificationToken();
+    const existingIndex = db.users.findIndex(user => user.email === email);
+    if (existingIndex >= 0 && db.users[existingIndex].emailVerified) {
+      return send(res, 409, { error: "This email is already registered. Please login or use forgot password when it is available." });
+    }
+    if (existingIndex >= 0) {
+      db.users[existingIndex] = {
+        ...db.users[existingIndex],
+        fullName: String(body.fullName || "").slice(0, 140),
+        company: String(body.company || "").slice(0, 160),
+        city: String(body.city || "").slice(0, 100),
+        country: String(body.country || "").slice(0, 100),
+        domain: String(body.domain || "").slice(0, 140),
+        experience: String(body.experience || "").slice(0, 60),
+        mobile: String(body.mobile || "").slice(0, 80),
+        passwordHash: crypto.createHash("sha256").update(String(body.password)).digest("hex"),
+        status: "Pending",
+        accessLevel: db.users[existingIndex].accessLevel || "L1",
+        emailVerified: false,
+        emailVerificationTokenHash: hashToken(token),
+        emailVerificationExpiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      writeDb(db);
+      const emailResult = await sendVerificationEmail(req, db.users[existingIndex], token);
+      return send(res, 200, {
+        ok: true,
+        status: db.users[existingIndex].status,
+        emailVerificationRequired: true,
+        emailSent: emailResult.sent,
+        resent: true,
+        message: "A fresh verification email has been sent. Please verify your email, then login.",
+        devVerificationUrl: showLocalVerificationLink(req) ? emailResult.verifyUrl : undefined
+      });
     }
     const user = {
       id: cleanId("user"),
@@ -688,11 +1099,81 @@ async function handleApi(req, res, url) {
       passwordHash: crypto.createHash("sha256").update(String(body.password)).digest("hex"),
       status: "Pending",
       accessLevel: "L1",
+      emailVerified: false,
+      emailVerificationTokenHash: hashToken(token),
+      emailVerificationExpiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       createdAt: new Date().toISOString()
     };
     db.users.unshift(user);
     writeDb(db);
-    return send(res, 201, { ok: true, status: user.status });
+    const emailResult = await sendVerificationEmail(req, user, token);
+    return send(res, 201, {
+      ok: true,
+      status: user.status,
+      emailVerificationRequired: true,
+      emailSent: emailResult.sent,
+      devVerificationUrl: showLocalVerificationLink(req) ? emailResult.verifyUrl : undefined
+    });
+  }
+
+  if (url.pathname === "/api/verify-email" && req.method === "POST") {
+    const body = await getBody(req);
+    const result = verifyEmailToken(body.token);
+    if (!result.ok) return send(res, result.statusCode || 400, { error: result.error || "Verification failed" });
+    return send(res, 200, result);
+  }
+
+  if (url.pathname === "/api/resend-verification" && req.method === "POST") {
+    const body = await getBody(req);
+    const email = String(body.email || "").trim().toLowerCase();
+    if (!isValidEmail(email)) return send(res, 400, { error: "Please enter a valid email address" });
+    const db = readDb();
+    const index = db.users.findIndex(user => user.email === email);
+    if (index < 0) return send(res, 404, { error: "No account found for this email" });
+    if (db.users[index].emailVerified) return send(res, 200, { ok: true, message: "This email is already verified" });
+    const token = verificationToken();
+    db.users[index].emailVerificationTokenHash = hashToken(token);
+    db.users[index].emailVerificationExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+    writeDb(db);
+    const emailResult = await sendVerificationEmail(req, db.users[index], token);
+    return send(res, 200, {
+      ok: true,
+      emailSent: emailResult.sent,
+      devVerificationUrl: showLocalVerificationLink(req) ? emailResult.verifyUrl : undefined
+    });
+  }
+
+  if (url.pathname === "/api/request-password-reset" && req.method === "POST") {
+    const body = await getBody(req);
+    const email = String(body.email || "").trim().toLowerCase();
+    if (!isValidEmail(email)) return send(res, 400, { error: "Please enter a valid email address" });
+    const db = readDb();
+    const index = db.users.findIndex(user => user.email === email);
+    if (index < 0) {
+      return send(res, 200, {
+        ok: true,
+        emailSent: true,
+        message: "If this email is registered, a password reset link will be sent."
+      });
+    }
+    const token = passwordResetToken();
+    db.users[index].passwordResetTokenHash = hashToken(token);
+    db.users[index].passwordResetExpiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+    writeDb(db);
+    const emailResult = await sendPasswordResetEmail(req, db.users[index], token);
+    return send(res, 200, {
+      ok: true,
+      emailSent: emailResult.sent,
+      message: "If this email is registered, a password reset link will be sent.",
+      devResetUrl: showLocalVerificationLink(req) ? emailResult.resetUrl : undefined
+    });
+  }
+
+  if (url.pathname === "/api/reset-password" && req.method === "POST") {
+    const body = await getBody(req);
+    const result = resetEmailToken(body.token, body.password);
+    if (!result.ok) return send(res, result.statusCode || 400, { error: result.error || "Password reset failed" });
+    return send(res, 200, result);
   }
 
   if (url.pathname === "/api/login" && req.method === "POST") {
@@ -702,7 +1183,8 @@ async function handleApi(req, res, url) {
     const db = readDb();
     const user = db.users.find(entry => entry.email === email && entry.passwordHash === passwordHash);
     if (!user) return send(res, 401, { error: "Invalid email or password" });
-    if (user.status !== "Approved") return send(res, 403, { error: `Your account is ${user.status}` });
+    if (!user.emailVerified) return send(res, 403, { code: "EMAIL_NOT_VERIFIED", email: user.email, error: "Please verify your email address before login. Check your inbox for the ELV.art verification email." });
+    if (user.status === "Rejected") return send(res, 403, { code: "ACCOUNT_REJECTED", status: user.status, error: "This account is not active. Please contact ELV.art support." });
     const token = Buffer.from(`${user.id}:${user.accessLevel}:${Date.now()}`).toString("base64");
     return send(res, 200, {
       token,
@@ -716,7 +1198,8 @@ async function handleApi(req, res, url) {
         domain: user.domain,
         experience: user.experience,
         mobile: user.mobile,
-        accessLevel: user.accessLevel
+        accessLevel: user.accessLevel,
+        emailVerified: Boolean(user.emailVerified)
       }
     });
   }
@@ -751,7 +1234,7 @@ async function handleApi(req, res, url) {
 
   if (req.method === "GET" && url.pathname === "/api/admin/content") {
     const db = readDb();
-    db.users = db.users.map(({ passwordHash, ...user }) => user);
+    db.users = db.users.map(({ passwordHash, emailVerificationTokenHash, passwordResetTokenHash, ...user }) => user);
     return send(res, 200, db);
   }
 
@@ -775,6 +1258,17 @@ async function handleApi(req, res, url) {
     writeDb(db);
     const { passwordHash, ...user } = db.users[index];
     return send(res, 200, user);
+  }
+
+  const userDeleteMatch = url.pathname.match(/^\/api\/admin\/users\/([^/]+)$/);
+  if (userDeleteMatch && req.method === "DELETE") {
+    const id = decodeURIComponent(userDeleteMatch[1]);
+    const db = readDb();
+    const before = db.users.length;
+    db.users = db.users.filter(user => user.id !== id);
+    if (db.users.length === before) return send(res, 404, { error: "User not found" });
+    writeDb(db);
+    return send(res, 200, { ok: true });
   }
 
   const routes = {
@@ -802,7 +1296,7 @@ async function handleApi(req, res, url) {
   const matched = Object.entries(routes).find(([route]) => url.pathname === route);
   if (matched && req.method === "POST") {
     const [collection, prefix] = matched[1];
-    const item = upsert(collection, await getBody(req), prefix);
+    const item = await upsert(collection, await getBody(req), prefix);
     return send(res, 200, item);
   }
 
@@ -833,8 +1327,13 @@ function serveStatic(req, res, url) {
       }
       return send(res, 404, "Not found", "text/plain; charset=utf-8");
     }
-    const type = mimeTypes[path.extname(absolute).toLowerCase()] || "application/octet-stream";
-    res.writeHead(200, { "Content-Type": type });
+    const ext = path.extname(absolute).toLowerCase();
+    const type = mimeTypes[ext] || "application/octet-stream";
+    const noCache = [".html", ".css", ".js", ".json"].includes(ext);
+    res.writeHead(200, {
+      "Content-Type": type,
+      "Cache-Control": noCache ? "no-cache, must-revalidate" : "public, max-age=86400"
+    });
     res.end(file);
   });
 }
@@ -844,7 +1343,20 @@ ensureStore();
 http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
   try {
+    if (req.method === "GET" && url.pathname === "/verify.html" && url.searchParams.get("token")) {
+      const result = verifyEmailToken(url.searchParams.get("token"));
+      const params = new URLSearchParams();
+      if (result.ok) {
+        params.set("verified", "1");
+      } else {
+        params.set("error", result.error || "Verification failed");
+      }
+      res.writeHead(302, { Location: `/verify.html?${params.toString()}` });
+      return res.end();
+    }
     if (url.pathname.startsWith("/api/")) return await handleApi(req, res, url);
+    if (url.pathname === "/robots.txt") return send(res, 200, buildRobots(req), "text/plain; charset=utf-8");
+    if (url.pathname === "/sitemap.xml") return send(res, 200, buildSitemap(req), "application/xml; charset=utf-8");
     return serveStatic(req, res, url);
   } catch (error) {
     return send(res, error.statusCode || 500, { error: error.message || "Server error" });

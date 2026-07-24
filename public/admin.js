@@ -191,6 +191,22 @@ function priceMeta(item) {
   ];
 }
 
+function catalogTargetOptions(value = "") {
+  const groups = [
+    ["Model Groups", admin.db.products || [], "product"],
+    ["Models", admin.db.models || [], "model"],
+    ["Accessories", admin.db.parts || [], "part"]
+  ];
+  return `<option value="">Select linked catalog item</option>${groups.map(([label, items, type]) => `
+    <optgroup label="${escapeHtml(label)}">
+      ${items.map(item => {
+        const optionValue = `${type}:${item.id}`;
+        return `<option value="${escapeHtml(optionValue)}" ${optionValue === value ? "selected" : ""}>${escapeHtml(item.name)}</option>`;
+      }).join("")}
+    </optgroup>
+  `).join("")}`;
+}
+
 function hideSearchResults() {
   const box = $("#catalogSearchResults");
   if (box) box.classList.add("hidden");
@@ -443,7 +459,7 @@ function renderProducts() {
     <button class="button secondary mini" data-product-edit="${escapeHtml(product.id)}" type="button">Edit</button>
     <button class="button primary mini" data-product-view="${escapeHtml(product.id)}" type="button">Models</button>
     <button class="button secondary mini danger" data-delete="products" data-id="${escapeHtml(product.id)}" type="button">Delete</button>
-  `, [product.segment || "Product family", product.status || "Badge", ...priceMeta(product), `${modelCount} models`]);
+  `, [product.segment || "Product family", product.status || "Badge", product.homeFeatured ? "Home page" : "", ...priceMeta(product), `${modelCount} models`].filter(Boolean));
   }).join("") || `<p>No model groups in this product category yet.</p>`;
 }
 
@@ -460,6 +476,7 @@ function productForm(item = {}) {
       ${field("name", "Model Group Name", item.name || "", "text", "", "required minlength=\"2\"")}
       ${field("segment", "Group Segment / Family", item.segment || "", "text", "", "required placeholder=\"Network Cameras / Access Control\"")}
       ${field("status", "Badge", item.status || "", "text", "", "required placeholder=\"Featured / New\"")}
+      <label class="check-row full"><input name="homeFeatured" type="checkbox" ${item.homeFeatured ? "checked" : ""}> Show this model group on home page</label>
       <label>Model Group Picture<input name="imageFile" type="file" accept="image/*" ${item.image ? "" : "required"}><span class="file-note">${item.image ? "Current picture will stay if you do not upload a new one." : "Required for new model group."}</span></label>
       ${field("l1", "Public Price", item.prices?.l1 || "", "number", "", "required min=\"0\" step=\"0.01\" placeholder=\"Visible to all visitors\"")}
       ${field("l2", "Account Price", item.prices?.l2 || "", "number", "", "required min=\"0\" step=\"0.01\" placeholder=\"Visible after admin gives account access\"")}
@@ -485,6 +502,7 @@ function productForm(item = {}) {
     data.specs = linesFromText(data.specsText);
     data.prices = { l1: cleanPrice(data.l1), l2: cleanPrice(data.l2), l3: cleanPrice(data.l3) };
     data.image = await fileData(form.imageFile.files[0]) || item.image || "";
+    data.homeFeatured = form.homeFeatured.checked;
     delete data.l1; delete data.l2; delete data.l3;
     delete data.featuresText; delete data.specsText; delete data.imageFile;
     await api("/api/admin/products", { method: "POST", body: JSON.stringify(data) });
@@ -1067,6 +1085,269 @@ function renderSimpleList(collection, containerId, endpoint, titleKey = "name") 
   `).join("") || `<p>No records yet.</p>`;
 }
 
+function renderSolutionsAdmin() {
+  const solutions = admin.db.solutions || [];
+  $("#solutionListAdmin").innerHTML = solutions.map(solution => renderCard(solution, `
+    <button class="button secondary mini" data-solution-edit="${escapeHtml(solution.id)}" type="button">Edit</button>
+    <a class="button primary mini" href="/solution.html?id=${encodeURIComponent(solution.id)}" target="_blank">View</a>
+    <button class="button secondary mini danger" data-delete="solutions" data-id="${escapeHtml(solution.id)}" type="button">Delete</button>
+  `, [solution.status || "Solution", `${(solution.hotspots || []).length} hotspots`])).join("") || `<p>No solutions yet. Press + to add an interactive solution scene.</p>`;
+}
+
+function hotspotRow(hotspot = {}, index = 0) {
+  return `
+    <article class="hotspot-admin-row" data-hotspot-row data-hotspot-index="${index}">
+      <div class="hotspot-admin-head">
+        <strong>Hotspot ${index + 1}</strong>
+        <button class="button secondary mini danger" data-remove-hotspot type="button">Remove</button>
+      </div>
+      <label>Popup Title<input name="hotspotTitle" value="${escapeHtml(hotspot.title || "")}" required placeholder="RFID Reader"></label>
+      <label>Small Detail<input name="hotspotMessage" value="${escapeHtml(hotspot.message || "")}" required placeholder="Reads registered vehicle tags before gate opens"></label>
+      <label>Position X %<input name="hotspotX" type="number" min="0" max="100" step="0.1" value="${escapeHtml(hotspot.x ?? 50)}" required></label>
+      <label>Position Y %<input name="hotspotY" type="number" min="0" max="100" step="0.1" value="${escapeHtml(hotspot.y ?? 50)}" required></label>
+      <label class="full">Linked Product / Model / Accessory
+        <select name="hotspotTarget" required>${catalogTargetOptions(hotspot.target || "")}</select>
+      </label>
+    </article>
+  `;
+}
+
+function bindHotspotEditor() {
+  const list = $("#hotspotRows");
+  const add = $("#addHotspotRow");
+  if (!list || !add) return;
+  const preview = $("#solutionHotspotPreview");
+  let activeIndex = Number(list.dataset.activeHotspot || 0);
+  let draggingIndex = -1;
+  const refreshNumbers = () => {
+    $$("[data-hotspot-row]").forEach((row, index) => {
+      row.dataset.hotspotIndex = String(index);
+      const title = row.querySelector(".hotspot-admin-head strong");
+      if (title) title.textContent = `Hotspot ${index + 1}`;
+    });
+    if (activeIndex >= $$("[data-hotspot-row]").length) activeIndex = Math.max(0, $$("[data-hotspot-row]").length - 1);
+    list.dataset.activeHotspot = String(activeIndex);
+  };
+  const setActive = index => {
+    activeIndex = Math.max(0, Math.min(index, $$("[data-hotspot-row]").length - 1));
+    list.dataset.activeHotspot = String(activeIndex);
+    $$("[data-hotspot-row]").forEach((row, rowIndex) => row.classList.toggle("active", rowIndex === activeIndex));
+    $$(".solution-preview-dot").forEach((dot, dotIndex) => dot.classList.toggle("active", dotIndex === activeIndex));
+  };
+  const placeHotspot = (event, index = activeIndex) => {
+    const image = preview?.querySelector("img");
+    const row = $$("[data-hotspot-row]")[index];
+    if (!image || !row) return;
+    const rect = image.getBoundingClientRect();
+    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) return;
+    const x = ((event.clientX - rect.left) / rect.width) * 100;
+    const y = ((event.clientY - rect.top) / rect.height) * 100;
+    row.querySelector("[name='hotspotX']").value = Math.max(0, Math.min(100, x)).toFixed(1);
+    row.querySelector("[name='hotspotY']").value = Math.max(0, Math.min(100, y)).toFixed(1);
+    updatePreview();
+  };
+  const updatePreview = () => {
+    const previewMap = $("#solutionHotspotMap");
+    if (!previewMap) return;
+    previewMap.innerHTML = $$("[data-hotspot-row]").map((row, index) => {
+      const x = Math.max(0, Math.min(100, Number(row.querySelector("[name='hotspotX']")?.value || 0)));
+      const y = Math.max(0, Math.min(100, Number(row.querySelector("[name='hotspotY']")?.value || 0)));
+      const title = row.querySelector("[name='hotspotTitle']")?.value.trim() || `Hotspot ${index + 1}`;
+      return `<button class="solution-preview-dot ${index === activeIndex ? "active" : ""}" type="button" data-preview-dot="${index}" style="left:${x}%;top:${y}%" title="${escapeHtml(title)}"><span>${index + 1}</span></button>`;
+    }).join("");
+    $$("[data-preview-dot]").forEach(button => {
+      button.onpointerdown = event => {
+        event.preventDefault();
+        event.stopPropagation();
+        draggingIndex = Number(button.dataset.previewDot);
+        setActive(draggingIndex);
+      };
+      button.onclick = event => event.stopPropagation();
+    });
+  };
+  if (!list.dataset.hotspotEditorBound) {
+    list.dataset.hotspotEditorBound = "true";
+    add.onclick = () => {
+      list.insertAdjacentHTML("beforeend", hotspotRow({}, $$("[data-hotspot-row]").length));
+      refreshNumbers();
+      setActive($$("[data-hotspot-row]").length - 1);
+      updatePreview();
+    };
+    list.addEventListener("click", event => {
+      const remove = event.target.closest("[data-remove-hotspot]");
+      const row = event.target.closest("[data-hotspot-row]");
+      if (!row) return;
+      if (remove) {
+        row.remove();
+        refreshNumbers();
+        setActive(activeIndex);
+        updatePreview();
+        return;
+      }
+      setActive(Number(row.dataset.hotspotIndex || 0));
+    });
+    list.addEventListener("input", event => {
+      if (event.target.matches("[name='hotspotX'], [name='hotspotY'], [name='hotspotTitle']")) updatePreview();
+    });
+  }
+  if (preview && !preview.dataset.hotspotPreviewBound) {
+    preview.dataset.hotspotPreviewBound = "true";
+    preview.addEventListener("pointermove", event => {
+      if (draggingIndex < 0) return;
+      event.preventDefault();
+      placeHotspot(event, draggingIndex);
+    });
+    preview.addEventListener("pointerup", event => {
+      if (draggingIndex < 0) return;
+      event.preventDefault();
+      placeHotspot(event, draggingIndex);
+      draggingIndex = -1;
+    });
+    preview.addEventListener("pointercancel", () => {
+      draggingIndex = -1;
+    });
+    preview.addEventListener("click", event => {
+      if (event.target.closest("[data-preview-dot]")) return;
+      placeHotspot(event, activeIndex);
+    });
+  }
+  const imageInput = document.querySelector("[name='imageFile']");
+  if (imageInput && preview && !imageInput.dataset.hotspotPreviewBound) {
+    imageInput.dataset.hotspotPreviewBound = "true";
+    imageInput.addEventListener("change", async () => {
+      const src = await fileData(imageInput.files[0]);
+      if (!src) return;
+      preview.innerHTML = `
+        <div class="solution-admin-map">
+          <img src="${src}" alt="Solution preview">
+          <div id="solutionHotspotMap"></div>
+        </div>
+        <p>Click a hotspot row, then click on the image to place it. X/Y inputs also move dots live.</p>
+      `;
+      bindHotspotEditor();
+    });
+  }
+  refreshNumbers();
+  setActive(activeIndex);
+  updatePreview();
+}
+
+function collectHotspots(form) {
+  return $$("[data-hotspot-row]").map(row => ({
+    title: row.querySelector("[name='hotspotTitle']")?.value.trim() || "",
+    message: row.querySelector("[name='hotspotMessage']")?.value.trim() || "",
+    x: Math.max(0, Math.min(100, Number(row.querySelector("[name='hotspotX']")?.value || 0))),
+    y: Math.max(0, Math.min(100, Number(row.querySelector("[name='hotspotY']")?.value || 0))),
+    target: row.querySelector("[name='hotspotTarget']")?.value || ""
+  })).filter(hotspot => hotspot.title && hotspot.message && hotspot.target);
+}
+
+function solutionParagraphRow(section = {}, index = 0) {
+  return `
+    <article class="hotspot-admin-row" data-solution-section>
+      <div class="hotspot-admin-head">
+        <strong>Detail Paragraph ${index + 1}</strong>
+        <button class="button secondary mini danger" data-remove-solution-section type="button">Remove</button>
+      </div>
+      ${field("solutionSectionHeading", "Heading (optional)", section.heading || "", "text", "full", "placeholder=\"How the lane works\"")}
+      ${textarea("solutionSectionParagraph", "Paragraph", section.paragraph || "", "full", "required minlength=\"10\"")}
+    </article>
+  `;
+}
+
+function bindSolutionSectionEditor() {
+  const list = $("#solutionSectionRows");
+  const add = $("#addSolutionSectionRow");
+  if (!list || !add) return;
+  const refreshNumbers = () => {
+    $$("[data-solution-section]").forEach((row, index) => {
+      const title = row.querySelector(".hotspot-admin-head strong");
+      if (title) title.textContent = `Detail Paragraph ${index + 1}`;
+    });
+  };
+  add.onclick = () => {
+    list.insertAdjacentHTML("beforeend", solutionParagraphRow({}, $$("[data-solution-section]").length));
+    bindSolutionSectionEditor();
+  };
+  $$("[data-remove-solution-section]").forEach(button => {
+    button.onclick = () => {
+      const rows = $$("[data-solution-section]");
+      if (rows.length <= 1) {
+        alert("At least one detail paragraph is required.");
+        return;
+      }
+      button.closest("[data-solution-section]")?.remove();
+      refreshNumbers();
+    };
+  });
+}
+
+function collectSolutionSections() {
+  return $$("[data-solution-section]").map(row => ({
+    heading: row.querySelector("[name='solutionSectionHeading']")?.value.trim() || "",
+    paragraph: row.querySelector("[name='solutionSectionParagraph']")?.value.trim() || ""
+  })).filter(section => section.paragraph);
+}
+
+function solutionForm(item = {}) {
+  const hotspots = Array.isArray(item.hotspots) ? item.hotspots : [];
+  const sections = Array.isArray(item.sections) && item.sections.length
+    ? item.sections
+    : [{ heading: "System Overview", paragraph: item.summary || "" }];
+  openModal(item.id ? "Edit Solution Scene" : "Add Solution Scene", `
+    <form class="admin-form two-col">
+      ${hidden("id", item.id || "")}
+      ${field("title", "Solution Title", item.title || "", "text", "", "required minlength=\"2\"")}
+      ${field("status", "Badge / Type", item.status || "Solution", "text", "", "required")}
+      <label>Main Scene Image<input name="imageFile" type="file" accept="image/*" ${item.image ? "" : "required"}><span class="file-note">${item.image ? "Current image will stay if you do not upload a new one." : "Required for new solution scene."}</span></label>
+      ${textarea("summary", "Short Summary", item.summary || "", "full", "required minlength=\"10\"")}
+      ${textarea("outcomesText", "Outcomes (one per line)", (item.outcomes || []).join("\n"), "full", "placeholder=\"Fast entry\nSafer lanes\nCentral monitoring\"")}
+      <div class="solution-admin-preview full" id="solutionHotspotPreview">
+        ${item.image ? `
+          <div class="solution-admin-map">
+            <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title || "Solution image")}">
+            <div id="solutionHotspotMap"></div>
+          </div>
+          <p>Click a hotspot row, then click on the image to place it. X/Y inputs also move dots live.</p>
+        ` : `<span>Upload the scene image, save once, then edit again to place hotspots on the live preview.</span>`}
+      </div>
+      <div class="case-blocks-head full">
+        <div><p class="eyebrow">Hotspots</p><h3>Clickable products in this solution</h3></div>
+        <button class="button secondary mini" id="addHotspotRow" type="button">+ Hotspot</button>
+      </div>
+      <div id="hotspotRows" class="hotspot-admin-list full">
+        ${(hotspots.length ? hotspots : [{}]).map((hotspot, index) => hotspotRow(hotspot, index)).join("")}
+      </div>
+      <div class="case-blocks-head full">
+        <div><p class="eyebrow">Details</p><h3>Paragraphs under the interactive diagram</h3></div>
+        <button class="button secondary mini" id="addSolutionSectionRow" type="button">+ Paragraph</button>
+      </div>
+      <div id="solutionSectionRows" class="hotspot-admin-list full">
+        ${sections.map((section, index) => solutionParagraphRow(section, index)).join("")}
+      </div>
+      <button class="button primary full" type="submit">Save Solution</button>
+    </form>
+  `, async event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (!form.reportValidity()) return;
+    if (!item.image && !requireFile(form.imageFile, "Please upload a main solution image.")) return;
+    const data = objectFromForm(form);
+    data.image = await fileData(form.imageFile.files[0]) || item.image || "";
+    data.outcomes = linesFromText(data.outcomesText);
+    data.hotspots = collectHotspots(form);
+    data.sections = collectSolutionSections();
+    delete data.imageFile; delete data.outcomesText;
+    delete data.hotspotTitle; delete data.hotspotMessage; delete data.hotspotX; delete data.hotspotY; delete data.hotspotTarget;
+    delete data.solutionSectionHeading; delete data.solutionSectionParagraph;
+    await api("/api/admin/solutions", { method: "POST", body: JSON.stringify(data) });
+    closeModal();
+    await loadAdmin(false);
+  });
+  bindHotspotEditor();
+  bindSolutionSectionEditor();
+}
+
 function simpleForm(collection, endpoint, title, item = {}) {
   const titleField = collection === "solutions" || collection === "projects" || collection === "trainings" || collection === "downloads" || collection === "blogs" ? "title" : "name";
   openModal(item.id ? `Edit ${title}` : `Add ${title}`, `
@@ -1093,12 +1374,13 @@ function renderUsers() {
       <div>
         <h3>${escapeHtml(user.fullName)} - ${escapeHtml(user.company)}</h3>
         <p>${escapeHtml(user.city)}, ${escapeHtml(user.country)} | ${escapeHtml(user.domain)} | ${escapeHtml(user.experience)} years</p>
-        <small>${escapeHtml(user.email)} | ${escapeHtml(user.mobile)}</small>
+        <small>${escapeHtml(user.email)} | ${escapeHtml(user.mobile)} | ${user.emailVerified ? "Email verified" : "Email not verified"}</small>
       </div>
       <form class="row-actions" data-user-form="${escapeHtml(user.id)}">
         <select name="status"><option ${user.status === "Pending" ? "selected" : ""}>Pending</option><option ${user.status === "Approved" ? "selected" : ""}>Approved</option><option ${user.status === "Rejected" ? "selected" : ""}>Rejected</option></select>
         <select name="accessLevel"><option ${user.accessLevel === "L1" ? "selected" : ""}>L1</option><option ${user.accessLevel === "L2" ? "selected" : ""}>L2</option></select>
         <button class="button primary mini" type="submit">Update</button>
+        <button class="button secondary danger mini" type="button" data-delete-user="${escapeHtml(user.id)}">Delete</button>
       </form>
     </article>
   `).join("") || `<p>No users found.</p>`;
@@ -1111,6 +1393,18 @@ function renderUsers() {
       await loadAdmin(false);
     };
   });
+}
+
+async function deleteUser(userId) {
+  const user = (admin.db.users || []).find(entry => entry.id === userId);
+  const label = user ? `${user.fullName} (${user.email})` : "this user";
+  if (!confirm(`Delete ${label}? This cannot be undone.`)) return;
+  try {
+    await api(`/api/admin/users/${encodeURIComponent(userId)}`, { method: "DELETE" });
+    await loadAdmin(false);
+  } catch (error) {
+    alert(error.message || "User could not be deleted.");
+  }
 }
 
 function renderLeads() {
@@ -1166,6 +1460,7 @@ function bindCatalogActions() {
   $$("[data-training-edit]").forEach(button => button.onclick = () => trainingForm((admin.db.trainings || []).find(item => item.id === button.dataset.trainingEdit)));
   $$("[data-download-edit]").forEach(button => button.onclick = () => downloadForm((admin.db.downloads || []).find(item => item.id === button.dataset.downloadEdit)));
   $$("[data-blog-edit]").forEach(button => button.onclick = () => blogForm((admin.db.blogs || []).find(item => item.id === button.dataset.blogEdit)));
+  $$("[data-solution-edit]").forEach(button => button.onclick = () => solutionForm((admin.db.solutions || []).find(item => item.id === button.dataset.solutionEdit)));
   $$("[data-delete]").forEach(button => button.onclick = async () => {
     if (!confirm("Delete this item?")) return;
     await api(`/api/admin/${button.dataset.delete}/${encodeURIComponent(button.dataset.id)}`, { method: "DELETE" });
@@ -1192,7 +1487,7 @@ async function loadAdmin(reset = true) {
   renderTrainings();
   renderDownloads();
   renderBlogs();
-  renderSimpleList("solutions", "solutionListAdmin", "solutions", "title");
+  renderSolutionsAdmin();
   renderUsers();
   renderLeads();
   bindCatalogActions();
@@ -1206,6 +1501,7 @@ function setupEvents() {
   $("#addProductButton").onclick = () => productForm();
   $("#addModelButton").onclick = () => modelForm();
   $("#addPartButton").onclick = () => partForm();
+  $("#addSolutionButton").onclick = () => solutionForm();
   $("#addCaseStudyButton").onclick = () => caseStudyForm();
   $("#addTrainingButton").onclick = () => trainingForm();
   $("#addDownloadButton").onclick = () => downloadForm();
@@ -1229,6 +1525,13 @@ function setupEvents() {
     if (!event.target.closest(".admin-search")) hideSearchResults();
   });
   $("#userSearch").addEventListener("input", renderUsers);
+  $("#userList").addEventListener("click", event => {
+    const button = event.target.closest("[data-delete-user]");
+    if (!button) return;
+    event.preventDefault();
+    event.stopPropagation();
+    deleteUser(button.dataset.deleteUser);
+  });
   $("#logoutButton").addEventListener("click", () => {
     localStorage.removeItem("elvAdminToken");
     location.reload();

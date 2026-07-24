@@ -148,6 +148,23 @@
   grid-column: 1 / -1;
 }
 
+.admin-form .check-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f7fbff;
+  font-weight: 700;
+}
+
+.admin-form .check-row input {
+  width: 18px;
+  height: 18px;
+}
+
 .admin-list {
   display: grid;
   gap: 12px;
@@ -406,6 +423,109 @@ select:invalid {
   align-items: center;
   justify-content: space-between;
   gap: 14px;
+}
+
+.solution-admin-preview {
+  display: grid;
+  gap: 10px;
+  overflow: hidden;
+  border: 1px dashed #9eb0c7;
+  border-radius: 8px;
+  padding: 12px;
+  background: #f8fbff;
+  color: var(--muted);
+  font-weight: 900;
+}
+
+.solution-admin-map {
+  position: relative;
+  justify-self: center;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #edf3f9;
+  user-select: none;
+  touch-action: none;
+}
+
+.solution-admin-map img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.solution-admin-preview p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.solution-preview-dot {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  border: 3px solid var(--white);
+  border-radius: 999px;
+  background: var(--green);
+  box-shadow: 0 0 0 5px rgba(39, 170, 43, 0.22), 0 8px 18px rgba(16, 34, 56, 0.28);
+  color: var(--white);
+  cursor: pointer;
+  touch-action: none;
+  transform: translate(-50%, -50%);
+}
+
+.solution-preview-dot span {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 50%;
+  border-radius: 999px;
+  padding: 2px 6px;
+  background: #102238;
+  color: var(--white);
+  font-size: 0.68rem;
+  font-weight: 900;
+  transform: translateX(-50%);
+}
+
+.solution-preview-dot.active {
+  background: var(--blue);
+  box-shadow: 0 0 0 7px rgba(10, 63, 152, 0.22), 0 10px 24px rgba(16, 34, 56, 0.35);
+}
+
+.hotspot-admin-list {
+  display: grid;
+  gap: 12px;
+}
+
+.hotspot-admin-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  border: 1px solid #b3c2d4;
+  border-radius: 8px;
+  padding: 14px;
+  background: #f8fbff;
+  transition: border-color var(--fast), box-shadow var(--fast), background var(--fast);
+}
+
+.hotspot-admin-row.active {
+  border-color: var(--blue);
+  background: #eef5ff;
+  box-shadow: 0 10px 26px rgba(10, 63, 152, 0.12);
+}
+
+.hotspot-admin-head {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.hotspot-admin-row .full {
+  grid-column: 1 / -1;
 }
 
 .case-blocks-head h3 {

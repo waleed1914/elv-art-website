@@ -35,6 +35,166 @@ function stripHtml(value) {
   return div.textContent || div.innerText || "";
 }
 
+function absoluteUrl(path = location.pathname + location.search) {
+  try {
+    return new URL(path, location.origin).href;
+  } catch (error) {
+    return location.href;
+  }
+}
+
+function upsertMeta(selector, attributes) {
+  let element = document.head.querySelector(selector);
+  if (!element) {
+    element = document.createElement("meta");
+    document.head.appendChild(element);
+  }
+  Object.entries(attributes).forEach(([key, value]) => element.setAttribute(key, value));
+}
+
+function upsertLink(rel, href) {
+  let element = document.head.querySelector(`link[rel="${rel}"]`);
+  if (!element) {
+    element = document.createElement("link");
+    element.rel = rel;
+    document.head.appendChild(element);
+  }
+  element.href = href;
+}
+
+function upsertJsonLd(id, data) {
+  let element = document.head.querySelector(`#${id}`);
+  if (!element) {
+    element = document.createElement("script");
+    element.type = "application/ld+json";
+    element.id = id;
+    document.head.appendChild(element);
+  }
+  element.textContent = JSON.stringify(data);
+}
+
+function seoDescription(value) {
+  const text = stripHtml(value || "").replace(/\s+/g, " ").trim();
+  return text.length > 158 ? `${text.slice(0, 155).trim()}...` : text;
+}
+
+function setSeo({ title, description, image = "/assets/logo.jpeg", url = location.pathname + location.search, type = "website", schema = null }) {
+  const fullTitle = title?.includes("ELV.art") ? title : `${title || "ELV.art"} | ELV.art Pakistan`;
+  const desc = seoDescription(description || "ELV.art supplies and installs CCTV, access control, vehicle barriers, intercom, networking, fire alarm, AV, and ELV automation systems across Pakistan.");
+  const canonical = absoluteUrl(url);
+  const imageUrl = absoluteUrl(image);
+  document.title = fullTitle;
+  upsertMeta('meta[name="description"]', { name: "description", content: desc });
+  upsertMeta('meta[name="robots"]', { name: "robots", content: "index, follow, max-image-preview:large" });
+  upsertMeta('meta[property="og:title"]', { property: "og:title", content: fullTitle });
+  upsertMeta('meta[property="og:description"]', { property: "og:description", content: desc });
+  upsertMeta('meta[property="og:type"]', { property: "og:type", content: type });
+  upsertMeta('meta[property="og:url"]', { property: "og:url", content: canonical });
+  upsertMeta('meta[property="og:image"]', { property: "og:image", content: imageUrl });
+  upsertMeta('meta[name="twitter:card"]', { name: "twitter:card", content: "summary_large_image" });
+  upsertMeta('meta[name="twitter:title"]', { name: "twitter:title", content: fullTitle });
+  upsertMeta('meta[name="twitter:description"]', { name: "twitter:description", content: desc });
+  upsertMeta('meta[name="twitter:image"]', { name: "twitter:image", content: imageUrl });
+  upsertLink("canonical", canonical);
+  if (schema) upsertJsonLd("pageSchema", schema);
+}
+
+function organizationSchema() {
+  const settings = state.content?.settings || {};
+  return {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": settings.brand || "ELV.art",
+    "url": location.origin,
+    "logo": absoluteUrl("/assets/logo.jpeg"),
+    "image": absoluteUrl("/assets/generated/hero-elv-control-room.webp"),
+    "telephone": settings.phone || "+92 332 4816433",
+    "email": settings.email || "hello@elv.art",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "PK"
+    },
+    "areaServed": [
+      "Pakistan",
+      "Karachi",
+      "Lahore",
+      "Islamabad",
+      "Rawalpindi",
+      "Faisalabad",
+      "Multan",
+      "Peshawar",
+      "Quetta",
+      "Sialkot",
+      "Gujranwala",
+      "Hyderabad"
+    ],
+    "serviceType": [
+      "CCTV installation",
+      "Access control systems",
+      "Vehicle barrier installation",
+      "ANPR camera systems",
+      "Structured cabling",
+      "Intercom systems",
+      "Fire alarm systems",
+      "ELV automation"
+    ]
+  };
+}
+
+function applyDefaultSeo() {
+  const path = location.pathname;
+  if (["/admin.html", "/dashboard.html", "/cart.html", "/verify.html", "/reset-password.html"].includes(path)) return;
+  const defaults = {
+    "/": {
+      title: "ELV Systems, CCTV, Access Control & Automation in Pakistan",
+      description: "ELV.art supplies, installs, and supports CCTV cameras, access control, vehicle barriers, ANPR, intercom, structured cabling, fire alarm, AV, and automation systems across Pakistan.",
+      image: "/assets/generated/hero-elv-control-room.webp"
+    },
+    "/products.html": {
+      title: "ELV Products in Pakistan - CCTV, Access Control, Barriers, Networks",
+      description: "Browse ELV.art product families for CCTV, IP cameras, NVRs, access control, vehicle barriers, ANPR, PoE switches, intercom, fire alarm, and automation projects in Pakistan.",
+      image: "/assets/generated/product-cctv-system.webp"
+    },
+    "/solutions.html": {
+      title: "ELV Solutions in Pakistan - Security, Vehicle Access, Monitoring",
+      description: "Explore interactive ELV solution scenes for CCTV monitoring, vehicle e-tag lanes, pedestrian access, VMS command views, access control, and automation across Pakistan.",
+      image: "/assets/bick etag.webp"
+    },
+    "/about.html": {
+      title: "About ELV.art Pakistan - ELV, Security & Automation Integrator",
+      description: "ELV.art is an ELV systems company for Pakistan projects, supporting CCTV, access control, networks, intercom, fire alarm, AV, automation, installation, and maintenance.",
+      image: "/assets/generated/hero-elv-control-room.webp"
+    },
+    "/contact.html": {
+      title: "Contact ELV.art Pakistan - CCTV & ELV Project Quotations",
+      description: "Contact ELV.art for CCTV installation, access control, vehicle barriers, ANPR, networking, intercom, fire alarm, and ELV automation project quotations in Pakistan.",
+      image: "/assets/logo.jpeg"
+    },
+    "/case-studies.html": {
+      title: "ELV Case Studies in Pakistan - CCTV, Access Control & Networks",
+      description: "Review ELV.art case studies for CCTV, access control, vehicle access, network cabling, monitoring, and security upgrades.",
+      image: "/assets/generated/case-study-hero.webp"
+    },
+    "/training.html": {
+      title: "ELV Training Resources - CCTV, Access Control & Network Handover",
+      description: "ELV.art training resources for CCTV commissioning, access control wiring, network racks, handover documents, and field installation support.",
+      image: "/assets/generated/training-hero.webp"
+    },
+    "/downloads.html": {
+      title: "ELV Downloads - Datasheets, Manuals, PDFs & Project Files",
+      description: "Download ELV product datasheets, manuals, PDFs, ZIP files, checklists, and project documents for CCTV, access control, networking, and automation.",
+      image: "/assets/generated/downloads-hero.webp"
+    },
+    "/blogs.html": {
+      title: "ELV Blog Pakistan - CCTV, Access Control & Low Voltage Guides",
+      description: "Read practical ELV guides about CCTV planning, access control, network cabling, fire alarm, intercom, automation, and security project planning in Pakistan.",
+      image: "/assets/generated/hero-elv-control-room.webp"
+    }
+  };
+  const meta = defaults[path] || defaults["/"];
+  setSeo({ ...meta, url: path, schema: organizationSchema() });
+}
+
 function formData(form) {
   return Object.fromEntries(new FormData(form).entries());
 }
@@ -123,7 +283,7 @@ function renderEnhancedFooter() {
           <h3>Contact</h3>
           <a href="tel:${escapeHtml(settings.phone || "")}">${escapeHtml(settings.phone || "Call ELV.art")}</a>
           <a href="mailto:${escapeHtml(settings.email || "")}">${escapeHtml(settings.email || "hello@elv.art")}</a>
-          <span>${escapeHtml(settings.location || "Dubai, UAE")}</span>
+          <span>${escapeHtml(settings.location || "Pakistan")}</span>
           <a href="/contact.html">Contact Form</a>
         </div>
       </nav>
@@ -209,8 +369,8 @@ function buildGlobalSearchItems() {
       type: "Solution",
       title: item.title,
       summary: item.summary,
-      url: "/solutions.html",
-      keywords: itemSearchText([item.title, item.summary, item.outcomes])
+      url: solutionUrl(item.id || ""),
+      keywords: itemSearchText([item.title, item.summary, item.outcomes, item.hotspots?.map(hotspot => [hotspot.title, hotspot.message])])
     })),
     ...(content.projects || []).map(item => ({
       type: "Case Study",
@@ -219,7 +379,7 @@ function buildGlobalSearchItems() {
       url: `/case-study.html?id=${encodeURIComponent(item.id)}`,
       keywords: itemSearchText([item.title, item.summary, item.sections?.map(section => [section.heading, section.paragraph])])
     })),
-    ...(content.training || []).map(item => ({
+    ...(content.trainings || []).map(item => ({
       type: "Training",
       title: item.title,
       summary: item.summary,
@@ -392,8 +552,41 @@ async function api(path, options = {}) {
     ...options
   });
   const data = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(data.error || "Request failed");
+  if (!response.ok) {
+    const error = new Error(data.error || "Request failed");
+    Object.assign(error, data, { status: response.status });
+    throw error;
+  }
   return data;
+}
+
+function setFormStatus(element, message, type = "") {
+  if (!element) return;
+  element.classList.remove("success", "error", "info");
+  if (type) element.classList.add(type);
+  element.innerHTML = message;
+}
+
+function showResendVerification(email = "") {
+  const form = $("#resendVerificationForm");
+  if (!form) return;
+  form.classList.remove("hidden");
+  const input = form.querySelector("input[name='email']");
+  if (input && email) input.value = email;
+}
+
+function setAuthTab(tab) {
+  const showRegister = tab === "register";
+  const loginForm = $("#loginUserForm");
+  const registerForm = $("#registerForm");
+  if (loginForm) loginForm.classList.toggle("hidden", showRegister);
+  if (registerForm) registerForm.classList.toggle("hidden", !showRegister);
+  $$("[data-auth-tab]").forEach(button => {
+    const active = button.dataset.authTab === tab;
+    button.classList.toggle("primary", active);
+    button.classList.toggle("secondary", !active);
+    button.setAttribute("aria-pressed", String(active));
+  });
 }
 
 function syncAccountFromContent() {
@@ -747,6 +940,19 @@ function productUrl(id) {
   return `/product.html?id=${encodeURIComponent(id)}`;
 }
 
+function solutionUrl(id) {
+  return `/solution.html?id=${encodeURIComponent(id)}`;
+}
+
+function targetUrl(target) {
+  const [type, id] = String(target || "").split(":");
+  if (!id) return "#";
+  if (type === "product") return productUrl(id);
+  if (type === "model") return modelUrl(id);
+  if (type === "part") return partUrl(id);
+  return "#";
+}
+
 function modelUrl(id) {
   return `/model.html?id=${encodeURIComponent(id)}`;
 }
@@ -940,6 +1146,10 @@ function renderProducts() {
   const limit = Number(grid.dataset.limit || 0);
   const categoryId = grid.dataset.category || new URLSearchParams(location.search).get("category");
   let products = categoryId ? state.content.products.filter(product => product.categoryId === categoryId) : state.content.products;
+  if (!categoryId && limit) {
+    const homeProducts = products.filter(product => product.homeFeatured);
+    if (homeProducts.length) products = homeProducts;
+  }
   products = limit ? products.slice(0, limit) : products;
   grid.innerHTML = products.map(product => productFlowCard({
     type: product.segment || product.status || "Model Group",
@@ -1030,7 +1240,19 @@ function renderCategoryDetail() {
   const id = new URLSearchParams(location.search).get("id");
   const category = state.content.categories.find(item => item.id === id) || state.content.categories[0];
   const products = state.content.products.filter(product => product.categoryId === category.id);
-  document.title = `${category.name} | ELV.art`;
+  setSeo({
+    title: `${category.name} products in Pakistan`,
+    description: `${category.summary} Browse related ELV model groups, prices, datasheets, manuals, and project-ready product options across Pakistan.`,
+    image: category.image || "/assets/generated/product-cctv-system.webp",
+    url: categoryUrl(category.id),
+    schema: {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": `${category.name} products`,
+      "description": category.summary,
+      "url": absoluteUrl(categoryUrl(category.id))
+    }
+  });
   detail.innerHTML = `
     <section class="page-hero">
       <p class="eyebrow">Product Category</p>
@@ -1064,12 +1286,41 @@ function renderSolutions() {
   const limit = list.classList.contains("solution-preview") ? 3 : 0;
   const solutions = limit ? state.content.solutions.slice(0, limit) : state.content.solutions;
   list.innerHTML = solutions.map(solution => `
-    <article class="solution-card">
-      <strong>${escapeHtml(solution.title)}</strong>
-      <p>${escapeHtml(solution.summary)}</p>
-      <p>${(solution.outcomes || []).map(escapeHtml).join(" / ")}</p>
+    <article class="solution-card interactive-solution-card solution-summary-card" id="${escapeHtml(solution.id || "")}">
+      ${renderSolutionScene(solution, { preview: true })}
+      <div class="solution-copy">
+        <strong>${escapeHtml(solution.title)}</strong>
+        <p>${escapeHtml(solution.summary)}</p>
+        <p>${(solution.outcomes || []).map(escapeHtml).join(" / ")}</p>
+        <a class="solution-open-label" href="${escapeHtml(solutionUrl(solution.id || ""))}">Open Solution</a>
+      </div>
     </article>
   `).join("");
+  $$(".solution-summary-card").forEach(card => {
+    card.addEventListener("click", event => {
+      if (event.target.closest("a")) return;
+      const link = card.querySelector(".solution-open-label");
+      if (link) location.href = link.href;
+    });
+  });
+}
+
+function renderSolutionScene(solution, options = {}) {
+  if (!solution?.image) return "";
+  const preview = Boolean(options.preview);
+  return `
+    <div class="solution-scene ${preview ? "solution-scene-preview" : "solution-scene-detail"}">
+      <div class="solution-image-map">
+        <img src="${escapeHtml(solution.image)}" alt="${escapeHtml(solution.title)}">
+        ${(solution.hotspots || []).map((hotspot, index) => `
+          <a class="solution-hotspot ${Number(hotspot.x || 0) > 68 ? "bubble-left" : ""} ${Number(hotspot.y || 0) < 24 ? "bubble-low" : ""}" href="${escapeHtml(preview ? solutionUrl(solution.id || "") : targetUrl(hotspot.target))}" style="left:${escapeHtml(hotspot.x ?? 50)}%;top:${escapeHtml(hotspot.y ?? 50)}%;--hotspot-delay:${(index % 6) * 0.32}s" aria-label="${escapeHtml(preview ? `Open ${solution.title}` : hotspot.title || `Open product ${index + 1}`)}">
+            <span></span>
+            <em><strong>${escapeHtml(hotspot.title || "Product")}</strong>${escapeHtml(hotspot.message || "View related product")}</em>
+          </a>
+        `).join("")}
+      </div>
+    </div>
+  `;
 }
 
 function renderProjects() {
@@ -1088,6 +1339,73 @@ function renderProjects() {
   `).join("");
 }
 
+function renderSolutionDetail() {
+  const detail = $("#solutionDetail");
+  if (!detail) return;
+  const id = new URLSearchParams(location.search).get("id");
+  const solution = (state.content.solutions || []).find(item => item.id === id) || (state.content.solutions || [])[0];
+  if (!solution) {
+    detail.innerHTML = `<section class="page-hero"><p class="eyebrow">Solutions</p><h1>No solution found</h1><p>This solution has not been added yet.</p></section>`;
+    return;
+  }
+  const sections = Array.isArray(solution.sections) && solution.sections.length
+    ? solution.sections
+    : [{ heading: "Interactive Diagram", paragraph: "Hover a product point to preview it, then click it to open the linked catalog item." }];
+  setSeo({
+    title: `${solution.title} solution in Pakistan`,
+    description: `${solution.summary || ""} Interactive ELV solution for ${solution.status || "security and automation"} projects across Pakistan.`,
+    image: solution.image || "/assets/generated/hero-elv-control-room.webp",
+    url: solutionUrl(solution.id),
+    schema: {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": solution.title,
+      "description": solution.summary,
+      "provider": organizationSchema(),
+      "areaServed": "Pakistan",
+      "serviceType": solution.status || "ELV Solution"
+    }
+  });
+  detail.innerHTML = `
+    <section class="solution-detail-shell">
+      <div class="solution-detail-top">
+        <div>
+          <p class="eyebrow">${escapeHtml(solution.status || "Solution")}</p>
+          <h1>${escapeHtml(solution.title)}</h1>
+          <p>${escapeHtml(solution.summary || "")}</p>
+        </div>
+        <div class="solution-detail-actions">
+          <a class="button secondary" href="/solutions.html">Back to Solutions</a>
+          <a class="button primary" href="${escapeHtml(whatsappLink(3))}" target="_blank" rel="noreferrer">${icon("message-circle")}Discuss This Solution</a>
+        </div>
+      </div>
+      ${(solution.outcomes || []).length ? `
+        <div class="solution-detail-outcomes">
+          ${(solution.outcomes || []).map(outcome => `<span>${escapeHtml(outcome)}</span>`).join("")}
+        </div>
+      ` : ""}
+      <div class="solution-detail-stage">
+        ${renderSolutionScene(solution)}
+      </div>
+      <div class="solution-detail-guide">
+        <div class="solution-guide-head">
+          <p class="eyebrow">Interactive Diagram</p>
+          <h2>Hover a product point. Click it to open the linked catalog item.</h2>
+        </div>
+        <div class="solution-detail-paragraphs">
+          ${sections.map((section, index) => `
+            <article>
+              <span>${String(index + 1).padStart(2, "0")}</span>
+              ${section.heading ? `<h3>${escapeHtml(section.heading)}</h3>` : ""}
+              <p>${escapeHtml(section.paragraph || "")}</p>
+            </article>
+          `).join("")}
+        </div>
+      </div>
+    </section>
+  `;
+}
+
 function renderCaseStudyDetail() {
   const detail = $("#caseStudyDetail");
   if (!detail) return;
@@ -1100,7 +1418,22 @@ function renderCaseStudyDetail() {
   const sections = Array.isArray(item.sections) && item.sections.length
     ? item.sections
     : [{ heading: item.sector || "Project Overview", paragraph: item.summary || "", image: item.image || "" }];
-  document.title = `${item.title} | ELV.art`;
+  setSeo({
+    title: `${item.title} case study`,
+    description: item.summary || sections.map(section => section.paragraph).join(" "),
+    image: item.image || sections.find(section => section.image)?.image || "/assets/generated/case-study-hero.webp",
+    url: `/case-study.html?id=${encodeURIComponent(item.id)}`,
+    type: "article",
+    schema: {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": item.title,
+      "description": item.summary,
+      "image": absoluteUrl(item.image || "/assets/generated/case-study-hero.webp"),
+      "author": { "@type": "Organization", "name": "ELV.art" },
+      "publisher": organizationSchema()
+    }
+  });
   detail.innerHTML = `
     <section class="case-hero">
       <div class="case-hero-image">${item.image ? `<img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}">` : ""}</div>
@@ -1176,7 +1509,22 @@ function renderBlogDetail() {
     : [{ heading: "", paragraph: item.body || item.summary || "", image: "" }];
   const videoLinks = Array.isArray(item.videoLinks) && item.videoLinks.length ? item.videoLinks : [item.videoUrl].filter(Boolean);
   const videos = videoLinks.map(link => ({ link, embed: youtubeEmbedUrl(link) })).filter(video => video.link);
-  document.title = `${item.title} | ELV.art`;
+  setSeo({
+    title: `${item.title} - ELV guide Pakistan`,
+    description: item.summary || sections.map(section => section.paragraph).join(" "),
+    image: item.image || sections.find(section => section.image)?.image || "/assets/generated/hero-elv-control-room.webp",
+    url: blogUrl(item.id),
+    type: "article",
+    schema: {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": item.title,
+      "description": item.summary,
+      "image": absoluteUrl(item.image || "/assets/generated/hero-elv-control-room.webp"),
+      "author": { "@type": "Organization", "name": "ELV.art" },
+      "publisher": organizationSchema()
+    }
+  });
   detail.innerHTML = `
     <section class="page-hero">
       <p class="eyebrow">${escapeHtml(item.date || "Blog")}</p>
@@ -1225,7 +1573,19 @@ function renderDownloadDetail() {
   const documents = Array.isArray(item.documents) && item.documents.length
     ? item.documents
     : item.url ? [{ name: item.title || "Download file", url: item.url }] : [];
-  document.title = `${item.title} | ELV.art`;
+  setSeo({
+    title: `${item.title} download`,
+    description: item.summary || sections.map(section => section.paragraph).join(" "),
+    image: "/assets/generated/downloads-hero.webp",
+    url: downloadUrl(item.id),
+    schema: {
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      "name": item.title,
+      "description": item.summary,
+      "provider": organizationSchema()
+    }
+  });
   detail.innerHTML = `
     <section class="page-hero">
       <p class="eyebrow">${escapeHtml(item.product || "Downloads")}</p>
@@ -1270,7 +1630,19 @@ function renderTrainingDetail() {
   const videoLinks = Array.isArray(item.videoLinks) && item.videoLinks.length ? item.videoLinks : [item.videoUrl].filter(Boolean);
   const videos = videoLinks.map(link => ({ link, embed: youtubeEmbedUrl(link) })).filter(video => video.link);
   const documents = Array.isArray(item.documents) ? item.documents : [];
-  document.title = `${item.title} | ELV.art`;
+  setSeo({
+    title: `${item.title} training`,
+    description: item.summary || sections.map(section => section.paragraph).join(" "),
+    image: item.image || "/assets/generated/training-hero.webp",
+    url: trainingUrl(item.id),
+    schema: {
+      "@context": "https://schema.org",
+      "@type": "Course",
+      "name": item.title,
+      "description": item.summary,
+      "provider": organizationSchema()
+    }
+  });
   detail.innerHTML = `
     <section class="case-hero">
       <div class="case-hero-image">${item.image ? `<img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}">` : ""}</div>
@@ -1501,6 +1873,31 @@ function renderProductShowcase(item) {
       ` : ""}
     </div>
   `;
+}
+
+function productSchema(item, url, category = "ELV Product") {
+  const price = activePrice(item);
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": item.name,
+    "description": seoDescription(item.summary || item.summaryHtml || ""),
+    "image": absoluteUrl(item.image || "/assets/logo.jpeg"),
+    "brand": { "@type": "Brand", "name": "ELV.art" },
+    "category": category,
+    "url": absoluteUrl(url),
+    "areaServed": "Pakistan"
+  };
+  if (!price.quoteOnly && price.amount > 0) {
+    schema.offers = {
+      "@type": "Offer",
+      "price": String(price.amount),
+      "priceCurrency": "PKR",
+      "availability": "https://schema.org/InStock",
+      "url": absoluteUrl(url)
+    };
+  }
+  return schema;
 }
 
 function setupDetailMedia() {
@@ -1757,7 +2154,13 @@ function renderProductDetail() {
     .filter(item => item.id !== product.id && (item.categoryId === product.categoryId || item.segment === product.segment)))
     .slice(0, 4);
   const catalogRows = modelGroupRows(product);
-  document.title = `${product.name} | ELV.art`;
+  setSeo({
+    title: `${product.name} price and details in Pakistan`,
+    description: `${product.summary || stripHtml(product.summaryHtml)} Available for CCTV, access control, network, vehicle access, and ELV projects across Pakistan.`,
+    image: product.image || "/assets/generated/product-cctv-system.webp",
+    url: productUrl(product.id),
+    schema: productSchema(product, productUrl(product.id), product.segment || "Model Group")
+  });
   detail.innerHTML = `
     <section class="page-hero product-detail-hero">
       <p class="eyebrow">${escapeHtml(product.segment || product.status || "Product")}</p>
@@ -1843,7 +2246,13 @@ function renderModelDetail() {
   const similar = (state.content.models || [])
     .filter(item => item.id !== model.id && (item.productId === model.productId || item.segment === model.segment))
     .slice(0, 3);
-  document.title = `${model.name} | ELV.art`;
+  setSeo({
+    title: `${model.name} model price and specifications Pakistan`,
+    description: `${model.summary || stripHtml(model.summaryHtml)} Model details, pricing, datasheet, manual, CAD, and 3D files for ELV projects in Pakistan.`,
+    image: model.image || product?.image || "/assets/generated/product-cctv-system.webp",
+    url: modelUrl(model.id),
+    schema: productSchema(model, modelUrl(model.id), category?.name || product?.name || "ELV Model")
+  });
   detail.innerHTML = `
     <section class="page-hero product-detail-hero">
       <p class="eyebrow">${escapeHtml(category?.name || product?.name || "Model")}</p>
@@ -1913,7 +2322,13 @@ function renderPartDetail() {
   }
   const product = state.content.products.find(item => item.id === part.productId);
   const model = (state.content.models || []).find(item => item.id === part.modelId);
-  document.title = `${part.name} | ELV.art`;
+  setSeo({
+    title: `${part.name} accessory price Pakistan`,
+    description: `${part.summary || stripHtml(part.summaryHtml)} Accessory details, pricing, datasheets, and technical files for ELV installations across Pakistan.`,
+    image: part.image || model?.image || product?.image || "/assets/generated/product-cctv-system.webp",
+    url: partUrl(part.id),
+    schema: productSchema(part, partUrl(part.id), "ELV Accessory")
+  });
   detail.innerHTML = `
     <section class="page-hero">
       <p class="eyebrow">${escapeHtml(model?.name || product?.name || "Product Accessory")}</p>
@@ -2175,11 +2590,10 @@ function setupForms() {
 
   $$("[data-auth-tab]").forEach(button => {
     button.addEventListener("click", () => {
-      const showRegister = button.dataset.authTab === "register";
-      $("#loginUserForm").classList.toggle("hidden", showRegister);
-      $("#registerForm").classList.toggle("hidden", !showRegister);
+      setAuthTab(button.dataset.authTab);
     });
   });
+  if ($("#loginUserForm") && $("#registerForm")) setAuthTab(location.hash === "#register" ? "register" : "login");
 
   const leadForm = $("#leadForm");
   if (leadForm) leadForm.addEventListener("submit", async event => {
@@ -2201,13 +2615,18 @@ function setupForms() {
     event.preventDefault();
     const form = event.currentTarget;
     const status = $("#registerStatus");
-    if (status) status.textContent = "Submitting...";
+    setFormStatus(status, "Submitting...", "info");
     try {
-      await api("/api/register", { method: "POST", body: JSON.stringify(formData(form)) });
+      const result = await api("/api/register", { method: "POST", body: JSON.stringify(formData(form)) });
+      const email = form.email?.value || "";
       if (form && typeof form.reset === "function") form.reset();
-      if (status) status.textContent = "Thank you for registering with ELV.art. You can now login to your account.";
+      setFormStatus(status, result.emailSent
+        ? "Thank you for registering with ELV.art. Please check your email and click the verification link. After verification, you can login."
+        : "Thank you for registering with ELV.art. Email sending is not configured on this server. Please contact ELV.art support.",
+        "success");
+      showResendVerification(email);
     } catch (error) {
-      if (status) status.textContent = error.message;
+      setFormStatus(status, escapeHtml(error.message), "error");
     }
   });
 
@@ -2216,11 +2635,11 @@ function setupForms() {
     event.preventDefault();
     const form = event.currentTarget;
     const status = $("#loginUserStatus");
-    if (status) status.textContent = "Checking...";
+    setFormStatus(status, "Checking...", "info");
     try {
       state.account = await api("/api/login", { method: "POST", body: JSON.stringify(formData(form)) });
       localStorage.setItem("elvAccount", JSON.stringify(state.account));
-      if (status) status.textContent = "Logged in.";
+      setFormStatus(status, "Logged in.", "success");
       state.content = await api("/api/content");
       syncAccountFromContent();
       renderAccount();
@@ -2229,7 +2648,75 @@ function setupForms() {
       renderCartNav();
       renderAccountNav();
     } catch (error) {
-      if (status) status.textContent = error.message;
+      setFormStatus(status, escapeHtml(error.message), "error");
+      if (error.code === "EMAIL_NOT_VERIFIED") showResendVerification(error.email || form.email?.value || "");
+    }
+  });
+
+  const resendVerificationForm = $("#resendVerificationForm");
+  if (resendVerificationForm) resendVerificationForm.addEventListener("submit", async event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const status = $("#resendVerificationStatus");
+    setFormStatus(status, "Sending verification email...", "info");
+    try {
+      const result = await api("/api/resend-verification", { method: "POST", body: JSON.stringify(formData(form)) });
+      setFormStatus(status, result.emailSent
+        ? "Verification email sent. Please check your inbox."
+        : "Email sending is not configured on this server. Please contact ELV.art support.",
+        "success");
+    } catch (error) {
+      setFormStatus(status, escapeHtml(error.message), "error");
+    }
+  });
+
+  const showForgotPassword = $("#showForgotPassword");
+  if (showForgotPassword) showForgotPassword.addEventListener("click", () => {
+    $("#loginUserForm")?.classList.add("hidden");
+    $("#forgotPasswordForm")?.classList.remove("hidden");
+    $("#forgotPasswordForm input[name='email']")?.focus();
+  });
+
+  const backToLoginFromForgot = $("#backToLoginFromForgot");
+  if (backToLoginFromForgot) backToLoginFromForgot.addEventListener("click", () => {
+    $("#forgotPasswordForm")?.classList.add("hidden");
+    $("#loginUserForm")?.classList.remove("hidden");
+  });
+
+  const forgotPasswordForm = $("#forgotPasswordForm");
+  if (forgotPasswordForm) forgotPasswordForm.addEventListener("submit", async event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const status = $("#forgotPasswordStatus");
+    setFormStatus(status, "Sending reset link...", "info");
+    try {
+      const result = await api("/api/request-password-reset", { method: "POST", body: JSON.stringify(formData(form)) });
+      setFormStatus(status, result.message || "If this email is registered, a password reset link will be sent.", "success");
+    } catch (error) {
+      setFormStatus(status, escapeHtml(error.message), "error");
+    }
+  });
+
+  const resetPasswordForm = $("#resetPasswordForm");
+  if (resetPasswordForm) resetPasswordForm.addEventListener("submit", async event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const status = $("#resetPasswordStatus");
+    const password = form.password?.value || "";
+    const confirmPassword = form.confirmPassword?.value || "";
+    if (password !== confirmPassword) {
+      setFormStatus(status, "Passwords do not match.", "error");
+      return;
+    }
+    setFormStatus(status, "Saving new password...", "info");
+    try {
+      const result = await api("/api/reset-password", { method: "POST", body: JSON.stringify({ token: form.token.value, password }) });
+      form.reset();
+      $("#resetTitle").textContent = "Password changed";
+      $("#resetIntro").textContent = "Your password has been updated. You can now login with the new password.";
+      setFormStatus(status, result.message || "Password changed successfully.", "success");
+    } catch (error) {
+      setFormStatus(status, escapeHtml(error.message), "error");
     }
   });
 
@@ -2239,7 +2726,7 @@ function setupForms() {
     if (!state.account) return;
     const form = event.currentTarget;
     const status = $("#accountInfoStatus");
-    if (status) status.textContent = "Saving...";
+    setFormStatus(status, "Saving...", "info");
     try {
       const updatedUser = await api("/api/account", {
         method: "PUT",
@@ -2251,21 +2738,534 @@ function setupForms() {
       renderAccount();
       renderAccountNav();
       const freshStatus = $("#accountInfoStatus");
-      if (freshStatus) freshStatus.textContent = "Your information has been updated.";
+      setFormStatus(freshStatus, "Your information has been updated.", "success");
     } catch (error) {
-      if (status) status.textContent = error.message;
+      setFormStatus(status, escapeHtml(error.message), "error");
     }
   });
+
+  setupEmailVerificationPage();
+}
+
+async function setupEmailVerificationPage() {
+  const title = $("#verifyTitle");
+  const status = $("#verifyStatus");
+  if (!title || !status) return;
+  const params = new URLSearchParams(location.search);
+  if (params.get("verified") === "1") {
+    title.textContent = "Email verified";
+    status.textContent = "Your email has been verified. You can now login to your ELV.art account.";
+    return;
+  }
+  if (params.get("error")) {
+    title.textContent = "Verification failed";
+    status.textContent = params.get("error");
+    return;
+  }
+  const token = params.get("token");
+  if (!token) {
+    title.textContent = "Verification link missing";
+    status.textContent = "Please open the full verification link from your ELV.art email.";
+    return;
+  }
+  try {
+    const result = await api("/api/verify-email", { method: "POST", body: JSON.stringify({ token }) });
+    title.textContent = "Email verified";
+    status.textContent = result.message || "Your email has been verified. You can now login.";
+  } catch (error) {
+    title.textContent = "Verification failed";
+    status.textContent = error.message;
+  }
+}
+
+function setupResetPasswordPage() {
+  const form = $("#resetPasswordForm");
+  if (!form) return;
+  const params = new URLSearchParams(location.search);
+  const token = params.get("token") || "";
+  form.token.value = token;
+  if (!token) {
+    $("#resetTitle").textContent = "Reset link missing";
+    $("#resetIntro").textContent = "Please open the full password reset link from your ELV.art email.";
+    form.querySelector("button[type='submit']").disabled = true;
+  }
+}
+
+const prefersReducedMotion = () =>
+  window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function injectFonts() {
+  if (document.getElementById("elvFonts")) return;
+  const preconnect1 = document.createElement("link");
+  preconnect1.rel = "preconnect";
+  preconnect1.href = "https://fonts.googleapis.com";
+  const preconnect2 = document.createElement("link");
+  preconnect2.rel = "preconnect";
+  preconnect2.href = "https://fonts.gstatic.com";
+  preconnect2.crossOrigin = "anonymous";
+  const font = document.createElement("link");
+  font.id = "elvFonts";
+  font.rel = "stylesheet";
+  font.href = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap";
+  document.head.append(preconnect1, preconnect2, font);
+}
+
+function setupScrollProgress() {
+  if (document.querySelector(".scroll-progress")) return;
+  const bar = document.createElement("div");
+  bar.className = "scroll-progress";
+  bar.setAttribute("aria-hidden", "true");
+  document.body.appendChild(bar);
+  let ticking = false;
+  const update = () => {
+    const doc = document.documentElement;
+    const max = doc.scrollHeight - doc.clientHeight;
+    const ratio = max > 0 ? Math.min(1, doc.scrollTop / max) : 0;
+    bar.style.transform = `scaleX(${ratio})`;
+    ticking = false;
+  };
+  window.addEventListener("scroll", () => {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(update);
+  }, { passive: true });
+  update();
+}
+
+function setupMetricCountUp() {
+  const numbers = $$(".metric-grid strong");
+  if (!numbers.length) return;
+  const animate = el => {
+    const raw = el.textContent.trim();
+    const match = raw.match(/^(\d[\d,]*)(.*)$/);
+    if (!match) return;
+    const target = Number(match[1].replace(/,/g, ""));
+    const suffix = match[2] || "";
+    if (!Number.isFinite(target) || prefersReducedMotion()) return;
+    const duration = 1400;
+    let start = null;
+    const step = now => {
+      if (start === null) start = now;
+      const progress = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = `${Math.round(target * eased).toLocaleString()}${suffix}`;
+      if (progress < 1) window.requestAnimationFrame(step);
+    };
+    window.requestAnimationFrame(step);
+  };
+  if (!("IntersectionObserver" in window)) {
+    numbers.forEach(animate);
+    return;
+  }
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      animate(entry.target);
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.4 });
+  numbers.forEach(el => observer.observe(el));
+}
+
+function setupHeroSlider() {
+  const hero = document.querySelector("[data-hero-slider]");
+  if (!hero) return;
+  const title = hero.querySelector("[data-hero-title]");
+  const copy = hero.querySelector("[data-hero-copy]");
+  const kicker = hero.querySelector("[data-hero-kicker]");
+  if (!title || !copy || !kicker) return;
+
+  const slides = [
+    {
+      image: "/assets/generated/hero-elv-control-room.webp",
+      kicker: "Security - Networks - Automation",
+      title: "Integrated ELV systems for secure, intelligent buildings in Pakistan.",
+      copy: "ELV.art delivers CCTV, access control, vehicle barriers, ANPR, structured cabling, fire alarm, intercom, AV, and automation solutions across Karachi, Lahore, Islamabad, Rawalpindi, Faisalabad, Multan, Peshawar, Quetta, Sialkot, and other major Pakistan cities."
+    },
+    {
+      image: "/assets/generated/hero-elv-lobby-command.webp",
+      kicker: "Command Rooms - Access Control - CCTV",
+      title: "One connected command view for every entrance, camera, and network point.",
+      copy: "Bring lobby access, surveillance walls, turnstiles, barriers, racks, and site monitoring into a single dependable ELV environment designed for commercial buildings and campuses."
+    },
+    {
+      image: "/assets/generated/hero-elv-anpr-gate.webp",
+      kicker: "ANPR - Barriers - Vehicle Access",
+      title: "Smarter gates that identify vehicles, control lanes, and protect sites.",
+      copy: "From ANPR cameras and RFID readers to boom barriers and traffic indication, ELV.art builds controlled entry systems for societies, offices, warehouses, and industrial facilities."
+    },
+    {
+      image: "/assets/generated/hero-elv-network-automation.webp",
+      kicker: "Networks - Fire Safety - Automation",
+      title: "Clean infrastructure for buildings that need security, safety, and uptime.",
+      copy: "Structured cabling, PoE switching, fire alarm interfaces, access readers, CCTV, and automation panels are planned together so your site is easier to maintain and expand."
+    }
+  ];
+
+  const fader = document.createElement("div");
+  fader.className = "hero-bg-fader";
+  hero.prepend(fader);
+  const dots = document.createElement("div");
+  dots.className = "hero-slide-dots";
+  dots.setAttribute("aria-label", "Hero slides");
+  dots.innerHTML = slides.map((slide, index) => `<button type="button" aria-label="Show slide ${index + 1}" data-hero-dot="${index}"></button>`).join("");
+  hero.appendChild(dots);
+
+  let index = 0;
+  let timer = null;
+  let typeTimer = null;
+  const interval = 6500;
+  const reduce = prefersReducedMotion();
+
+  const setDots = () => {
+    dots.querySelectorAll("[data-hero-dot]").forEach((dot, dotIndex) => dot.classList.toggle("active", dotIndex === index));
+  };
+
+  const typeTitle = text => {
+    if (typeTimer) window.clearTimeout(typeTimer);
+    if (reduce) {
+      title.textContent = text;
+      return;
+    }
+    title.textContent = "";
+    let i = 0;
+    const tick = () => {
+      title.textContent = text.slice(0, i);
+      i += 1;
+      if (i <= text.length) typeTimer = window.setTimeout(tick, i < 12 ? 34 : 24);
+    };
+    tick();
+  };
+
+  const activate = nextIndex => {
+    const next = slides[nextIndex];
+    index = nextIndex;
+    hero.style.setProperty("--hero-bg-next", `url("${next.image}")`);
+    hero.classList.add("is-changing");
+    copy.classList.add("is-swapping");
+    window.setTimeout(() => {
+      hero.style.setProperty("--hero-bg", `url("${next.image}")`);
+      kicker.textContent = next.kicker;
+      copy.textContent = next.copy;
+      copy.classList.remove("is-swapping");
+      typeTitle(next.title);
+      setDots();
+      window.setTimeout(() => hero.classList.remove("is-changing"), 60);
+    }, reduce ? 0 : 420);
+  };
+
+  const play = () => {
+    if (timer) window.clearInterval(timer);
+    if (reduce) return;
+    timer = window.setInterval(() => activate((index + 1) % slides.length), interval);
+  };
+
+  dots.querySelectorAll("[data-hero-dot]").forEach(dot => {
+    dot.addEventListener("click", () => {
+      activate(Number(dot.dataset.heroDot || 0));
+      play();
+    });
+  });
+
+  hero.style.setProperty("--hero-bg", `url("${slides[0].image}")`);
+  hero.style.setProperty("--hero-bg-next", `url("${slides[0].image}")`);
+  setDots();
+  typeTitle(slides[0].title);
+  play();
+}
+
+function setupHeroScrollCue() {
+  const hero = document.querySelector(".hero");
+  if (!hero || hero.querySelector(".scroll-cue")) return;
+  hero.insertAdjacentHTML("beforeend", `
+    <div class="scroll-cue" aria-hidden="true"><span></span>Scroll</div>
+  `);
+}
+
+function setupSiteExplorer() {
+  const explorer = document.querySelector("[data-explorer]");
+  if (!explorer) return;
+  const tabs = Array.from(explorer.querySelectorAll(".explorer-tab"));
+  const images = Array.from(explorer.querySelectorAll(".explorer-stage-img"));
+  if (!tabs.length) return;
+
+  let index = 0;
+  let timer = null;
+  const duration = 6000;
+
+  const activate = i => {
+    index = i;
+    tabs.forEach((tab, k) => {
+      const on = k === i;
+      tab.classList.toggle("active", on);
+      tab.setAttribute("aria-selected", on ? "true" : "false");
+    });
+    images.forEach((img, k) => img.classList.toggle("active", k === i));
+  };
+
+  const stop = () => {
+    if (timer) window.clearInterval(timer);
+    timer = null;
+  };
+
+  const play = () => {
+    stop();
+    if (prefersReducedMotion()) return;
+    timer = window.setInterval(() => activate((index + 1) % tabs.length), duration);
+  };
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener("click", () => { activate(i); play(); });
+    tab.addEventListener("mouseenter", () => { if (!prefersReducedMotion()) activate(i); });
+  });
+  explorer.addEventListener("mouseenter", stop);
+  explorer.addEventListener("mouseleave", play);
+
+  activate(0);
+  play();
+}
+
+function setupHeroInteractive() {
+  const canvas = document.querySelector(".hero-canvas");
+  if (!canvas) return;
+  const scene = canvas.closest(".hero-live-scene") || canvas.parentElement;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+  const reduce = prefersReducedMotion();
+
+  const nodes = [
+    { nx: 0.50, ny: 0.50, label: "Command Core", rgb: "110,231,117", hub: true, r: 12 },
+    { nx: 0.19, ny: 0.24, label: "CCTV", rgb: "74,158,255", r: 8 },
+    { nx: 0.83, ny: 0.20, label: "ANPR Gate", rgb: "74,158,255", r: 8 },
+    { nx: 0.87, ny: 0.66, label: "Access Door", rgb: "110,231,117", r: 8 },
+    { nx: 0.15, ny: 0.70, label: "PoE Switch", rgb: "74,158,255", r: 8 },
+    { nx: 0.50, ny: 0.12, label: "Fire Alarm", rgb: "110,231,117", r: 8 },
+    { nx: 0.52, ny: 0.88, label: "Intercom", rgb: "74,158,255", r: 8 }
+  ];
+  const edges = [[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 4], [2, 3], [5, 2], [6, 3]];
+  const pulses = edges.map((e, i) => ({ e, t: (i * 0.17) % 1, speed: 0.0026 + (i % 4) * 0.0011 }));
+
+  const pointer = { x: 0.5, y: 0.5, active: false };
+  const view = { x: 0.5, y: 0.5 };
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  let W = 0, H = 0, rings = [];
+
+  function resize() {
+    const rect = scene.getBoundingClientRect();
+    W = Math.max(1, rect.width);
+    H = Math.max(1, rect.height);
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width = `${W}px`;
+    canvas.style.height = `${H}px`;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function nodePos(n) {
+    const px = view.x - 0.5;
+    const py = view.y - 0.5;
+    const depth = n.hub ? 8 : 30;
+    return { x: n.nx * W + px * depth, y: n.ny * H + py * depth };
+  }
+
+  function draw(time) {
+    ctx.clearRect(0, 0, W, H);
+    const P = nodes.map(nodePos);
+    const hub = P[0];
+    const pxr = view.x * W;
+    const pyr = view.y * H;
+
+    // expanding radar rings from the hub
+    if (!reduce && time - (rings._last || 0) > 1400) {
+      rings.push({ born: time });
+      rings._last = time;
+    }
+    rings = rings.filter(ring => time - ring.born < 2600);
+    rings.forEach(ring => {
+      const age = (time - ring.born) / 2600;
+      const rad = 20 + age * Math.max(W, H) * 0.42;
+      ctx.beginPath();
+      ctx.arc(hub.x, hub.y, rad, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(110,231,117,${(1 - age) * 0.22})`;
+      ctx.lineWidth = 1.4;
+      ctx.stroke();
+    });
+
+    // connection lines
+    edges.forEach(([a, b]) => {
+      ctx.beginPath();
+      ctx.moveTo(P[a].x, P[a].y);
+      ctx.lineTo(P[b].x, P[b].y);
+      ctx.strokeStyle = "rgba(140,180,235,0.16)";
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+    });
+
+    // data pulses travelling the edges
+    pulses.forEach(p => {
+      if (!reduce) {
+        p.t += p.speed;
+        if (p.t > 1) p.t -= 1;
+      }
+      const a = P[p.e[0]];
+      const b = P[p.e[1]];
+      const x = a.x + (b.x - a.x) * p.t;
+      const y = a.y + (b.y - a.y) * p.t;
+      ctx.beginPath();
+      ctx.arc(x, y, 2.4, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(110,231,117,0.95)";
+      ctx.shadowColor = "rgba(110,231,117,0.8)";
+      ctx.shadowBlur = 8;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    });
+
+    // nodes + labels
+    nodes.forEach((n, i) => {
+      const { x, y } = P[i];
+      const dist = Math.hypot(x - pxr, y - pyr);
+      const near = pointer.active && dist < 95;
+      const beat = reduce ? 1 : 1 + Math.sin(time / 500 + i) * 0.07;
+      const R = n.r * beat * (near ? 1.55 : 1);
+
+      // cursor tether to nearby nodes
+      if (near) {
+        ctx.beginPath();
+        ctx.moveTo(pxr, pyr);
+        ctx.lineTo(x, y);
+        ctx.strokeStyle = `rgba(${n.rgb},${0.5 * (1 - dist / 95)})`;
+        ctx.lineWidth = 1.3;
+        ctx.stroke();
+      }
+
+      ctx.beginPath();
+      ctx.arc(x, y, R + (near ? 12 : 7), 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${n.rgb},${near ? 0.24 : 0.12})`;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(x, y, R, 0, Math.PI * 2);
+      ctx.fillStyle = `rgb(${n.rgb})`;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(x, y, R + 4, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(${n.rgb},0.55)`;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      if (n.hub || near) {
+        ctx.font = "700 12px Inter, system-ui, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillStyle = "rgba(235,244,255,0.95)";
+        ctx.fillText(n.label, x, y - R - 10);
+      }
+    });
+  }
+
+  let raf = 0;
+  function loop(ts) {
+    const time = ts || 0;
+    const tx = pointer.active ? pointer.x : 0.5 + Math.cos(time / 2600) * 0.13;
+    const ty = pointer.active ? pointer.y : 0.5 + Math.sin(time / 2200) * 0.13;
+    view.x += (tx - view.x) * 0.07;
+    view.y += (ty - view.y) * 0.07;
+    draw(time);
+    raf = window.requestAnimationFrame(loop);
+  }
+
+  scene.addEventListener("pointermove", event => {
+    const rect = scene.getBoundingClientRect();
+    pointer.x = (event.clientX - rect.left) / rect.width;
+    pointer.y = (event.clientY - rect.top) / rect.height;
+    pointer.active = true;
+    scene.classList.add("is-scanning");
+  });
+  scene.addEventListener("pointerleave", () => {
+    pointer.active = false;
+    scene.classList.remove("is-scanning");
+  });
+  window.addEventListener("resize", resize);
+
+  resize();
+  if (reduce) {
+    draw(0);
+  } else {
+    raf = window.requestAnimationFrame(loop);
+  }
+}
+
+function setupDataViz() {
+  const hasIO = "IntersectionObserver" in window;
+
+  // Reveal / animate the inline SVG + CSS charts when scrolled into view
+  const charts = $$("[data-animate-chart]");
+  if (charts.length) {
+    if (!hasIO) {
+      charts.forEach(chart => chart.classList.add("chart-in"));
+    } else {
+      const chartObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("chart-in");
+          chartObserver.unobserve(entry.target);
+        });
+      }, { threshold: 0.25 });
+      charts.forEach(chart => chartObserver.observe(chart));
+    }
+  }
+
+  // Count-up for any [data-count] number (supports data-decimals / data-suffix)
+  const runCount = el => {
+    const target = Number(el.dataset.count);
+    if (!Number.isFinite(target)) return;
+    const decimals = Number(el.dataset.decimals || 0);
+    const suffix = el.dataset.suffix || "";
+    const format = value => (decimals ? value.toFixed(decimals) : Math.round(value).toLocaleString()) + suffix;
+    if (prefersReducedMotion()) {
+      el.textContent = format(target);
+      return;
+    }
+    const duration = 1500;
+    let start = null;
+    const step = now => {
+      if (start === null) start = now;
+      const progress = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = format(target * eased);
+      if (progress < 1) window.requestAnimationFrame(step);
+    };
+    window.requestAnimationFrame(step);
+  };
+
+  const counters = $$("[data-count]");
+  if (!counters.length) return;
+  if (!hasIO) {
+    counters.forEach(runCount);
+    return;
+  }
+  const countObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      runCount(entry.target);
+      countObserver.unobserve(entry.target);
+    });
+  }, { threshold: 0.6 });
+  counters.forEach(el => countObserver.observe(el));
 }
 
 async function init() {
+  injectFonts();
+  await setupEmailVerificationPage();
   state.content = await api("/api/content");
   syncAccountFromContent();
+  applyDefaultSeo();
   renderGlobalSearch();
   renderBackButton();
   renderCategories();
   renderProducts();
   renderSolutions();
+  renderSolutionDetail();
   renderProjects();
   renderResources();
   renderCaseStudyDetail();
@@ -2283,7 +3283,15 @@ async function init() {
   renderCartNav();
   renderAccountNav();
   setupForms();
+  setupResetPasswordPage();
   setupScrollMotion();
+  setupScrollProgress();
+  setupMetricCountUp();
+  setupHeroSlider();
+  setupHeroScrollCue();
+  setupHeroInteractive();
+  setupSiteExplorer();
+  setupDataViz();
 }
 
 init().catch(error => {

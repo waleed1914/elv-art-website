@@ -4,6 +4,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ELV.art Admin</title>
+    <meta name="description" content="ELV.art admin panel.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="geo.region" content="PK">
+    <meta name="geo.placename" content="Pakistan">
+    <link rel="canonical" href="/admin.html">
+    <meta property="og:title" content="ELV.art Admin">
+    <meta property="og:description" content="ELV.art admin panel.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/assets/logo.jpeg">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" href="/assets/logo.jpeg">
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="/admin.css">
@@ -122,8 +132,14 @@
           </section>
 
           <section data-panel="solutions" class="admin-panel">
-            <form id="solutionForm" class="admin-form two-col"></form>
-            <div id="solutionListAdmin" class="admin-list"></div>
+            <div class="panel-toolbar">
+              <div>
+                <p class="eyebrow">Solutions</p>
+                <h2>Interactive Solution Scenes</h2>
+              </div>
+              <button id="addSolutionButton" class="button primary add-icon" type="button" title="Add Solution">+</button>
+            </div>
+            <div id="solutionListAdmin" class="admin-card-grid"></div>
           </section>
 
           <section data-panel="projects" class="admin-panel">

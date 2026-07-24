@@ -1,13 +1,29 @@
 <!doctype html>
 <html lang="en">
-  <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Signup / Login | ELV.art</title><link rel="icon" href="/assets/logo.jpeg"><link rel="stylesheet" href="/styles.css"></head>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Signup / Login | ELV.art</title>
+    <meta name="description" content="Login or register with ELV.art to manage account information and project quotation activity.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="geo.region" content="PK">
+    <meta name="geo.placename" content="Pakistan">
+    <link rel="canonical" href="/dashboard.html">
+    <meta property="og:title" content="Signup / Login | ELV.art">
+    <meta property="og:description" content="Login or register with ELV.art to manage account information and project quotation activity.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/assets/logo.jpeg">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="/assets/logo.jpeg">
+    <link rel="stylesheet" href="/styles.css">
+  </head>
   <body>
     <header class="site-header"><a class="brand" href="/"><img src="/assets/logo-nav.jpeg" alt="ELV.art"></a><button class="nav-toggle" aria-label="Open menu" aria-expanded="false">Menu</button><nav class="site-nav"><a href="/">Home</a><a href="/solutions.html">Solutions</a><a href="/products.html">Products</a><a href="/case-studies.html">Case Study</a><a href="/training.html">Training</a><a href="/downloads.html">Download</a><a href="/blogs.html">Blogs</a><a href="/about.html">About Us</a><a class="nav-admin" href="/dashboard.html">Signup / Login</a></nav></header>
     <main>
       <section class="page-hero auth-page-hero"><p class="eyebrow">Signup / Login</p><h1>Your ELV.art project account.</h1><p>Login or create your company account to manage quotation items, download project resources, and keep product selections organized.</p></section>
       <section class="section auth-layout">
         <div class="auth-visual-card">
-          <img src="/assets/generated/product-cctv-system.png" alt="ELV control room and security products">
+          <img src="/assets/generated/product-cctv-system.webp" alt="ELV control room and security products">
           <div class="auth-visual-content">
             <p class="eyebrow">Partner Portal</p>
             <h2>A smoother workspace for installers, consultants, and project buyers.</h2>
@@ -16,6 +32,11 @@
               <span>Saved account access</span>
               <span>Product files and training</span>
             </div>
+            <ol class="auth-step-list">
+              <li><span>1</span><strong>Register</strong><small>Create your company account.</small></li>
+              <li><span>2</span><strong>Verify Email</strong><small>Confirm the link sent by ELV.art.</small></li>
+              <li><span>3</span><strong>Login</strong><small>Your account opens after email verification.</small></li>
+            </ol>
             <div id="accountBox" class="partner-session-card"></div>
           </div>
         </div>
@@ -26,8 +47,10 @@
             <p>Login to continue, or create a company account to start saving your project activity.</p>
           </div>
           <div class="auth-actions auth-tabs"><button class="button primary" data-auth-tab="login" type="button">Login</button><button class="button secondary" data-auth-tab="register" type="button">Register</button></div>
-          <form id="loginUserForm" class="auth-form"><label>Email<input name="email" type="email" autocomplete="email" required></label><label>Password<input name="password" type="password" autocomplete="current-password" required></label><button class="button primary" type="submit">Login</button><p id="loginUserStatus" class="form-status" role="status"></p></form>
-          <form id="registerForm" class="auth-form hidden"><label>Full Name<input name="fullName" autocomplete="name" required></label><label>Company Name<input name="company" required></label><label>City<input name="city" required></label><label>Country<input name="country"></label><label>Business Domain / Industry<input name="domain" required></label><label>Years of Experience<input name="experience" required></label><label>Email Address<input name="email" type="email" autocomplete="email" required></label><label>Mobile Number<input name="mobile" autocomplete="tel" required></label><label>Password<input name="password" type="password" autocomplete="new-password" required></label><button class="button primary" type="submit">Submit Registration</button><p id="registerStatus" class="form-status" role="status"></p></form>
+          <form id="loginUserForm" class="auth-form"><label>Email<input name="email" type="email" autocomplete="email" required placeholder="you@company.com"></label><label>Password<input name="password" type="password" autocomplete="current-password" required placeholder="Your password"></label><button class="button primary" type="submit">Login</button><button class="link-button" id="showForgotPassword" type="button">Forgot password?</button><p id="loginUserStatus" class="form-status" role="status"></p></form>
+          <form id="forgotPasswordForm" class="auth-resend hidden"><strong>Reset your password</strong><p>Enter your account email and we will send a secure reset link.</p><label>Email<input name="email" type="email" autocomplete="email" required placeholder="you@company.com"></label><button class="button secondary" type="submit">Send Reset Link</button><button class="link-button" id="backToLoginFromForgot" type="button">Back to login</button><p id="forgotPasswordStatus" class="form-status" role="status"></p></form>
+          <form id="registerForm" class="auth-form auth-form-grid hidden"><label>Full Name<input name="fullName" autocomplete="name" required placeholder="Your full name"></label><label>Company Name<input name="company" autocomplete="organization" required placeholder="Company name"></label><label>City<input name="city" required autocomplete="address-level2" placeholder="Karachi / Lahore / Islamabad"></label><label>Country<input name="country" autocomplete="country-name" value="Pakistan"></label><label>Business Domain / Industry<input name="domain" required placeholder="Installer / Consultant / Contractor"></label><label>Years of Experience<input name="experience" required inputmode="numeric" placeholder="5"></label><label>Email Address<input name="email" type="email" autocomplete="email" required placeholder="you@company.com"></label><label>Mobile Number<input name="mobile" autocomplete="tel" required placeholder="+92 300 0000000"></label><label class="full">Password<input name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters"></label><button class="button primary full" type="submit">Submit Registration</button><p id="registerStatus" class="form-status full" role="status"></p></form>
+          <form id="resendVerificationForm" class="auth-resend hidden"><strong>Need a new verification email?</strong><p>Enter your account email and we will send a fresh verification link.</p><label>Email<input name="email" type="email" autocomplete="email" required placeholder="you@company.com"></label><button class="button secondary" type="submit">Resend Verification Email</button><p id="resendVerificationStatus" class="form-status" role="status"></p></form>
         </div>
       </section>
       <section id="account-info" class="section account-info-section">
