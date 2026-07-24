@@ -3,10 +3,13 @@ npm-debug.log*
 
 .env
 .env.*
+!.env.example
 
 cloudflared-tunnel*.log
 
 data/backups/
+data/db.local.json
+data/db.production.json
 
 Thumbs.db
 .DS_Store

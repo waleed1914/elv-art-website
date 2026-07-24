@@ -10,11 +10,19 @@ loadEnvFile();
 const PORT = process.env.PORT || 3000;
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || "elv-admin-2026";
 const PUBLIC_SITE_URL = process.env.PUBLIC_SITE_URL || "";
+const APP_ENV = process.env.APP_ENV || process.env.NODE_ENV || "development";
+const MAINTENANCE_MODE = String(process.env.MAINTENANCE_MODE || "false").toLowerCase() === "true";
+const MAINTENANCE_PASSWORD = process.env.MAINTENANCE_PASSWORD || ADMIN_TOKEN;
+const MAINTENANCE_COOKIE = "elv_maintenance_access";
 const root = __dirname;
 const publicDir = path.join(root, "public");
 const dataDir = path.join(root, "data");
 const uploadsDir = path.join(publicDir, "uploads");
-const dbPath = path.join(dataDir, "db.json");
+const defaultDbFile = APP_ENV === "production" ? path.join("data", "db.production.json") : path.join("data", "db.local.json");
+const dbFile = process.env.DB_FILE || defaultDbFile;
+const dbPath = path.isAbsolute(dbFile) ? dbFile : path.join(root, dbFile);
+const seedDbPath = path.join(dataDir, "db.seed.json");
+const legacyDbPath = path.join(dataDir, "db.json");
 
 function loadEnvFile() {
   const envPath = path.join(__dirname, ".env");
@@ -57,7 +65,16 @@ function ensureStore() {
   fs.mkdirSync(dataDir, { recursive: true });
   fs.mkdirSync(uploadsDir, { recursive: true });
 
+  const dbDirectory = path.dirname(dbPath);
+  fs.mkdirSync(dbDirectory, { recursive: true });
+
   if (!fs.existsSync(dbPath)) {
+    const seedSource = fs.existsSync(seedDbPath) ? seedDbPath : legacyDbPath;
+    if (fs.existsSync(seedSource)) {
+      fs.copyFileSync(seedSource, dbPath);
+      return;
+    }
+
     const now = new Date().toISOString();
     const db = {
       settings: {
@@ -393,6 +410,60 @@ function writeDb(db) {
 function send(res, status, body, type = "application/json; charset=utf-8") {
   res.writeHead(status, { "Content-Type": type, "Cache-Control": "no-store" });
   res.end(type.includes("json") ? JSON.stringify(body) : body);
+}
+
+function parseCookies(req) {
+  return String(req.headers.cookie || "").split(";").reduce((cookies, pair) => {
+    const index = pair.indexOf("=");
+    if (index < 0) return cookies;
+    const key = pair.slice(0, index).trim();
+    const value = pair.slice(index + 1).trim();
+    if (key) cookies[key] = decodeURIComponent(value);
+    return cookies;
+  }, {});
+}
+
+function maintenanceCookieValue() {
+  return crypto
+    .createHmac("sha256", String(MAINTENANCE_PASSWORD || ADMIN_TOKEN))
+    .update("elv-art-maintenance")
+    .digest("hex");
+}
+
+function hasMaintenanceAccess(req) {
+  if (!MAINTENANCE_MODE) return true;
+  if (isAdmin(req)) return true;
+  return parseCookies(req)[MAINTENANCE_COOKIE] === maintenanceCookieValue();
+}
+
+function isMaintenanceAllowedPath(url) {
+  if (!MAINTENANCE_MODE) return true;
+  if (url.pathname === "/maintenance.html") return true;
+  if (url.pathname === "/api/maintenance-login") return true;
+  if (url.pathname === "/api/admin/login") return true;
+  if (url.pathname.startsWith("/api/admin/")) return true;
+  if (url.pathname === "/admin.html" || url.pathname === "/admin.css" || url.pathname === "/admin.js") return true;
+  if (url.pathname.startsWith("/assets/") || url.pathname.startsWith("/uploads/")) return true;
+  if (url.pathname === "/styles.css") return true;
+  return false;
+}
+
+function serveMaintenance(res) {
+  const filePath = path.join(publicDir, "maintenance.html");
+  if (fs.existsSync(filePath)) {
+    return send(res, 503, fs.readFileSync(filePath, "utf8"), "text/html; charset=utf-8");
+  }
+  return send(res, 503, "ELV.art is under maintenance.", "text/plain; charset=utf-8");
+}
+
+function setMaintenanceCookie(res) {
+  const cookie = `${MAINTENANCE_COOKIE}=${encodeURIComponent(maintenanceCookieValue())}; Path=/; HttpOnly; SameSite=Lax; Max-Age=86400`;
+  res.writeHead(200, {
+    "Content-Type": "application/json; charset=utf-8",
+    "Cache-Control": "no-store",
+    "Set-Cookie": cookie
+  });
+  res.end(JSON.stringify({ ok: true }));
 }
 
 function getBody(req) {
@@ -982,6 +1053,18 @@ function validateCatalogItem(db, collection, item) {
 }
 
 async function handleApi(req, res, url) {
+  if (url.pathname === "/api/maintenance-login" && req.method === "POST") {
+    const body = await getBody(req);
+    if (String(body.password || "") !== String(MAINTENANCE_PASSWORD)) {
+      return send(res, 401, { error: "Invalid maintenance password" });
+    }
+    return setMaintenanceCookie(res);
+  }
+
+  if (MAINTENANCE_MODE && !hasMaintenanceAccess(req) && !isMaintenanceAllowedPath(url)) {
+    return send(res, 503, { error: "Website is in maintenance mode" });
+  }
+
   if (req.method === "GET" && url.pathname === "/api/content") {
     const db = readDb();
     const user = currentUser(req, db);
@@ -1343,6 +1426,12 @@ ensureStore();
 http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
   try {
+    if (MAINTENANCE_MODE && !hasMaintenanceAccess(req) && !isMaintenanceAllowedPath(url)) {
+      if (url.pathname.startsWith("/api/")) {
+        return send(res, 503, { error: "Website is in maintenance mode" });
+      }
+      return serveMaintenance(res);
+    }
     if (req.method === "GET" && url.pathname === "/verify.html" && url.searchParams.get("token")) {
       const result = verifyEmailToken(url.searchParams.get("token"));
       const params = new URLSearchParams();
@@ -1365,4 +1454,6 @@ http.createServer(async (req, res) => {
   console.log(`ELV.art website running at http://localhost:${PORT}`);
   console.log(`Admin panel: http://localhost:${PORT}/admin.html`);
   console.log(`Admin password: ${ADMIN_TOKEN}`);
+  console.log(`Database: ${dbPath}`);
+  console.log(`Maintenance mode: ${MAINTENANCE_MODE ? "ON" : "OFF"}`);
 });

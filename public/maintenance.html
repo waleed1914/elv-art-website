@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ELV.art Maintenance</title>
+  <meta name="robots" content="noindex, nofollow">
+  <style>
+    :root {
+      --blue: #16479d;
+      --green: #35b54a;
+      --ink: #0d2038;
+      --muted: #66758a;
+      --line: #aec2df;
+      --soft: #f4f8fd;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(110deg, rgba(13, 32, 56, .92), rgba(13, 32, 56, .68)),
+        url("/assets/generated/hero-elv-lobby-command.webp") center / cover no-repeat;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+    }
+
+    .maintenance-shell {
+      width: min(960px, 100%);
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .panel {
+      background: rgba(255, 255, 255, .94);
+      border: 1px solid rgba(174, 194, 223, .85);
+      border-radius: 18px;
+      box-shadow: 0 30px 90px rgba(5, 20, 40, .22);
+      overflow: hidden;
+    }
+
+    .intro {
+      padding: 34px;
+      position: relative;
+    }
+
+    .logo {
+      width: 150px;
+      height: auto;
+      display: block;
+      margin-bottom: 42px;
+    }
+
+    .eyebrow {
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: clamp(40px, 6vw, 78px);
+      line-height: .95;
+      margin: 0 0 18px;
+      letter-spacing: 0;
+    }
+
+    p {
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.7;
+      margin: 0;
+      max-width: 620px;
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .status-pill {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      background: var(--soft);
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .status-pill span {
+      color: var(--green);
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: 5px;
+    }
+
+    .login {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    label {
+      font-weight: 900;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      min-height: 54px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 0 16px;
+      font: inherit;
+      font-weight: 700;
+      color: var(--ink);
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(22, 71, 157, .12);
+    }
+
+    button {
+      min-height: 54px;
+      border: 1px solid #123b86;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #16479d, #2d6fd7);
+      color: #fff;
+      font: inherit;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 14px 30px rgba(22, 71, 157, .22);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 38px rgba(22, 71, 157, .3);
+    }
+
+    .message {
+      min-height: 24px;
+      color: #b42318;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .hint {
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 820px) {
+      body { padding: 16px; }
+      .maintenance-shell { grid-template-columns: 1fr; }
+      .intro, .login { padding: 24px; }
+      .logo { margin-bottom: 28px; }
+      .status-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="maintenance-shell">
+    <section class="panel intro">
+      <img class="logo" src="/assets/logo-nav.jpeg" alt="ELV.art">
+      <div class="eyebrow">Production setup in progress</div>
+      <h1>We are preparing ELV.art.</h1>
+      <p>Our team is uploading products, solutions, technical files, and project content. Please check back soon, or enter the access password if you are part of the review team.</p>
+      <div class="status-grid" aria-label="Maintenance progress">
+        <div class="status-pill"><span>Catalog</span>Products</div>
+        <div class="status-pill"><span>Solutions</span>Hotspots</div>
+        <div class="status-pill"><span>Support</span>Downloads</div>
+      </div>
+    </section>
+
+    <form class="panel login" id="maintenanceForm">
+      <div>
+        <div class="eyebrow">Private entry</div>
+        <p>Enter the maintenance password to preview the website.</p>
+      </div>
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter password" required>
+      <button type="submit">Enter Website</button>
+      <div class="message" id="message" role="status"></div>
+      <p class="hint">Admin panel remains available during maintenance so product uploads can continue.</p>
+    </form>
+  </main>
+
+  <script>
+    document.getElementById("maintenanceForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      const message = document.getElementById("message");
+      message.textContent = "";
+      const password = document.getElementById("password").value;
+      try {
+        const response = await fetch("/api/maintenance-login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Access failed");
+        window.location.href = "/";
+      } catch (error) {
+        message.textContent = error.message || "Invalid password";
+      }
+    });
+  </script>
+</body>
+</html>

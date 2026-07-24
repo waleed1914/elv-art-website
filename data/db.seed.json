@@ -1,0 +1,3129 @@
+{
+  "settings": {
+    "brand": "ELV.art",
+    "tagline": "Integrated low-voltage systems for secure, intelligent spaces.",
+    "phone": "+92 332 4816433",
+    "email": "hello@elv.art",
+    "location": "Pakistan - Karachi, Lahore, Islamabad, Rawalpindi, Faisalabad, Multan, Peshawar, Quetta, Sialkot",
+    "whatsapp": "+92 332 4816433"
+  },
+  "categories": [
+    {
+      "image": "/uploads/upload-fc72457d3c3c.webp",
+      "superCategoryId": "super-camera-products",
+      "id": "cat-cctv",
+      "name": "CCTV & Video Surveillance",
+      "summary": "IP cameras, NVRs, analytics, storage, monitoring, and remote viewing.",
+      "icon": "Camera"
+    },
+    {
+      "image": "/assets/generated/product-vehicle-access.webp",
+      "superCategoryId": "super-access-control",
+      "id": "cat-access",
+      "name": "Access Control",
+      "summary": "Door controllers, readers, credentials, time attendance, and visitor flow.",
+      "icon": "KeyRound"
+    },
+    {
+      "image": "/assets/generated/hero-elv-control-room.webp",
+      "superCategoryId": "super-networking",
+      "id": "cat-network",
+      "name": "Structured Cabling & Networks",
+      "summary": "Fiber, copper, racks, switching, Wi-Fi, and resilient site connectivity.",
+      "icon": "Network"
+    },
+    {
+      "image": "/assets/generated/hero-elv-control-room.webp",
+      "superCategoryId": "super-fire-products",
+      "id": "cat-fire",
+      "name": "Fire Alarm & Life Safety",
+      "summary": "Detection, evacuation, emergency lighting, and compliant safety integration.",
+      "icon": "Flame"
+    },
+    {
+      "image": "/assets/generated/hero-elv-control-room.webp",
+      "superCategoryId": "super-display-control",
+      "id": "cat-av",
+      "name": "Audio Visual & Automation",
+      "summary": "Meeting rooms, digital signage, background music, and smart controls.",
+      "icon": "MonitorSpeaker"
+    },
+    {
+      "image": "/assets/generated/product-access-control.webp",
+      "superCategoryId": "super-video-intercom",
+      "id": "cat-intercom",
+      "name": "Intercom & Gate Automation",
+      "summary": "Video intercom, barriers, turnstiles, gate motors, and entry automation.",
+      "icon": "RadioTower"
+    },
+    {
+      "image": "/assets/generated/product-cctv-system.webp",
+      "superCategoryId": "super-camera-products",
+      "id": "cat-network-cameras",
+      "name": "Network Cameras",
+      "summary": "IP dome, bullet, turret, fisheye, and panoramic cameras for general CCTV projects."
+    },
+    {
+      "image": "/assets/generated/product-cctv-system.webp",
+      "superCategoryId": "super-camera-products",
+      "id": "cat-ptz-cameras",
+      "name": "PTZ Cameras",
+      "summary": "Pan-tilt-zoom cameras for wide-area surveillance, tracking, and long-distance monitoring."
+    },
+    {
+      "image": "/assets/generated/hero-elv-control-room.webp",
+      "superCategoryId": "super-recorders",
+      "id": "cat-video-recorders",
+      "name": "Video Recorders & Storage",
+      "summary": "NVR, recording, storage, display, and video management systems for CCTV projects."
+    },
+    {
+      "image": "/assets/generated/product-access-control.webp",
+      "superCategoryId": "super-access-control",
+      "id": "cat-access-control-pro",
+      "name": "Access Control & Attendance",
+      "summary": "Door controllers, readers, credentials, locks, exit buttons, and attendance solutions."
+    },
+    {
+      "image": "/assets/generated/product-vehicle-access.webp",
+      "superCategoryId": "super-vehicle-access",
+      "id": "cat-vehicle-access-pro",
+      "name": "Vehicle Access Control",
+      "summary": "Barriers, bollards, road blockers, loop detectors, and ANPR-based entrance control."
+    },
+    {
+      "image": "/assets/generated/product-access-control.webp",
+      "superCategoryId": "super-video-intercom",
+      "id": "cat-video-intercom-pro",
+      "name": "Video Intercom",
+      "summary": "Villa, apartment, office, and multi-tenant IP intercom systems with mobile access."
+    },
+    {
+      "image": "/assets/generated/product-cctv-system.webp",
+      "superCategoryId": "super-camera-products",
+      "id": "cat-ai-cameras",
+      "name": "AI Analytics Cameras",
+      "summary": "Smart cameras with people, vehicle, intrusion, face, and behavior analytics."
+    },
+    {
+      "image": "/assets/generated/product-cctv-system.webp",
+      "superCategoryId": "super-camera-products",
+      "id": "cat-low-light-cameras",
+      "name": "Low-Light & Color Cameras",
+      "summary": "Cameras designed for full-color monitoring in low-light environments."
+    },
+    {
+      "image": "/assets/generated/product-cctv-system.webp",
+      "superCategoryId": "super-camera-products",
+      "id": "cat-anpr-cameras",
+      "name": "ANPR & Traffic Cameras",
+      "summary": "License plate recognition and traffic monitoring cameras for vehicle access projects."
+    },
+    {
+      "image": "/assets/generated/product-cctv-system.webp",
+      "superCategoryId": "super-camera-products",
+      "id": "cat-thermal-cameras",
+      "name": "Thermal Cameras",
+      "summary": "Thermal and bi-spectrum cameras for perimeter, industrial, and safety monitoring."
+    },
+    {
+      "image": "/assets/generated/product-cctv-system.webp",
+      "superCategoryId": "super-camera-products",
+      "id": "cat-camera-accessories",
+      "name": "Camera Accessories",
+      "summary": "Mounting brackets, junction boxes, poles, power, storage, and camera installation accessories."
+    }
+  ],
+  "products": [
+    {
+      "summaryHtml": "Weather-ready cameras with smart detection, night vision, and mobile access.",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": true,
+      "id": "prod-ai-camera",
+      "categoryId": "cat-cctv",
+      "name": "AI IP Camera Series",
+      "summary": "Weather-ready cameras with smart detection, night vision, and mobile access.",
+      "features": [
+        "4MP to 8MP options",
+        "Human and vehicle analytics",
+        "PoE installation",
+        "Edge recording support"
+      ],
+      "specs": [
+        "IP67 outdoor housing",
+        "H.265 compression",
+        "Smart IR",
+        "ONVIF compatible"
+      ],
+      "prices": {
+        "l1": "420",
+        "l2": "360",
+        "l3": "315"
+      },
+      "image": "/assets/generated/product-cctv-system.webp",
+      "status": "Featured"
+    },
+    {
+      "summaryHtml": "A complete access package for offices, clinics, schools, and apartments.",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-door-access",
+      "categoryId": "cat-access",
+      "name": "Smart Door Access Kit",
+      "summary": "A complete access package for offices, clinics, schools, and apartments.",
+      "features": [
+        "RFID, PIN, mobile credential",
+        "Fail-safe and fail-secure locks",
+        "Attendance-ready logs",
+        "Cloud or local control"
+      ],
+      "specs": [
+        "2-door expandable controller",
+        "Wiegand/OSDP reader support",
+        "TCP/IP connection",
+        "Battery backup ready"
+      ],
+      "prices": {
+        "l1": "780",
+        "l2": "690",
+        "l3": "610"
+      },
+      "image": "/assets/generated/product-access-control.webp",
+      "status": "Popular"
+    },
+    {
+      "summaryHtml": "Clean rack build with switching, patching, power protection, and labeling.",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-network-rack",
+      "categoryId": "cat-network",
+      "name": "Managed Network Rack",
+      "summary": "Clean rack build with switching, patching, power protection, and labeling.",
+      "features": [
+        "CAT6/CAT6A patch panels",
+        "Managed PoE switches",
+        "UPS-ready design",
+        "Documentation included"
+      ],
+      "specs": [
+        "Wall or floor rack",
+        "PoE budget planning",
+        "Fiber uplink option",
+        "Labeled patching"
+      ],
+      "prices": {
+        "l1": "1200",
+        "l2": "1050",
+        "l3": "940"
+      },
+      "image": "/assets/generated/hero-elv-control-room.webp",
+      "status": "Project"
+    },
+    {
+      "summaryHtml": "Heavy-duty vehicle access control for critical entrances and high-security gates.",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-road-blocker",
+      "categoryId": "cat-access",
+      "segment": "Vehicle Access Control",
+      "name": "Hydraulic Road Blocker",
+      "summary": "Heavy-duty vehicle access control for critical entrances and high-security gates.",
+      "features": [
+        "Anti-ram structure",
+        "Manual release option",
+        "Traffic light integration",
+        "Loop detector compatible"
+      ],
+      "specs": [
+        "Rising height 500-900 mm",
+        "Hydraulic drive",
+        "IP-rated control panel",
+        "Remote and access control input"
+      ],
+      "prices": {
+        "l1": "8500",
+        "l2": "7900",
+        "l3": "7200"
+      },
+      "image": "/assets/generated/product-vehicle-access.webp",
+      "status": "Vehicle Access"
+    },
+    {
+      "summaryHtml": "Vehicle detection module for barriers, gates, road blockers, and parking automation.",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-loop-detector",
+      "categoryId": "cat-access",
+      "segment": "Vehicle Access Control",
+      "name": "Loop Detector",
+      "summary": "Vehicle detection module for barriers, gates, road blockers, and parking automation.",
+      "features": [
+        "Single and dual loop options",
+        "Adjustable sensitivity",
+        "Relay output",
+        "DIN rail mounting"
+      ],
+      "specs": [
+        "12-24V AC/DC options",
+        "Presence detection",
+        "Pulse output",
+        "Fail-safe configuration"
+      ],
+      "prices": {
+        "l1": "95",
+        "l2": "82",
+        "l3": "70"
+      },
+      "image": "/assets/generated/product-vehicle-access.webp",
+      "status": "Model"
+    },
+    {
+      "summaryHtml": "Retractable bollards for perimeter protection, VIP entrances, and restricted vehicle zones.",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-bollard",
+      "categoryId": "cat-access",
+      "segment": "Vehicle Access Control",
+      "name": "Automatic Security Bollard",
+      "summary": "Retractable bollards for perimeter protection, VIP entrances, and restricted vehicle zones.",
+      "features": [
+        "Fast rise and lower cycle",
+        "Stainless steel body option",
+        "LED crown visibility",
+        "Emergency manual release"
+      ],
+      "specs": [
+        "Hydraulic or electromechanical drive",
+        "600-900 mm height options",
+        "IP-rated control box",
+        "Access control and remote input"
+      ],
+      "prices": {
+        "l1": "2100",
+        "l2": "1880",
+        "l3": "1690"
+      },
+      "image": "/assets/generated/product-vehicle-access.webp",
+      "status": "Vehicle Access"
+    },
+    {
+      "summaryHtml": "Reliable barrier gate for parking, compounds, commercial entrances, and industrial checkpoints.",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-traffic-barrier",
+      "categoryId": "cat-access",
+      "segment": "Vehicle Access Control",
+      "name": "High-Speed Traffic Barrier",
+      "summary": "Reliable barrier gate for parking, compounds, commercial entrances, and industrial checkpoints.",
+      "features": [
+        "3m to 6m arm options",
+        "Loop detector safety",
+        "Access reader integration",
+        "Anti-crash arm support"
+      ],
+      "specs": [
+        "1.5s to 6s opening speed",
+        "24V DC motor option",
+        "Auto-close timer",
+        "Manual clutch release"
+      ],
+      "prices": {
+        "l1": "1350",
+        "l2": "1180",
+        "l3": "1020"
+      },
+      "image": "/assets/generated/product-vehicle-access.webp",
+      "status": "Popular"
+    },
+    {
+      "summaryHtml": "Camera package for vehicle plate capture, gate automation, parking records, and blacklist alerts.",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-anpr-camera",
+      "categoryId": "cat-cctv",
+      "segment": "Vehicle Access Control",
+      "name": "ANPR License Plate Camera",
+      "summary": "Camera package for vehicle plate capture, gate automation, parking records, and blacklist alerts.",
+      "features": [
+        "License plate recognition",
+        "Day and night capture",
+        "Barrier trigger output",
+        "Whitelist and blacklist database"
+      ],
+      "specs": [
+        "2MP/4MP sensor options",
+        "IR illumination",
+        "IP66 housing",
+        "TCP/IP integration"
+      ],
+      "prices": {
+        "l1": "980",
+        "l2": "860",
+        "l3": "760"
+      },
+      "image": "/assets/generated/product-cctv-system.webp",
+      "status": "ANPR"
+    },
+    {
+      "summaryHtml": "Villa and office video intercom system with indoor monitor, door station, and mobile calling.",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-video-intercom",
+      "categoryId": "cat-intercom",
+      "segment": "Intercom & Entry",
+      "name": "IP Video Intercom Kit",
+      "summary": "Villa and office video intercom system with indoor monitor, door station, and mobile calling.",
+      "features": [
+        "HD video door station",
+        "Mobile app calling",
+        "Door release output",
+        "Multi-apartment support"
+      ],
+      "specs": [
+        "PoE connection",
+        "Night vision camera",
+        "SIP support option",
+        "Surface or flush mount"
+      ],
+      "prices": {
+        "l1": "520",
+        "l2": "455",
+        "l3": "390"
+      },
+      "image": "/assets/generated/product-access-control.webp",
+      "status": "Residential"
+    },
+    {
+      "summaryHtml": "Expandable fire alarm control panel for detection, evacuation, and safety monitoring.",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-fire-panel",
+      "categoryId": "cat-fire",
+      "segment": "Life Safety",
+      "name": "Addressable Fire Alarm Panel",
+      "summary": "Expandable fire alarm control panel for detection, evacuation, and safety monitoring.",
+      "features": [
+        "Addressable loop architecture",
+        "Sounder and strobe outputs",
+        "Event history logs",
+        "Battery backup support"
+      ],
+      "specs": [
+        "1-4 loop options",
+        "LCD control interface",
+        "Relay output modules",
+        "Civil defense ready design support"
+      ],
+      "prices": {
+        "l1": "1450",
+        "l2": "1280",
+        "l3": "1120"
+      },
+      "image": "/assets/generated/hero-elv-control-room.webp",
+      "status": "Safety"
+    },
+    {
+      "summaryHtml": "Managed switching for IP cameras, access readers, intercoms, Wi-Fi access points, and uplinks.",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-poe-switch",
+      "categoryId": "cat-network",
+      "segment": "Network Infrastructure",
+      "name": "Managed PoE Switch",
+      "summary": "Managed switching for IP cameras, access readers, intercoms, Wi-Fi access points, and uplinks.",
+      "features": [
+        "PoE budget planning",
+        "VLAN and QoS support",
+        "Fiber uplink ports",
+        "Remote monitoring"
+      ],
+      "specs": [
+        "8/16/24/48 port options",
+        "PoE+ and PoE++ options",
+        "Rack mountable",
+        "Layer 2 managed features"
+      ],
+      "prices": {
+        "l1": "390",
+        "l2": "330",
+        "l3": "285"
+      },
+      "image": "/assets/generated/hero-elv-control-room.webp",
+      "status": "Network"
+    },
+    {
+      "summaryHtml": "fsjkhdkjgfhbdkvjnbiuedhggslkjdfhglsidhfgdvbn,mxn<div><br></div><div><br></div><div>alksfdhjglkjashfdglkjashdfg</div><div>lkajsdfhgl;iasudfhgiuh</div><div>asdkfjghsal;iudfhga;iuerhgkjsdhf;gbiouasyhhfed;goh</div><div>asflkjdgjh;aoifsdhg</div>",
+      "gallery": [
+        "/uploads/upload-bba2a6d8ed05.webp",
+        "/uploads/upload-b6c8d5a3d2b3.png",
+        "/uploads/upload-dec32d666864.webp",
+        "/uploads/upload-ada5bcd790a6.webp",
+        "/uploads/upload-d01255d23432.webp"
+      ],
+      "datasheet": "/uploads/upload-c3bb4fc2b45c.pdf",
+      "manual": "/uploads/upload-8bde5f80557e.pdf",
+      "model3d": "/uploads/upload-ed7c0530725d.bin",
+      "cad": "/uploads/upload-bc94b06a46d9.pdf",
+      "homeFeatured": false,
+      "id": "prod-61c8ba049169",
+      "categoryId": "cat-cctv",
+      "name": "Bella Vista Italian",
+      "segment": "akjshd",
+      "status": "active",
+      "similarProductIds": [
+        "prod-network-rack",
+        "prod-road-blocker",
+        "prod-loop-detector",
+        "prod-traffic-barrier"
+      ],
+      "summary": "fsjkhdkjgfhbdkvjnbiuedhggslkjdfhglsidhfgdvbn,mxnalksfdhjglkjashfdglkjashdfglkajsdfhgl;iasudfhgiuhasdkfjghsal;iudfhga;iuerhgkjsdhf;gbiouasyhhfed;gohasflkjdgjh;aoifsdhg",
+      "prices": {
+        "l1": "45",
+        "l2": "40",
+        "l3": "35"
+      },
+      "image": "/uploads/upload-9639c79b7a7b.webp",
+      "features": [
+        "Multi-image product gallery for visual review",
+        "Datasheet, manual, CAD drawing, and 3D model attachments",
+        "Suitable for quotation, approval, and project documentation workflows",
+        "Compatible models and accessories can be added below this product group"
+      ],
+      "specs": [
+        "Product category: CCTV / ELV solution family",
+        "Segment: akjshd",
+        "Status: active",
+        "Admin-managed pricing, gallery, files, models, and accessories"
+      ]
+    },
+    {
+      "summaryHtml": "<p>Bullet, dome, turret, and mini-dome camera families for standard CCTV projects.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-fixed-ip-cameras",
+      "categoryId": "cat-network-cameras",
+      "name": "Fixed IP Cameras",
+      "segment": "Network Cameras",
+      "status": "Popular",
+      "summary": "Bullet, dome, turret, and mini-dome camera families for standard CCTV projects.",
+      "image": "/assets/generated/product-cctv-system.webp"
+    },
+    {
+      "summaryHtml": "<p>Camera families with human, vehicle, intrusion, face, and object analytics.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-ai-analytics-cameras",
+      "categoryId": "cat-ai-cameras",
+      "name": "AI Analytics Cameras",
+      "segment": "AI Cameras",
+      "status": "AI Series",
+      "summary": "Camera families with human, vehicle, intrusion, face, and object analytics.",
+      "image": "/assets/generated/product-cctv-system.webp"
+    },
+    {
+      "summaryHtml": "<p>Camera families designed for color image capture in low-light environments.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-low-light-cameras",
+      "categoryId": "cat-low-light-cameras",
+      "name": "Color Low-Light Cameras",
+      "segment": "Low-Light Cameras",
+      "status": "Color Night",
+      "summary": "Camera families designed for color image capture in low-light environments.",
+      "image": "/assets/generated/product-cctv-system.webp"
+    },
+    {
+      "summaryHtml": "<p>Speed dome and PTZ camera families for wide-area zoom monitoring.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-smart-ptz",
+      "categoryId": "cat-ptz-cameras",
+      "name": "Smart PTZ Cameras",
+      "segment": "PTZ Cameras",
+      "status": "Long Range",
+      "summary": "Speed dome and PTZ camera families for wide-area zoom monitoring.",
+      "image": "/assets/generated/product-cctv-system.webp"
+    },
+    {
+      "summaryHtml": "<p>NVR product families for camera recording, playback, smart search, and remote viewing.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-embedded-nvr",
+      "categoryId": "cat-video-recorders",
+      "name": "Embedded Network Video Recorders",
+      "segment": "Video Recorders",
+      "status": "Storage",
+      "summary": "NVR product families for camera recording, playback, smart search, and remote viewing.",
+      "image": "/assets/generated/hero-elv-control-room.webp"
+    },
+    {
+      "summaryHtml": "<p>Recorder families with built-in PoE ports for quick camera deployment.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-poe-nvr",
+      "categoryId": "cat-video-recorders",
+      "name": "PoE NVR Systems",
+      "segment": "Video Recorders",
+      "status": "PoE",
+      "summary": "Recorder families with built-in PoE ports for quick camera deployment.",
+      "image": "/assets/generated/hero-elv-control-room.webp"
+    },
+    {
+      "summaryHtml": "<p>Single-door, two-door, and multi-door access controller families.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-door-controllers",
+      "categoryId": "cat-access-control-pro",
+      "name": "Door Controllers",
+      "segment": "Access Control",
+      "status": "Controller",
+      "summary": "Single-door, two-door, and multi-door access controller families.",
+      "image": "/assets/generated/product-access-control.webp"
+    },
+    {
+      "summaryHtml": "<p>RFID, PIN, QR, biometric, and mobile credential reader families.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-readers-credentials",
+      "categoryId": "cat-access-control-pro",
+      "name": "Readers & Credentials",
+      "segment": "Access Control",
+      "status": "Readers",
+      "summary": "RFID, PIN, QR, biometric, and mobile credential reader families.",
+      "image": "/assets/generated/product-access-control.webp"
+    },
+    {
+      "summaryHtml": "<p>Barrier gate product families for parking, compounds, warehouses, and checkpoints.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-traffic-barriers-family",
+      "categoryId": "cat-vehicle-access-pro",
+      "name": "Traffic Barrier Gates",
+      "segment": "Vehicle Access Control",
+      "status": "Entrance",
+      "summary": "Barrier gate product families for parking, compounds, warehouses, and checkpoints.",
+      "image": "/assets/generated/product-vehicle-access.webp"
+    },
+    {
+      "summaryHtml": "<p>Heavy-duty rising road blockers and retractable bollards for secured entrances.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-road-blockers-family",
+      "categoryId": "cat-vehicle-access-pro",
+      "name": "Road Blockers & Bollards",
+      "segment": "Vehicle Access Control",
+      "status": "High Security",
+      "summary": "Heavy-duty rising road blockers and retractable bollards for secured entrances.",
+      "image": "/assets/generated/product-vehicle-access.webp"
+    },
+    {
+      "summaryHtml": "<p>Door stations, indoor monitors, and mobile app intercom families.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-ip-intercom-family",
+      "categoryId": "cat-video-intercom-pro",
+      "name": "IP Video Intercom Kits",
+      "segment": "Video Intercom",
+      "status": "Residential",
+      "summary": "Door stations, indoor monitors, and mobile app intercom families.",
+      "image": "/assets/generated/product-access-control.webp"
+    },
+    {
+      "summaryHtml": "<p>IP cameras with motorized lens adjustment for flexible field-of-view control.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-varifocal-cameras",
+      "categoryId": "cat-network-cameras",
+      "name": "Motorized Varifocal Cameras",
+      "segment": "Network Cameras",
+      "status": "Varifocal",
+      "summary": "IP cameras with motorized lens adjustment for flexible field-of-view control.",
+      "image": "/assets/generated/product-cctv-system.webp"
+    },
+    {
+      "summaryHtml": "<p>Wide-angle camera families for lobby, retail, warehouse, and open-area coverage.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-fisheye-panoramic",
+      "categoryId": "cat-network-cameras",
+      "name": "Fisheye & Panoramic Cameras",
+      "segment": "Network Cameras",
+      "status": "Panoramic",
+      "summary": "Wide-angle camera families for lobby, retail, warehouse, and open-area coverage.",
+      "image": "/assets/generated/product-cctv-system.webp"
+    },
+    {
+      "summaryHtml": "<p>PTZ families combining overview and zoom detail for large areas.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-tandem-ptz",
+      "categoryId": "cat-ptz-cameras",
+      "name": "Dual-Lens PTZ Cameras",
+      "segment": "PTZ Cameras",
+      "status": "Tracking",
+      "summary": "PTZ families combining overview and zoom detail for large areas.",
+      "image": "/assets/generated/product-cctv-system.webp"
+    },
+    {
+      "summaryHtml": "<p>Camera families for controlled entry, watchlist, and smart event workflows.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-face-recognition-cameras",
+      "categoryId": "cat-ai-cameras",
+      "name": "Face Recognition Cameras",
+      "segment": "AI Cameras",
+      "status": "Face AI",
+      "summary": "Camera families for controlled entry, watchlist, and smart event workflows.",
+      "image": "/assets/generated/product-cctv-system.webp"
+    },
+    {
+      "summaryHtml": "<p>License plate recognition cameras for barriers, parking, and vehicle records.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-anpr-camera-family",
+      "categoryId": "cat-anpr-cameras",
+      "name": "ANPR Cameras",
+      "segment": "Traffic Cameras",
+      "status": "ANPR",
+      "summary": "License plate recognition cameras for barriers, parking, and vehicle records.",
+      "image": "/assets/generated/product-cctv-system.webp"
+    },
+    {
+      "summaryHtml": "<p>Thermal camera families for perimeter, industrial, and safety monitoring.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-thermal-camera-family",
+      "categoryId": "cat-thermal-cameras",
+      "name": "Thermal Bullet Cameras",
+      "segment": "Thermal Cameras",
+      "status": "Thermal",
+      "summary": "Thermal camera families for perimeter, industrial, and safety monitoring.",
+      "image": "/assets/generated/product-cctv-system.webp"
+    },
+    {
+      "summaryHtml": "<p>Junction boxes, wall mounts, pole mounts, pendant mounts, and camera brackets.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "homeFeatured": false,
+      "id": "prod-camera-mounting-accessories",
+      "categoryId": "cat-camera-accessories",
+      "name": "Mounting Accessories",
+      "segment": "Camera Accessories",
+      "status": "Accessories",
+      "summary": "Junction boxes, wall mounts, pole mounts, pendant mounts, and camera brackets.",
+      "image": "/assets/generated/product-cctv-system.webp"
+    }
+  ],
+  "solutions": [
+    {
+      "id": "sol-bike-etag",
+      "title": "Bike Lane E-Tag Access",
+      "status": "Vehicle Access",
+      "summary": "A complete lane automation scene with RFID tag reading, camera verification, barrier control, and traffic indication for controlled bike or vehicle entry.",
+      "image": "/assets/bick etag.webp",
+      "outcomes": [
+        "Fast tag-based entry",
+        "Safer barrier movement",
+        "Clear visual indication"
+      ],
+      "hotspots": [
+        {
+          "title": "ANPR / Verification Camera",
+          "message": "Captures lane events and supports plate or vehicle verification.",
+          "x": 26,
+          "y": 13,
+          "target": "product:prod-anpr-camera"
+        },
+        {
+          "title": "RFID Reader",
+          "message": "Reads registered tags before the barrier opens.",
+          "x": 24,
+          "y": 31,
+          "target": "product:prod-readers-credentials"
+        },
+        {
+          "title": "High-Speed Barrier",
+          "message": "Controls lane access after authorization.",
+          "x": 58,
+          "y": 32,
+          "target": "product:prod-traffic-barrier"
+        },
+        {
+          "title": "Traffic Signal",
+          "message": "Shows red or green lane status to the rider.",
+          "x": 75,
+          "y": 14,
+          "target": "product:prod-traffic-barrier"
+        },
+        {
+          "title": "loop dectotor",
+          "message": "it will let know the system that bick has read the limit",
+          "x": 57.4,
+          "y": 61.8,
+          "target": "product:prod-loop-detector"
+        }
+      ],
+      "sections": [
+        {
+          "heading": "How The Lane Works",
+          "paragraph": "The rider approaches the controlled lane and the RFID reader checks the registered e-tag before the barrier receives an open command. The signal light gives a clear stop or go indication so movement stays predictable."
+        },
+        {
+          "heading": "Products Working Together",
+          "paragraph": "The camera, reader, barrier, and traffic light are not separate items on this page. They show how a complete ELV solution joins identification, verification, access control, and user guidance in one site-ready workflow."
+        }
+      ]
+    },
+    {
+      "id": "sol-bike-lane",
+      "title": "Bike Lane Safety Control",
+      "status": "Lane Safety",
+      "summary": "A controlled bicycle lane setup combining camera verification, lane signaling, and automation devices for safer guided movement.",
+      "image": "/assets/bick lane.webp",
+      "outcomes": [
+        "Clear lane guidance",
+        "Better incident visibility",
+        "Controlled movement"
+      ],
+      "hotspots": [
+        {
+          "title": "Lane Camera",
+          "message": "Monitors movement and records entry events across the bike lane.",
+          "x": 31,
+          "y": 18,
+          "target": "product:prod-ai-camera"
+        },
+        {
+          "title": "Barrier Control",
+          "message": "Coordinates physical lane access with safe opening and closing behavior.",
+          "x": 61,
+          "y": 36,
+          "target": "product:prod-traffic-barrier"
+        },
+        {
+          "title": "Loop Detector",
+          "message": "Detects presence in the lane and helps protect the barrier movement zone.",
+          "x": 53,
+          "y": 57,
+          "target": "product:prod-loop-detector"
+        }
+      ],
+      "sections": [
+        {
+          "heading": "Safe Lane Operation",
+          "paragraph": "The solution gives operators a practical view of the bike lane while coordinating barrier movement, visual indication, and vehicle or rider presence detection."
+        },
+        {
+          "heading": "Site Integration",
+          "paragraph": "Each hotspot can link directly to the product or model used in the design, making it easy for customers to move from the scene to the exact catalog item."
+        }
+      ]
+    },
+    {
+      "id": "sol-vehicle-etag-lane",
+      "title": "Vehicle E-Tag Lane",
+      "status": "Vehicle Access",
+      "summary": "A vehicle access lane with tag reading, traffic indication, camera monitoring, and fast barrier control for approved entry.",
+      "image": "/assets/vechile etag lane.webp",
+      "outcomes": [
+        "Automated vehicle entry",
+        "Reduced queue time",
+        "Recorded access events"
+      ],
+      "hotspots": [
+        {
+          "title": "RFID Reader",
+          "message": "Reads authorized vehicle tags before allowing access.",
+          "x": 24.5,
+          "y": 9,
+          "target": "product:prod-readers-credentials"
+        },
+        {
+          "title": "ANPR Camera",
+          "message": "Adds visual verification and event evidence at the lane.",
+          "x": 31,
+          "y": 6.9,
+          "target": "product:prod-anpr-camera"
+        },
+        {
+          "title": "Traffic Barrier",
+          "message": "Opens quickly after authorization and closes safely after passage.",
+          "x": 58.3,
+          "y": 44,
+          "target": "product:prod-traffic-barrier"
+        },
+        {
+          "title": "Traffic Signal",
+          "message": "Shows drivers when to stop or proceed through the lane.",
+          "x": 35,
+          "y": 36.8,
+          "target": "product:prod-traffic-barrier"
+        },
+        {
+          "title": "barrir",
+          "message": "asdgfasdfgafsdg",
+          "x": 51.9,
+          "y": 28.5,
+          "target": "product:prod-door-access"
+        }
+      ],
+      "sections": [
+        {
+          "heading": "Access Sequence",
+          "paragraph": "The lane checks the vehicle tag, verifies activity with camera coverage, changes the signal state, and then triggers the barrier for approved entry."
+        },
+        {
+          "heading": "Operational Value",
+          "paragraph": "This layout is useful for compounds, warehouses, staff parking, and service gates where the client needs fast access without losing event visibility."
+        }
+      ]
+    },
+    {
+      "id": "sol-pedestrian-access",
+      "title": "Pedestrian Access Lane",
+      "status": "Access Control",
+      "summary": "A pedestrian entry scene with credential reading, access control, and monitoring for controlled people flow.",
+      "image": "/assets/perdistrian.webp",
+      "outcomes": [
+        "Controlled pedestrian entry",
+        "Credential-based access",
+        "Cleaner visitor flow"
+      ],
+      "hotspots": [
+        {
+          "title": "Access Reader",
+          "message": "Reads card, PIN, or credential before granting entry.",
+          "x": 30,
+          "y": 42,
+          "target": "product:prod-readers-credentials"
+        },
+        {
+          "title": "Door Controller",
+          "message": "Controls the access decision and logs entry events.",
+          "x": 45,
+          "y": 34,
+          "target": "product:prod-door-controllers"
+        },
+        {
+          "title": "Monitoring Camera",
+          "message": "Covers entry movement and supports security review.",
+          "x": 62,
+          "y": 20,
+          "target": "product:prod-ai-camera"
+        }
+      ],
+      "sections": [
+        {
+          "heading": "People Flow",
+          "paragraph": "The pedestrian lane controls access using reader credentials while keeping entry movement visible to the security team."
+        },
+        {
+          "heading": "Expandable Design",
+          "paragraph": "The same workflow can be expanded with turnstiles, visitor management, attendance reports, and additional access points."
+        }
+      ]
+    },
+    {
+      "id": "sol-vms-lane",
+      "title": "VMS Command Lane",
+      "status": "Monitoring",
+      "summary": "A monitoring-focused lane solution showing how cameras, network equipment, and command software work together.",
+      "image": "/assets/VMS_LANE.webp",
+      "outcomes": [
+        "Central monitoring",
+        "Recorded events",
+        "Network-ready design"
+      ],
+      "hotspots": [
+        {
+          "title": "AI Camera",
+          "message": "Captures live video and analytics events for the monitoring team.",
+          "x": 26,
+          "y": 20,
+          "target": "product:prod-ai-camera"
+        },
+        {
+          "title": "PoE Network",
+          "message": "Powers and connects cameras, readers, and field devices.",
+          "x": 54,
+          "y": 58,
+          "target": "product:prod-poe-switch"
+        },
+        {
+          "title": "NVR / Recording",
+          "message": "Stores lane video and keeps incident playback available.",
+          "x": 70,
+          "y": 42,
+          "target": "product:prod-embedded-nvr"
+        }
+      ],
+      "sections": [
+        {
+          "heading": "Command View",
+          "paragraph": "The VMS lane connects video, networking, and recording into one operator-friendly monitoring workflow."
+        },
+        {
+          "heading": "Technical Backbone",
+          "paragraph": "A reliable PoE and recording design keeps the lane visible, searchable, and easier to maintain after handover."
+        }
+      ]
+    },
+    {
+      "id": "sol-8156950e4cf6",
+      "title": "asdfasdfasdf",
+      "status": "Solution",
+      "summary": "dfghdfhgjdgjhkfghjsfghdfgjdcghfjcvbnxszfghn",
+      "image": "/uploads/upload-36960a16a1c9.webp",
+      "outcomes": [],
+      "hotspots": [
+        {
+          "title": "solar light",
+          "message": "adfasdgfasdfg",
+          "x": 21.9,
+          "y": 16.6,
+          "target": "product:prod-network-rack"
+        },
+        {
+          "title": "asdfasdgfa",
+          "message": "asdfgasdfgafds",
+          "x": 86,
+          "y": 53,
+          "target": "product:prod-video-intercom"
+        }
+      ],
+      "sections": [
+        {
+          "heading": "System Overviewasdgfasfdgasfdg",
+          "paragraph": "asdfasdfsadfgasdfgasdf"
+        }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "bodyHtml": "Access control, CCTV coverage planning, PoE switching, and rack cleanup for a growing office.",
+      "summaryHtml": "<p>Access control, CCTV coverage planning, PoE switching, and rack cleanup for a growing office.</p>",
+      "gallery": [],
+      "sections": [
+        {
+          "heading": "Commercial",
+          "paragraph": "Access control, CCTV coverage planning, PoE switching, and rack cleanup for a growing office.",
+          "image": "/assets/generated/hero-elv-control-room.webp"
+        }
+      ],
+      "id": "project-1",
+      "title": "Office Security Upgrade",
+      "sector": "Commercial",
+      "summary": "Access control, CCTV coverage planning, PoE switching, and rack cleanup for a growing office.",
+      "image": "/assets/generated/hero-elv-control-room.webp"
+    },
+    {
+      "bodyHtml": "Video intercom, gate automation, perimeter cameras, indoor Wi-Fi, and family mobile access.",
+      "summaryHtml": "<p>Video intercom, gate automation, perimeter cameras, indoor Wi-Fi, and family mobile access.</p>",
+      "gallery": [],
+      "sections": [
+        {
+          "heading": "Residential",
+          "paragraph": "Video intercom, gate automation, perimeter cameras, indoor Wi-Fi, and family mobile access.",
+          "image": "/assets/generated/product-vehicle-access.webp"
+        }
+      ],
+      "id": "project-2",
+      "title": "Villa Automation Package",
+      "sector": "Residential",
+      "summary": "Video intercom, gate automation, perimeter cameras, indoor Wi-Fi, and family mobile access.",
+      "image": "/assets/generated/product-vehicle-access.webp"
+    },
+    {
+      "bodyHtml": "",
+      "summaryHtml": "",
+      "gallery": [
+        "/assets/generated/hero-elv-control-room.webp",
+        "/assets/generated/product-cctv-system.webp",
+        "/assets/generated/product-access-control.webp"
+      ],
+      "sections": [
+        {
+          "heading": "Client Requirement",
+          "paragraph": "The client needed better camera visibility, controlled staff entry, reliable recording, and a clean network rack that could support future expansion.",
+          "image": "/assets/generated/hero-elv-control-room.webp"
+        },
+        {
+          "heading": "Proposed Solution",
+          "paragraph": "ELV.art designed a layered system with AI IP cameras, managed PoE switching, access control at sensitive doors, and a central monitoring display for the facility team.",
+          "image": "/assets/generated/product-cctv-system.webp"
+        },
+        {
+          "heading": "Delivered Result",
+          "paragraph": "The final installation reduced blind spots, improved entry control, simplified remote monitoring, and gave the client clear documentation for maintenance.",
+          "image": "/assets/generated/product-access-control.webp"
+        }
+      ],
+      "id": "case-commercial-command-room",
+      "title": "Commercial Command Room Upgrade",
+      "sector": "Commercial",
+      "image": "/assets/generated/hero-elv-control-room.webp",
+      "summary": "A complete CCTV, access control, network rack, and monitoring upgrade for a multi-floor commercial office."
+    },
+    {
+      "bodyHtml": "",
+      "summaryHtml": "",
+      "gallery": [
+        "/assets/generated/product-vehicle-access.webp"
+      ],
+      "sections": [
+        {
+          "heading": "Client Requirement",
+          "paragraph": "The site required a controlled vehicle entrance that could stop unauthorized vehicles while still allowing smooth daily movement for approved users.",
+          "image": "/assets/generated/product-vehicle-access.webp"
+        },
+        {
+          "heading": "Proposed Solution",
+          "paragraph": "We proposed a combined vehicle access solution using a hydraulic road blocker, high-speed barrier, loop detector safety, RFID reader input, and traffic light indication.",
+          "image": "/assets/generated/product-vehicle-access.webp"
+        },
+        {
+          "heading": "Outcome",
+          "paragraph": "The entrance became easier to manage, safer for drivers, and more secure for the facility team, with maintenance access built into the handover plan.",
+          "image": "/assets/generated/product-vehicle-access.webp"
+        }
+      ],
+      "id": "case-secure-vehicle-entrance",
+      "title": "Secure Vehicle Entrance Automation",
+      "sector": "Vehicle Access",
+      "image": "/assets/generated/product-vehicle-access.webp",
+      "summary": "Road blocker, traffic barrier, bollards, loop detector, and access reader integration for a secured entrance lane."
+    },
+    {
+      "bodyHtml": "<p>The client wanted a simple way to understand how a complete ELV project moves from requirement gathering to final handover.</p><h2>Installed Solution</h2><p>ELV.art prepared a practical system design that combined CCTV, access control, network switching, documentation, and user training.</p><p>After installation, the site team could monitor key areas, manage user access, and maintain the system with cleaner documentation.</p>",
+      "summaryHtml": "<p>A sample case study showing paragraph blocks with optional headings and optional pictures.</p>",
+      "gallery": [
+        "/assets/generated/product-cctv-system.webp"
+      ],
+      "sections": [
+        {
+          "heading": "",
+          "paragraph": "The client wanted a simple way to understand how a complete ELV project moves from requirement gathering to final handover, with clear visual proof of each major stage.",
+          "image": "/assets/generated/product-cctv-system.webp"
+        },
+        {
+          "heading": "Installed Solution",
+          "paragraph": "ELV.art prepared a practical system design that combined CCTV, access control, network switching, documentation, and user training into one manageable handover package.",
+          "image": ""
+        },
+        {
+          "heading": "",
+          "paragraph": "After installation, the site team could monitor key areas, manage user access, and maintain the system with cleaner documentation and easier support access.",
+          "image": ""
+        }
+      ],
+      "id": "case-sample-mixed-paragraphs",
+      "title": "Sample Mixed Layout Case Study",
+      "sector": "Demo Case Study",
+      "image": "/assets/generated/hero-elv-control-room.webp",
+      "summary": "A sample case study showing paragraph blocks with optional headings and optional pictures."
+    },
+    {
+      "bodyHtml": "<h2>adsfasfdga</h2><p>asfdgsadfg</p><h2>dfasdf</h2><p>asdfasddfhgjdsfgh</p>",
+      "summaryHtml": "<p>fasdgsaedghdsfghjfghjkfghjhkfgjhk</p>",
+      "gallery": [
+        "/uploads/upload-4c9afa6c4cb4.webp",
+        "/uploads/upload-51d16cda104f.webp"
+      ],
+      "sections": [
+        {
+          "heading": "adsfasfdga",
+          "paragraph": "asfdgsadfg",
+          "image": "/uploads/upload-55b7e57a823f.webp"
+        },
+        {
+          "heading": "dfasdf",
+          "paragraph": "asdfasddfhgjdsfgh",
+          "image": "/uploads/upload-0a377d477da5.webp"
+        }
+      ],
+      "id": "project-29e0955eab29",
+      "title": "etafsfgadfsgasdfg",
+      "sector": "asdfasdfasdf",
+      "summary": "fasdgsaedghdsfghjfghjkfghjhkfgjhk",
+      "image": "/uploads/upload-f367fd16eb6f.webp"
+    }
+  ],
+  "trainings": [
+    {
+      "image": "/assets/generated/product-access-control.webp",
+      "summaryHtml": "<p>A practical field training for wiring readers, locks, exit buttons, emergency release, and controller inputs before handover.</p>",
+      "videoLinks": [
+        "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
+      ],
+      "documents": [
+        {
+          "name": "Access control checklist.txt",
+          "url": "/uploads/training-access-control-checklist.txt"
+        },
+        {
+          "name": "CCTV commissioning guide.pdf",
+          "url": "/uploads/training-cctv-commissioning-guide.pdf"
+        }
+      ],
+      "sections": [
+        {
+          "heading": "Controller and Lock Wiring",
+          "paragraph": "Start by separating controller power, lock power, reader data, request-to-exit, and emergency release wiring. This makes troubleshooting easier and protects the controller from lock surge issues.",
+          "image": "/assets/generated/product-access-control.webp"
+        },
+        {
+          "heading": "",
+          "paragraph": "Before the door is closed for final testing, trigger every input manually and confirm the event appears correctly in the software. This catches swapped wires and wrong door numbers early.",
+          "image": ""
+        },
+        {
+          "heading": "Handover Test",
+          "paragraph": "Finish by testing card access, PIN access if available, exit button behavior, fire release behavior, and fail-safe or fail-secure lock response. Record the results in the handover document.",
+          "image": "/assets/generated/hero-elv-control-room.webp"
+        }
+      ],
+      "id": "training-access-control-door-flow",
+      "title": "Access Control Door Wiring and Testing",
+      "topic": "Access Control",
+      "summary": "A practical field training for wiring readers, locks, exit buttons, emergency release, and controller inputs before handover.",
+      "videoUrl": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
+    },
+    {
+      "image": "/assets/generated/product-cctv-system.webp",
+      "summaryHtml": "<p>Training for IP address planning, camera activation, stream settings, naming, NVR recording, and final view checks.</p>",
+      "videoLinks": [
+        "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
+      ],
+      "documents": [
+        {
+          "name": "CCTV commissioning guide.pdf",
+          "url": "/uploads/training-cctv-commissioning-guide.pdf"
+        }
+      ],
+      "sections": [
+        {
+          "heading": "Network and Naming Plan",
+          "paragraph": "Prepare the IP range, gateway, password standard, camera naming convention, and NVR channel map before activation. A small plan saves a lot of site time.",
+          "image": "/assets/generated/product-cctv-system.webp"
+        },
+        {
+          "heading": "",
+          "paragraph": "After the camera is online, check day view, night view, angle, focus, motion detection, recording schedule, and remote access from the client account.",
+          "image": "/assets/generated/hero-elv-control-room.webp"
+        }
+      ],
+      "id": "training-cctv-camera-commissioning",
+      "title": "CCTV Camera Commissioning Basics",
+      "topic": "CCTV",
+      "summary": "Training for IP address planning, camera activation, stream settings, naming, NVR recording, and final view checks.",
+      "videoUrl": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
+    },
+    {
+      "image": "",
+      "summaryHtml": "<p>A compact training note for patching, labeling, VLAN notes, switch access, UPS checks, and documentation handover.</p>",
+      "videoLinks": [],
+      "documents": [
+        {
+          "name": "Network rack handover notes.txt",
+          "url": "/uploads/training-network-handover-notes.txt"
+        }
+      ],
+      "sections": [
+        {
+          "heading": "",
+          "paragraph": "Label every patch panel port and switch port using the same room or device code that appears on the as-built drawing. Keep the final port map with the rack document sleeve.",
+          "image": ""
+        },
+        {
+          "heading": "Final Checks",
+          "paragraph": "Confirm uplink status, PoE budget, UPS runtime, cabinet ventilation, spare patch cords, and admin credential handover before the project is marked complete.",
+          "image": ""
+        }
+      ],
+      "id": "training-network-rack-handover",
+      "title": "Network Rack Handover Notes",
+      "topic": "Networking",
+      "summary": "A compact training note for patching, labeling, VLAN notes, switch access, UPS checks, and documentation handover.",
+      "videoUrl": ""
+    },
+    {
+      "image": "",
+      "summaryHtml": "<p>Controller power, lock wiring, request-to-exit, emergency release, and reader connection basics.</p>",
+      "videoLinks": [
+        "https://www.youtube.com/results?search_query=access+control+wiring+details"
+      ],
+      "documents": [],
+      "sections": [
+        {
+          "heading": "Access Control",
+          "paragraph": "Controller power, lock wiring, request-to-exit, emergency release, and reader connection basics.",
+          "image": ""
+        }
+      ],
+      "id": "training-wiring",
+      "title": "Access Control Wiring Details",
+      "topic": "Access Control",
+      "summary": "Controller power, lock wiring, request-to-exit, emergency release, and reader connection basics.",
+      "videoUrl": "https://www.youtube.com/results?search_query=access+control+wiring+details"
+    },
+    {
+      "image": "",
+      "summaryHtml": "<p>Loop cutting, cable turns, detector tuning, and barrier integration.</p>",
+      "videoLinks": [
+        "https://www.youtube.com/results?search_query=loop+detector+installation+barrier"
+      ],
+      "documents": [],
+      "sections": [
+        {
+          "heading": "Vehicle Access",
+          "paragraph": "Loop cutting, cable turns, detector tuning, and barrier integration.",
+          "image": ""
+        }
+      ],
+      "id": "training-loop",
+      "title": "Loop Detector Installation",
+      "topic": "Vehicle Access",
+      "summary": "Loop cutting, cable turns, detector tuning, and barrier integration.",
+      "videoUrl": "https://www.youtube.com/results?search_query=loop+detector+installation+barrier"
+    },
+    {
+      "image": "/uploads/upload-2ae35831f217.webp",
+      "summaryHtml": "<p>dsafdhgvlaksdjfhbvlakdfjhg</p>",
+      "videoLinks": [
+        "https://youtu.be/4vkhLwi82-I?list=RD4vkhLwi82-I"
+      ],
+      "documents": [
+        {
+          "name": "ELV-art-quotation-2026-07-13.pdf",
+          "url": "/uploads/upload-8f54eff123ee.pdf"
+        }
+      ],
+      "sections": [
+        {
+          "heading": "",
+          "paragraph": "ajlhdgfklajhsdfbg",
+          "image": ""
+        }
+      ],
+      "id": "training-e986f47f211b",
+      "title": "testing song",
+      "topic": "song",
+      "summary": "dsafdhgvlaksdjfhbvlakdfjhg",
+      "videoUrl": "https://youtu.be/4vkhLwi82-I?list=RD4vkhLwi82-I"
+    }
+  ],
+  "downloads": [
+    {
+      "summaryHtml": "<p>A field-ready manual package for access controller wiring, reader setup, lock wiring, and handover checks.</p>",
+      "documents": [
+        {
+          "name": "Access control installation manual.pdf",
+          "url": "/uploads/download-access-control-manual.pdf"
+        }
+      ],
+      "sections": [
+        {
+          "heading": "What is included",
+          "paragraph": "This package is meant for installers who need one quick reference for controller terminals, reader wiring, lock output behavior, request-to-exit wiring, and emergency release testing."
+        },
+        {
+          "heading": "Best use",
+          "paragraph": "Use it before installation starts and again during commissioning so the final door behavior matches the project handover document."
+        }
+      ],
+      "id": "download-access-control-manual-pack",
+      "title": "Access Control Installation Manual Pack",
+      "product": "Manual PDF",
+      "summary": "A field-ready manual package for access controller wiring, reader setup, lock wiring, and handover checks.",
+      "url": "/uploads/download-access-control-manual.pdf"
+    },
+    {
+      "summaryHtml": "<p>A ZIP package for camera datasheets, lens selection notes, and quick comparison files for CCTV proposals.</p>",
+      "documents": [
+        {
+          "name": "Camera datasheet bundle.zip",
+          "url": "/uploads/download-camera-datasheets.zip"
+        }
+      ],
+      "sections": [
+        {
+          "heading": "",
+          "paragraph": "The bundle is useful when preparing quotations because it keeps the camera family documents together instead of sharing individual files one by one."
+        },
+        {
+          "heading": "Scenario",
+          "paragraph": "Use this for CCTV projects where the customer needs to compare dome, bullet, turret, fisheye, and low-light camera options."
+        }
+      ],
+      "id": "download-camera-datasheet-bundle",
+      "title": "IP Camera Datasheet Bundle",
+      "product": "Datasheet ZIP",
+      "summary": "A ZIP package for camera datasheets, lens selection notes, and quick comparison files for CCTV proposals.",
+      "url": "/uploads/download-camera-datasheets.zip"
+    },
+    {
+      "summaryHtml": "<p>A downloadable software package for client viewing, local configuration, playback, and basic NVR maintenance.</p>",
+      "documents": [
+        {
+          "name": "NVR client software.zip",
+          "url": "/uploads/download-nvr-client-software.zip"
+        },
+        {
+          "name": "Release notes.txt",
+          "url": "/uploads/download-release-notes.txt"
+        }
+      ],
+      "sections": [
+        {
+          "heading": "Before installing",
+          "paragraph": "Confirm the Windows user has permission to install software and that the NVR network address is available before starting configuration."
+        },
+        {
+          "heading": "",
+          "paragraph": "This example has a ZIP file and a text note, showing how the same download record can include more than one file."
+        }
+      ],
+      "id": "download-nvr-client-software-package",
+      "title": "NVR Client Software Package",
+      "product": "Software ZIP",
+      "summary": "A downloadable software package for client viewing, local configuration, playback, and basic NVR maintenance.",
+      "url": "/uploads/download-nvr-client-software.zip"
+    },
+    {
+      "summaryHtml": "<p>A compact checklist for rack labeling, patching, uplinks, UPS checks, and final documentation handover.</p>",
+      "documents": [
+        {
+          "name": "Network rack handover checklist.pdf",
+          "url": "/uploads/download-network-rack-checklist.pdf"
+        }
+      ],
+      "sections": [
+        {
+          "heading": "Handover items",
+          "paragraph": "Verify switch names, port labels, uplink patching, cabinet power, UPS runtime, spare patch cords, and the latest rack elevation drawing."
+        }
+      ],
+      "id": "download-network-rack-handover-checklist",
+      "title": "Network Rack Handover Checklist",
+      "product": "Checklist PDF",
+      "summary": "A compact checklist for rack labeling, patching, uplinks, UPS checks, and final documentation handover.",
+      "url": "/uploads/download-network-rack-checklist.pdf"
+    },
+    {
+      "summaryHtml": "<p>Client software for user management, attendance reports, and controller configuration.</p>",
+      "documents": [
+        {
+          "name": "Access Control Client Software",
+          "url": "#"
+        }
+      ],
+      "sections": [
+        {
+          "heading": "Smart Door Access Kit",
+          "paragraph": "Client software for user management, attendance reports, and controller configuration."
+        }
+      ],
+      "id": "download-access-client",
+      "title": "Access Control Client Software",
+      "product": "Smart Door Access Kit",
+      "summary": "Client software for user management, attendance reports, and controller configuration.",
+      "url": "#"
+    },
+    {
+      "summaryHtml": "<p>Discovery and configuration utility for camera IP, password, and stream setup.</p>",
+      "documents": [
+        {
+          "name": "IP Camera Configuration Tool",
+          "url": "#"
+        }
+      ],
+      "sections": [
+        {
+          "heading": "AI IP Camera Series",
+          "paragraph": "Discovery and configuration utility for camera IP, password, and stream setup."
+        }
+      ],
+      "id": "download-camera-tool",
+      "title": "IP Camera Configuration Tool",
+      "product": "AI IP Camera Series",
+      "summary": "Discovery and configuration utility for camera IP, password, and stream setup.",
+      "url": "#"
+    },
+    {
+      "summaryHtml": "<p>asdasdasddsfgsdfgsdfgsfdgsdfg</p>",
+      "documents": [
+        {
+          "name": "Webside dash Board.pdf",
+          "url": "/uploads/upload-edc82f87ce7b.pdf"
+        },
+        {
+          "name": "Arena_Station_Setup_Guide.pdf",
+          "url": "/uploads/upload-dcf93aca8cfe.pdf"
+        }
+      ],
+      "sections": [
+        {
+          "heading": "sdfgfdsghs",
+          "paragraph": "sdfgsdfgsdfgsdfg"
+        }
+      ],
+      "id": "download-0657cae1660b",
+      "title": "asdasd",
+      "product": "asdasd",
+      "summary": "asdasdasddsfgsdfgsdfgsfdgsdfg",
+      "url": "/uploads/upload-4ec7e5e62201.pdf"
+    },
+    {
+      "summaryHtml": "<p>asdfadsfhgsdfghsgfdhsdfghadsfgasdffaswdgsdgfhdsfghs</p>",
+      "documents": [
+        {
+          "name": "ELV-art-quotation-2026-07-13.pdf",
+          "url": "/uploads/upload-76494fc81f6b.pdf"
+        },
+        {
+          "name": "Webside dash Board.pdf",
+          "url": "/uploads/upload-5874f7b3c998.pdf"
+        },
+        {
+          "name": "Arena_Station_Setup_Guide.pdf",
+          "url": "/uploads/upload-a67d900604dc.pdf"
+        }
+      ],
+      "sections": [
+        {
+          "heading": "",
+          "paragraph": "sdgfadsfhsdfghsadgfh"
+        }
+      ],
+      "id": "download-4e9c1c6e6efb",
+      "title": "testing downlods",
+      "product": "asdasd",
+      "summary": "asdfadsfhgsdfghsgfdhsdfghadsfgasdffaswdgsdgfhdsfghs",
+      "url": "/uploads/upload-e35fa864e38b.pdf"
+    }
+  ],
+  "blogs": [
+    {
+      "image": "/assets/generated/hero-elv-control-room.webp",
+      "summaryHtml": "<p>A practical guide for consultants and contractors to reserve pathways, power, rack space, and device locations before site work becomes expensive.</p>",
+      "videoLinks": [],
+      "sections": [
+        {
+          "heading": "Start With Pathways",
+          "paragraph": "Reserve cable trays, conduits, sleeves, risers, and rack routes early. CCTV, access control, intercom, Wi-Fi, audio, and fire systems all become easier when the cable path is designed before construction begins.",
+          "image": "/assets/generated/hero-elv-control-room.webp"
+        },
+        {
+          "heading": "",
+          "paragraph": "A simple coordination drawing can prevent many site problems. It should show rack location, power availability, device points, network uplinks, containment routes, and spare capacity for future expansion.",
+          "image": ""
+        },
+        {
+          "heading": "Leave Space for Growth",
+          "paragraph": "A rack that is full on day one becomes difficult to maintain. Add spare patch panel ports, switch ports, UPS capacity, and cable management space so the system can grow without messy rework.",
+          "image": "/assets/generated/product-cctv-system.webp"
+        }
+      ],
+      "id": "blog-elv-planning-before-construction",
+      "title": "How to Plan ELV Systems Before Construction Starts",
+      "date": "Planning Guide",
+      "summary": "A practical guide for consultants and contractors to reserve pathways, power, rack space, and device locations before site work becomes expensive.",
+      "videoUrl": "",
+      "body": "Good ELV planning starts before walls are closed and ceilings are installed."
+    },
+    {
+      "image": "/assets/generated/product-cctv-system.webp",
+      "summaryHtml": "<p>Camera selection should be based on distance, light, angle, mounting height, analytics need, and recording purpose rather than megapixels alone.</p>",
+      "videoLinks": [
+        "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
+      ],
+      "sections": [
+        {
+          "heading": "Megapixels Are Not the Whole Answer",
+          "paragraph": "A high-resolution camera can still perform badly if the lens angle, lighting, mounting point, and target distance are wrong. Start with the viewing objective, then select the camera type.",
+          "image": ""
+        },
+        {
+          "heading": "Night View and WDR",
+          "paragraph": "Entrances, glass doors, parking ramps, and warehouse shutters often need stronger wide dynamic range or low-light capability. Test the actual scene whenever possible before final approval.",
+          "image": "/assets/generated/product-cctv-system.webp"
+        }
+      ],
+      "id": "blog-camera-selection-site-conditions",
+      "title": "Choosing the Right Camera for Real Site Conditions",
+      "date": "CCTV",
+      "summary": "Camera selection should be based on distance, light, angle, mounting height, analytics need, and recording purpose rather than megapixels alone.",
+      "videoUrl": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+      "body": "Megapixels matter, but the site condition decides the correct camera."
+    },
+    {
+      "image": "/assets/generated/product-access-control.webp",
+      "summaryHtml": "<p>Small wiring and hardware decisions can create daily access problems. This article explains the checks that matter before handover.</p>",
+      "videoLinks": [],
+      "sections": [
+        {
+          "heading": "Wrong Lock Type",
+          "paragraph": "Fail-safe and fail-secure locks behave differently during power loss and emergency release. Confirm the safety requirement before choosing magnetic locks, strikes, bolts, or electric handles.",
+          "image": "/assets/generated/product-access-control.webp"
+        },
+        {
+          "heading": "Reader Position",
+          "paragraph": "Readers should be mounted at a comfortable height and away from metal interference where possible. Poor placement makes daily use frustrating even when the controller is working correctly.",
+          "image": "/assets/generated/hero-elv-control-room.webp"
+        },
+        {
+          "heading": "",
+          "paragraph": "Final testing should include card access, exit button behavior, door forced alarm, door held open alarm, emergency release, and software event logs.",
+          "image": ""
+        }
+      ],
+      "id": "blog-access-control-door-mistakes",
+      "title": "Common Access Control Door Mistakes",
+      "date": "Access Control",
+      "summary": "Small wiring and hardware decisions can create daily access problems. This article explains the checks that matter before handover.",
+      "videoUrl": "",
+      "body": "Most access control issues are avoidable with a clean door checklist."
+    },
+    {
+      "image": "",
+      "summaryHtml": "<p>A text-focused field note for rack labeling, patching, switch access, documentation, and maintenance readiness.</p>",
+      "videoLinks": [],
+      "sections": [
+        {
+          "heading": "Label Everything",
+          "paragraph": "Patch panel ports, switch ports, uplinks, UPS outputs, and device cables should follow one naming method. Labels save hours during troubleshooting and future additions.",
+          "image": ""
+        },
+        {
+          "heading": "",
+          "paragraph": "Keep a printed or digital port map with the rack. Include switch IP addresses, VLAN notes, uplink paths, spare ports, and the latest as-built drawing reference.",
+          "image": ""
+        }
+      ],
+      "id": "blog-network-rack-handover-clean",
+      "title": "What a Clean Network Rack Handover Should Include",
+      "date": "Networking",
+      "summary": "A text-focused field note for rack labeling, patching, switch access, documentation, and maintenance readiness.",
+      "videoUrl": "",
+      "body": "A rack is not finished until another technician can understand it quickly."
+    },
+    {
+      "image": "",
+      "summaryHtml": "<p>A practical checklist for containment, power, rack space, device locations, and future expansion.</p>",
+      "videoLinks": [],
+      "sections": [
+        {
+          "heading": "",
+          "paragraph": "Early ELV planning reduces rework, improves cable routes, and creates cleaner maintenance access after handover.",
+          "image": ""
+        }
+      ],
+      "id": "blog-elv-design",
+      "title": "How to Plan an ELV System Before Construction",
+      "summary": "A practical checklist for containment, power, rack space, device locations, and future expansion.",
+      "body": "Early ELV planning reduces rework, improves cable routes, and creates cleaner maintenance access after handover.",
+      "date": "2026-07-13"
+    }
+  ],
+  "users": [],
+  "leads": [],
+  "updatedAt": "2026-07-24T19:49:22.972Z",
+  "parts": [
+    {
+      "summaryHtml": "<p>Vehicle detection module for road blockers, barriers, and gate safety loops.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "part-loop-detector-module",
+      "productId": "prod-road-blocker",
+      "categoryId": "cat-access",
+      "name": "Dual Channel Loop Detector Module",
+      "segment": "Vehicle Access Control",
+      "status": "Accessory",
+      "summary": "Vehicle detection module for road blockers, barriers, and gate safety loops.",
+      "prices": {
+        "l1": "95",
+        "l2": "82",
+        "l3": "70"
+      },
+      "image": "/assets/generated/product-vehicle-access.webp"
+    },
+    {
+      "summaryHtml": "<p>Replacement barrier arm with reflective strip and optional LED visibility.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "part-barrier-arm",
+      "productId": "prod-traffic-barrier",
+      "categoryId": "cat-access",
+      "name": "LED Barrier Arm Assembly",
+      "segment": "Vehicle Access Control",
+      "status": "Spare Part",
+      "summary": "Replacement barrier arm with reflective strip and optional LED visibility.",
+      "prices": {
+        "l1": "180",
+        "l2": "150",
+        "l3": "125"
+      },
+      "image": "/assets/generated/product-vehicle-access.webp"
+    },
+    {
+      "summaryHtml": "<p>Wiegand/OSDP reader for access control doors and attendance points.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "part-rfid-reader",
+      "productId": "prod-door-access",
+      "categoryId": "cat-access",
+      "name": "RFID Door Reader",
+      "segment": "Access Control",
+      "status": "Accessory",
+      "summary": "Wiegand/OSDP reader for access control doors and attendance points.",
+      "prices": {
+        "l1": "75",
+        "l2": "62",
+        "l3": "55"
+      },
+      "image": "/assets/generated/product-access-control.webp"
+    },
+    {
+      "summaryHtml": "ASDFASDGFVASFVASDFVAS<div>ASDFGAS;F,GN;AKLFDJNG</div><div>ASDGFN;AKLJFSNG;ALKFNG</div>",
+      "gallery": [
+        "/uploads/upload-9ff7d99c5bd6.webp"
+      ],
+      "datasheet": "/uploads/upload-df2829f831e8.pdf",
+      "manual": "/uploads/upload-48462651fc77.pdf",
+      "model3d": "/uploads/upload-96cd2aecfb4e.bin",
+      "cad": "/uploads/upload-ba182657a941.pdf",
+      "id": "part-280499c715b7",
+      "productId": "prod-61c8ba049169",
+      "categoryId": "cat-cctv",
+      "name": "Rizwan",
+      "segment": "akjshd",
+      "status": "Part",
+      "summary": "ASDFASDGFVASFVASDFVASASDFGAS;F,GN;AKLFDJNGASDGFN;AKLJFSNG;ALKFNG",
+      "prices": {
+        "l1": "12",
+        "l2": "23",
+        "l3": "34"
+      },
+      "image": "/uploads/upload-e142370e32b4.webp",
+      "modelId": "model-d6c97c1a9695"
+    },
+    {
+      "summaryHtml": "<p>Weatherproof junction box for turret and dome camera cable protection.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "part-junction-box",
+      "modelId": "model-ipc-4mp-turret",
+      "productId": "prod-fixed-ip-cameras",
+      "categoryId": "cat-network-cameras",
+      "name": "Weatherproof Junction Box",
+      "segment": "Camera Accessories",
+      "status": "Mounting",
+      "summary": "Weatherproof junction box for turret and dome camera cable protection.",
+      "prices": {
+        "l1": "28",
+        "l2": "23",
+        "l3": "19"
+      },
+      "image": "/assets/generated/product-cctv-system.webp"
+    },
+    {
+      "summaryHtml": "<p>Wall bracket for bullet camera installation and service access.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "part-wall-bracket",
+      "modelId": "model-ipc-8mp-bullet",
+      "productId": "prod-fixed-ip-cameras",
+      "categoryId": "cat-network-cameras",
+      "name": "Bullet Camera Wall Bracket",
+      "segment": "Camera Accessories",
+      "status": "Mounting",
+      "summary": "Wall bracket for bullet camera installation and service access.",
+      "prices": {
+        "l1": "34",
+        "l2": "29",
+        "l3": "24"
+      },
+      "image": "/assets/generated/product-cctv-system.webp"
+    },
+    {
+      "summaryHtml": "<p>Pole mount adapter for outdoor PTZ speed dome installation.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "part-ptz-pole-mount",
+      "modelId": "model-ptz-25x",
+      "productId": "prod-smart-ptz",
+      "categoryId": "cat-ptz-cameras",
+      "name": "PTZ Pole Mount Adapter",
+      "segment": "PTZ Accessories",
+      "status": "Mounting",
+      "summary": "Pole mount adapter for outdoor PTZ speed dome installation.",
+      "prices": {
+        "l1": "75",
+        "l2": "64",
+        "l3": "55"
+      },
+      "image": "/assets/generated/product-cctv-system.webp"
+    },
+    {
+      "summaryHtml": "<p>6TB surveillance-grade hard drive for NVR recording systems.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "part-surveillance-hdd",
+      "modelId": "model-nvr-16ch",
+      "productId": "prod-embedded-nvr",
+      "categoryId": "cat-video-recorders",
+      "name": "Surveillance Hard Drive 6TB",
+      "segment": "Recorder Accessories",
+      "status": "Storage",
+      "summary": "6TB surveillance-grade hard drive for NVR recording systems.",
+      "prices": {
+        "l1": "210",
+        "l2": "185",
+        "l3": "165"
+      },
+      "image": "/assets/generated/hero-elv-control-room.webp"
+    },
+    {
+      "summaryHtml": "<p>Secure RFID reader for access control doors and attendance points.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "part-door-reader",
+      "modelId": "model-door-2-controller",
+      "productId": "prod-door-controllers",
+      "categoryId": "cat-access-control-pro",
+      "name": "OSDP RFID Door Reader",
+      "segment": "Access Accessories",
+      "status": "Reader",
+      "summary": "Secure RFID reader for access control doors and attendance points.",
+      "prices": {
+        "l1": "75",
+        "l2": "62",
+        "l3": "55"
+      },
+      "image": "/assets/generated/product-access-control.webp"
+    },
+    {
+      "summaryHtml": "<p>Electromagnetic lock for glass, wood, and metal access control doors.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "part-maglock-600",
+      "modelId": "model-door-2-controller",
+      "productId": "prod-door-controllers",
+      "categoryId": "cat-access-control-pro",
+      "name": "600lb Magnetic Lock",
+      "segment": "Access Accessories",
+      "status": "Lock",
+      "summary": "Electromagnetic lock for glass, wood, and metal access control doors.",
+      "prices": {
+        "l1": "120",
+        "l2": "105",
+        "l3": "90"
+      },
+      "image": "/assets/generated/product-access-control.webp"
+    },
+    {
+      "summaryHtml": "<p>Vehicle loop detector for barrier safety, open signal, and presence detection.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "part-loop-detector-pro",
+      "modelId": "model-barrier-4m",
+      "productId": "prod-traffic-barriers-family",
+      "categoryId": "cat-vehicle-access-pro",
+      "name": "Dual Channel Loop Detector",
+      "segment": "Vehicle Accessories",
+      "status": "Detector",
+      "summary": "Vehicle loop detector for barrier safety, open signal, and presence detection.",
+      "prices": {
+        "l1": "95",
+        "l2": "82",
+        "l3": "70"
+      },
+      "image": "/assets/generated/product-vehicle-access.webp"
+    },
+    {
+      "summaryHtml": "<p>Replacement barrier arm with reflector strip and LED visibility option.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "part-barrier-arm-led",
+      "modelId": "model-barrier-4m",
+      "productId": "prod-traffic-barriers-family",
+      "categoryId": "cat-vehicle-access-pro",
+      "name": "LED Barrier Arm Assembly",
+      "segment": "Vehicle Accessories",
+      "status": "Spare Part",
+      "summary": "Replacement barrier arm with reflector strip and LED visibility option.",
+      "prices": {
+        "l1": "180",
+        "l2": "150",
+        "l3": "125"
+      },
+      "image": "/assets/generated/product-vehicle-access.webp"
+    },
+    {
+      "summaryHtml": "<p>Protective rain shield for outdoor video door station installations.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "part-intercom-rain-shield",
+      "modelId": "model-villa-intercom-kit",
+      "productId": "prod-ip-intercom-family",
+      "categoryId": "cat-video-intercom-pro",
+      "name": "Door Station Rain Shield",
+      "segment": "Intercom Accessories",
+      "status": "Mounting",
+      "summary": "Protective rain shield for outdoor video door station installations.",
+      "prices": {
+        "l1": "42",
+        "l2": "35",
+        "l3": "30"
+      },
+      "image": "/assets/generated/product-access-control.webp"
+    },
+    {
+      "summaryHtml": "<p>Weatherproof junction box for turret camera cable termination.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "acc-jb-turret",
+      "modelId": "model-ipc-t4ir-4mp",
+      "productId": "prod-fixed-ip-cameras",
+      "categoryId": "cat-network-cameras",
+      "name": "Turret Camera Junction Box",
+      "segment": "Camera Accessories",
+      "status": "Mounting",
+      "summary": "Weatherproof junction box for turret camera cable termination.",
+      "prices": {
+        "l1": "28",
+        "l2": "23",
+        "l3": "19"
+      },
+      "image": "/assets/generated/product-cctv-system.webp"
+    },
+    {
+      "summaryHtml": "<p>Wall mount bracket for dome camera installation.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "acc-dome-wall-mount",
+      "modelId": "model-ipc-d4ir-4mp",
+      "productId": "prod-fixed-ip-cameras",
+      "categoryId": "cat-network-cameras",
+      "name": "Dome Wall Mount Bracket",
+      "segment": "Camera Accessories",
+      "status": "Mounting",
+      "summary": "Wall mount bracket for dome camera installation.",
+      "prices": {
+        "l1": "35",
+        "l2": "29",
+        "l3": "24"
+      },
+      "image": "/assets/generated/product-cctv-system.webp"
+    },
+    {
+      "summaryHtml": "<p>Pole mount accessory for outdoor bullet camera deployment.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "acc-bullet-pole-mount",
+      "modelId": "model-ipc-b8vf-8mp",
+      "productId": "prod-varifocal-cameras",
+      "categoryId": "cat-network-cameras",
+      "name": "Bullet Camera Pole Mount",
+      "segment": "Camera Accessories",
+      "status": "Mounting",
+      "summary": "Pole mount accessory for outdoor bullet camera deployment.",
+      "prices": {
+        "l1": "42",
+        "l2": "36",
+        "l3": "31"
+      },
+      "image": "/assets/generated/product-cctv-system.webp"
+    },
+    {
+      "summaryHtml": "<p>Ceiling mount ring for fisheye camera installation.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "acc-fisheye-ceiling-ring",
+      "modelId": "model-pano-12mp-fisheye",
+      "productId": "prod-fisheye-panoramic",
+      "categoryId": "cat-network-cameras",
+      "name": "Fisheye Ceiling Mount Ring",
+      "segment": "Camera Accessories",
+      "status": "Mounting",
+      "summary": "Ceiling mount ring for fisheye camera installation.",
+      "prices": {
+        "l1": "38",
+        "l2": "32",
+        "l3": "28"
+      },
+      "image": "/assets/generated/product-cctv-system.webp"
+    },
+    {
+      "summaryHtml": "<p>Pole mount adapter for outdoor PTZ speed dome installation.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "acc-ptz-pole-mount",
+      "modelId": "model-ptz-25x",
+      "productId": "prod-smart-ptz",
+      "categoryId": "cat-ptz-cameras",
+      "name": "PTZ Pole Mount Adapter",
+      "segment": "PTZ Accessories",
+      "status": "Mounting",
+      "summary": "Pole mount adapter for outdoor PTZ speed dome installation.",
+      "prices": {
+        "l1": "75",
+        "l2": "64",
+        "l3": "55"
+      },
+      "image": "/assets/generated/product-cctv-system.webp"
+    },
+    {
+      "summaryHtml": "<p>Corner mount bracket for PTZ camera perimeter installations.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "acc-ptz-corner-mount",
+      "modelId": "model-ptz-42x",
+      "productId": "prod-smart-ptz",
+      "categoryId": "cat-ptz-cameras",
+      "name": "PTZ Corner Mount Bracket",
+      "segment": "PTZ Accessories",
+      "status": "Mounting",
+      "summary": "Corner mount bracket for PTZ camera perimeter installations.",
+      "prices": {
+        "l1": "95",
+        "l2": "82",
+        "l3": "72"
+      },
+      "image": "/assets/generated/product-cctv-system.webp"
+    },
+    {
+      "summaryHtml": "<p>Audio pickup microphone for compatible AI camera recording.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "acc-ai-camera-mic",
+      "modelId": "model-ai-d5-dome",
+      "productId": "prod-ai-analytics-cameras",
+      "categoryId": "cat-ai-cameras",
+      "name": "Camera Audio Pickup Microphone",
+      "segment": "Camera Accessories",
+      "status": "Audio",
+      "summary": "Audio pickup microphone for compatible AI camera recording.",
+      "prices": {
+        "l1": "45",
+        "l2": "38",
+        "l3": "33"
+      },
+      "image": "/assets/generated/product-cctv-system.webp"
+    },
+    {
+      "summaryHtml": "<p>External IR illuminator for plate capture in difficult night conditions.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "acc-anpr-led",
+      "modelId": "model-anpr-4mp-lpr",
+      "productId": "prod-anpr-camera-family",
+      "categoryId": "cat-anpr-cameras",
+      "name": "ANPR External IR Illuminator",
+      "segment": "Traffic Accessories",
+      "status": "Lighting",
+      "summary": "External IR illuminator for plate capture in difficult night conditions.",
+      "prices": {
+        "l1": "180",
+        "l2": "155",
+        "l3": "138"
+      },
+      "image": "/assets/generated/product-cctv-system.webp"
+    },
+    {
+      "summaryHtml": "<p>Heavy-duty wall mount bracket for bi-spectrum thermal camera.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "acc-thermal-wall-mount",
+      "modelId": "model-thermal-bullet-bi",
+      "productId": "prod-thermal-camera-family",
+      "categoryId": "cat-thermal-cameras",
+      "name": "Thermal Camera Wall Bracket",
+      "segment": "Thermal Accessories",
+      "status": "Mounting",
+      "summary": "Heavy-duty wall mount bracket for bi-spectrum thermal camera.",
+      "prices": {
+        "l1": "85",
+        "l2": "72",
+        "l3": "64"
+      },
+      "image": "/assets/generated/product-cctv-system.webp"
+    }
+  ],
+  "models": [
+    {
+      "summaryHtml": "<p>4MP turret IP camera with smart IR, PoE, wide dynamic range, and mobile viewing.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-ipc-4mp-turret",
+      "productId": "prod-fixed-ip-cameras",
+      "categoryId": "cat-network-cameras",
+      "name": "ELV-IPC-T4IR 4MP Turret Camera",
+      "segment": "Network Cameras",
+      "status": "Featured",
+      "summary": "4MP turret IP camera with smart IR, PoE, wide dynamic range, and mobile viewing.",
+      "features": [
+        "Project-ready installation",
+        "Remote support available",
+        "Compatible with ELV.art catalog accessories"
+      ],
+      "specs": [
+        "PoE or low-voltage wiring options",
+        "Professional mounting accessories",
+        "Documentation and handover support"
+      ],
+      "prices": {
+        "l1": "420",
+        "l2": "360",
+        "l3": "315"
+      },
+      "image": "/assets/generated/product-cctv-system.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>8MP varifocal bullet camera for perimeter and entrance monitoring.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-ipc-8mp-bullet",
+      "productId": "prod-fixed-ip-cameras",
+      "categoryId": "cat-network-cameras",
+      "name": "ELV-IPC-B8VF 8MP Bullet Camera",
+      "segment": "Network Cameras",
+      "status": "4K",
+      "summary": "8MP varifocal bullet camera for perimeter and entrance monitoring.",
+      "features": [
+        "Project-ready installation",
+        "Remote support available",
+        "Compatible with ELV.art catalog accessories"
+      ],
+      "specs": [
+        "PoE or low-voltage wiring options",
+        "Professional mounting accessories",
+        "Documentation and handover support"
+      ],
+      "prices": {
+        "l1": "690",
+        "l2": "610",
+        "l3": "540"
+      },
+      "image": "/assets/generated/product-cctv-system.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>AI dome camera with human and vehicle filtering, line crossing, and intrusion analytics.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-ai-dome-5mp",
+      "productId": "prod-ai-analytics-cameras",
+      "categoryId": "cat-network-cameras",
+      "name": "ELV-AI-D5 5MP Analytics Dome",
+      "segment": "AI Cameras",
+      "status": "AI",
+      "summary": "AI dome camera with human and vehicle filtering, line crossing, and intrusion analytics.",
+      "features": [
+        "Project-ready installation",
+        "Remote support available",
+        "Compatible with ELV.art catalog accessories"
+      ],
+      "specs": [
+        "PoE or low-voltage wiring options",
+        "Professional mounting accessories",
+        "Documentation and handover support"
+      ],
+      "prices": {
+        "l1": "780",
+        "l2": "690",
+        "l3": "620"
+      },
+      "image": "/assets/generated/product-cctv-system.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>Full-color low-light turret camera for villas, retail, and parking areas.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-color-turret-4mp",
+      "productId": "prod-low-light-cameras",
+      "categoryId": "cat-network-cameras",
+      "name": "ELV-COLOR-T4 4MP Low-Light Turret",
+      "segment": "Low-Light Cameras",
+      "status": "Color Night",
+      "summary": "Full-color low-light turret camera for villas, retail, and parking areas.",
+      "features": [
+        "Project-ready installation",
+        "Remote support available",
+        "Compatible with ELV.art catalog accessories"
+      ],
+      "specs": [
+        "PoE or low-voltage wiring options",
+        "Professional mounting accessories",
+        "Documentation and handover support"
+      ],
+      "prices": {
+        "l1": "560",
+        "l2": "490",
+        "l3": "430"
+      },
+      "image": "/assets/generated/product-cctv-system.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>Outdoor PTZ speed dome with optical zoom, presets, patrol, and auto-tracking support.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-ptz-25x",
+      "productId": "prod-smart-ptz",
+      "categoryId": "cat-ptz-cameras",
+      "name": "ELV-PTZ-25X Smart Speed Dome",
+      "segment": "PTZ Cameras",
+      "status": "25x Zoom",
+      "summary": "Outdoor PTZ speed dome with optical zoom, presets, patrol, and auto-tracking support.",
+      "features": [
+        "Project-ready installation",
+        "Remote viewing support",
+        "Professional ELV documentation"
+      ],
+      "specs": [
+        "PoE network connection",
+        "ONVIF compatible",
+        "Weather-ready installation accessories"
+      ],
+      "prices": {
+        "l1": "1850",
+        "l2": "1640",
+        "l3": "1490"
+      },
+      "image": "/assets/generated/product-cctv-system.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>16-channel 4K NVR with smart search, remote access, and expandable storage.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-nvr-16ch",
+      "productId": "prod-embedded-nvr",
+      "categoryId": "cat-video-recorders",
+      "name": "ELV-NVR-16CH-4K Recorder",
+      "segment": "Video Recorders",
+      "status": "16 Channel",
+      "summary": "16-channel 4K NVR with smart search, remote access, and expandable storage.",
+      "features": [
+        "Project-ready installation",
+        "Remote support available",
+        "Compatible with ELV.art catalog accessories"
+      ],
+      "specs": [
+        "PoE or low-voltage wiring options",
+        "Professional mounting accessories",
+        "Documentation and handover support"
+      ],
+      "prices": {
+        "l1": "820",
+        "l2": "730",
+        "l3": "650"
+      },
+      "image": "/assets/generated/hero-elv-control-room.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>8-channel PoE NVR for small CCTV installations with direct camera power.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-poe-nvr-8ch",
+      "productId": "prod-poe-nvr",
+      "categoryId": "cat-video-recorders",
+      "name": "ELV-NVR-8P PoE Recorder",
+      "segment": "Video Recorders",
+      "status": "PoE",
+      "summary": "8-channel PoE NVR for small CCTV installations with direct camera power.",
+      "features": [
+        "Project-ready installation",
+        "Remote support available",
+        "Compatible with ELV.art catalog accessories"
+      ],
+      "specs": [
+        "PoE or low-voltage wiring options",
+        "Professional mounting accessories",
+        "Documentation and handover support"
+      ],
+      "prices": {
+        "l1": "620",
+        "l2": "545",
+        "l3": "480"
+      },
+      "image": "/assets/generated/hero-elv-control-room.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>Two-door access controller with TCP/IP connection, reader support, and event logs.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-door-2-controller",
+      "productId": "prod-door-controllers",
+      "categoryId": "cat-access-control-pro",
+      "name": "ELV-AC-2D Two Door Controller",
+      "segment": "Access Control",
+      "status": "Controller",
+      "summary": "Two-door access controller with TCP/IP connection, reader support, and event logs.",
+      "features": [
+        "Project-ready installation",
+        "Remote support available",
+        "Compatible with ELV.art catalog accessories"
+      ],
+      "specs": [
+        "PoE or low-voltage wiring options",
+        "Professional mounting accessories",
+        "Documentation and handover support"
+      ],
+      "prices": {
+        "l1": "780",
+        "l2": "690",
+        "l3": "610"
+      },
+      "image": "/assets/generated/product-access-control.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>Multi-format RFID reader with keypad option and controller integration.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-rfid-reader-pro",
+      "productId": "prod-readers-credentials",
+      "categoryId": "cat-access-control-pro",
+      "name": "ELV-RD-MF Multi-Format Reader",
+      "segment": "Access Control",
+      "status": "Reader",
+      "summary": "Multi-format RFID reader with keypad option and controller integration.",
+      "features": [
+        "Project-ready installation",
+        "Remote support available",
+        "Compatible with ELV.art catalog accessories"
+      ],
+      "specs": [
+        "PoE or low-voltage wiring options",
+        "Professional mounting accessories",
+        "Documentation and handover support"
+      ],
+      "prices": {
+        "l1": "95",
+        "l2": "82",
+        "l3": "70"
+      },
+      "image": "/assets/generated/product-access-control.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>4-meter traffic barrier with loop detector support and access control trigger input.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-barrier-4m",
+      "productId": "prod-traffic-barriers-family",
+      "categoryId": "cat-vehicle-access-pro",
+      "name": "ELV-BR-4M High-Speed Barrier",
+      "segment": "Vehicle Access Control",
+      "status": "Barrier",
+      "summary": "4-meter traffic barrier with loop detector support and access control trigger input.",
+      "features": [
+        "Project-ready installation",
+        "Remote support available",
+        "Compatible with ELV.art catalog accessories"
+      ],
+      "specs": [
+        "PoE or low-voltage wiring options",
+        "Professional mounting accessories",
+        "Documentation and handover support"
+      ],
+      "prices": {
+        "l1": "1350",
+        "l2": "1180",
+        "l3": "1020"
+      },
+      "image": "/assets/generated/product-vehicle-access.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>900mm hydraulic road blocker for high-security vehicle entrance control.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-road-blocker-900",
+      "productId": "prod-road-blockers-family",
+      "categoryId": "cat-vehicle-access-pro",
+      "name": "ELV-RB-900 Hydraulic Road Blocker",
+      "segment": "Vehicle Access Control",
+      "status": "Road Blocker",
+      "summary": "900mm hydraulic road blocker for high-security vehicle entrance control.",
+      "features": [
+        "Project-ready installation",
+        "Remote support available",
+        "Compatible with ELV.art catalog accessories"
+      ],
+      "specs": [
+        "PoE or low-voltage wiring options",
+        "Professional mounting accessories",
+        "Documentation and handover support"
+      ],
+      "prices": {
+        "l1": "8500",
+        "l2": "7900",
+        "l3": "7200"
+      },
+      "image": "/assets/generated/product-vehicle-access.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>IP video door station and indoor monitor kit with mobile app calling.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-villa-intercom-kit",
+      "productId": "prod-ip-intercom-family",
+      "categoryId": "cat-video-intercom-pro",
+      "name": "ELV-VI-KIT Villa Video Intercom",
+      "segment": "Video Intercom",
+      "status": "Villa Kit",
+      "summary": "IP video door station and indoor monitor kit with mobile app calling.",
+      "features": [
+        "Project-ready installation",
+        "Remote support available",
+        "Compatible with ELV.art catalog accessories"
+      ],
+      "specs": [
+        "PoE or low-voltage wiring options",
+        "Professional mounting accessories",
+        "Documentation and handover support"
+      ],
+      "prices": {
+        "l1": "520",
+        "l2": "455",
+        "l3": "390"
+      },
+      "image": "/assets/generated/product-access-control.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>4MP turret IP camera with smart IR, PoE, WDR, and mobile viewing.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-ipc-t4ir-4mp",
+      "productId": "prod-fixed-ip-cameras",
+      "categoryId": "cat-network-cameras",
+      "name": "ELV-IPC-T4IR 4MP Turret Camera",
+      "segment": "Network Cameras",
+      "status": "Featured",
+      "summary": "4MP turret IP camera with smart IR, PoE, WDR, and mobile viewing.",
+      "features": [
+        "4MP high-definition image",
+        "Smart IR night vision",
+        "PoE installation",
+        "Mobile and NVR support"
+      ],
+      "specs": [
+        "1/3 inch CMOS sensor",
+        "H.265 video compression",
+        "IP67 outdoor rating",
+        "2.8mm or 4mm lens"
+      ],
+      "prices": {
+        "l1": "420",
+        "l2": "360",
+        "l3": "315"
+      },
+      "image": "/assets/generated/product-cctv-system.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>Vandal-resistant 4MP dome camera for offices, corridors, lifts, and entrances.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-ipc-d4ir-4mp",
+      "productId": "prod-fixed-ip-cameras",
+      "categoryId": "cat-network-cameras",
+      "name": "ELV-IPC-D4IR 4MP Dome Camera",
+      "segment": "Network Cameras",
+      "status": "Indoor/Outdoor",
+      "summary": "Vandal-resistant 4MP dome camera for offices, corridors, lifts, and entrances.",
+      "features": [
+        "Project-ready installation",
+        "Remote viewing support",
+        "Professional ELV documentation"
+      ],
+      "specs": [
+        "PoE network connection",
+        "ONVIF compatible",
+        "Weather-ready installation accessories"
+      ],
+      "prices": {
+        "l1": "450",
+        "l2": "390",
+        "l3": "340"
+      },
+      "image": "/assets/generated/product-cctv-system.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>8MP motorized varifocal bullet camera for perimeter and entrance monitoring.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-ipc-b8vf-8mp",
+      "productId": "prod-varifocal-cameras",
+      "categoryId": "cat-network-cameras",
+      "name": "ELV-IPC-B8VF 8MP Varifocal Bullet",
+      "segment": "Network Cameras",
+      "status": "4K",
+      "summary": "8MP motorized varifocal bullet camera for perimeter and entrance monitoring.",
+      "features": [
+        "Project-ready installation",
+        "Remote viewing support",
+        "Professional ELV documentation"
+      ],
+      "specs": [
+        "PoE network connection",
+        "ONVIF compatible",
+        "Weather-ready installation accessories"
+      ],
+      "prices": {
+        "l1": "690",
+        "l2": "610",
+        "l3": "540"
+      },
+      "image": "/assets/generated/product-cctv-system.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>12MP fisheye camera for full-room monitoring with dewarped viewing modes.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-pano-12mp-fisheye",
+      "productId": "prod-fisheye-panoramic",
+      "categoryId": "cat-network-cameras",
+      "name": "ELV-PANO-F12 12MP Fisheye Camera",
+      "segment": "Network Cameras",
+      "status": "360 View",
+      "summary": "12MP fisheye camera for full-room monitoring with dewarped viewing modes.",
+      "features": [
+        "Project-ready installation",
+        "Remote viewing support",
+        "Professional ELV documentation"
+      ],
+      "specs": [
+        "PoE network connection",
+        "ONVIF compatible",
+        "Weather-ready installation accessories"
+      ],
+      "prices": {
+        "l1": "980",
+        "l2": "860",
+        "l3": "770"
+      },
+      "image": "/assets/generated/product-cctv-system.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>Long-range PTZ speed dome for industrial perimeters and large site coverage.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-ptz-42x",
+      "productId": "prod-smart-ptz",
+      "categoryId": "cat-ptz-cameras",
+      "name": "ELV-PTZ-42X Long Range Speed Dome",
+      "segment": "PTZ Cameras",
+      "status": "42x Zoom",
+      "summary": "Long-range PTZ speed dome for industrial perimeters and large site coverage.",
+      "features": [
+        "Project-ready installation",
+        "Remote viewing support",
+        "Professional ELV documentation"
+      ],
+      "specs": [
+        "PoE network connection",
+        "ONVIF compatible",
+        "Weather-ready installation accessories"
+      ],
+      "prices": {
+        "l1": "2850",
+        "l2": "2520",
+        "l3": "2310"
+      },
+      "image": "/assets/generated/product-cctv-system.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>Dual-lens PTZ combining fixed overview with zoom tracking for wide-area monitoring.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-dual-lens-ptz",
+      "productId": "prod-tandem-ptz",
+      "categoryId": "cat-ptz-cameras",
+      "name": "ELV-DUAL-PTZ Overview + Detail Camera",
+      "segment": "PTZ Cameras",
+      "status": "Dual Lens",
+      "summary": "Dual-lens PTZ combining fixed overview with zoom tracking for wide-area monitoring.",
+      "features": [
+        "Project-ready installation",
+        "Remote viewing support",
+        "Professional ELV documentation"
+      ],
+      "specs": [
+        "PoE network connection",
+        "ONVIF compatible",
+        "Weather-ready installation accessories"
+      ],
+      "prices": {
+        "l1": "3400",
+        "l2": "3060",
+        "l3": "2780"
+      },
+      "image": "/assets/generated/product-cctv-system.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>AI dome camera with human and vehicle filtering, line crossing, and intrusion analytics.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-ai-d5-dome",
+      "productId": "prod-ai-analytics-cameras",
+      "categoryId": "cat-ai-cameras",
+      "name": "ELV-AI-D5 5MP Analytics Dome",
+      "segment": "AI Cameras",
+      "status": "AI",
+      "summary": "AI dome camera with human and vehicle filtering, line crossing, and intrusion analytics.",
+      "features": [
+        "Project-ready installation",
+        "Remote viewing support",
+        "Professional ELV documentation"
+      ],
+      "specs": [
+        "PoE network connection",
+        "ONVIF compatible",
+        "Weather-ready installation accessories"
+      ],
+      "prices": {
+        "l1": "780",
+        "l2": "690",
+        "l3": "620"
+      },
+      "image": "/assets/generated/product-cctv-system.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>AI bullet camera for perimeter detection, virtual line crossing, and site protection.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-ai-b8-perimeter",
+      "productId": "prod-ai-analytics-cameras",
+      "categoryId": "cat-ai-cameras",
+      "name": "ELV-AI-B8 Perimeter Bullet Camera",
+      "segment": "AI Cameras",
+      "status": "Perimeter",
+      "summary": "AI bullet camera for perimeter detection, virtual line crossing, and site protection.",
+      "features": [
+        "Project-ready installation",
+        "Remote viewing support",
+        "Professional ELV documentation"
+      ],
+      "specs": [
+        "PoE network connection",
+        "ONVIF compatible",
+        "Weather-ready installation accessories"
+      ],
+      "prices": {
+        "l1": "940",
+        "l2": "830",
+        "l3": "760"
+      },
+      "image": "/assets/generated/product-cctv-system.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>Face recognition camera for access points, watchlist alerts, and attendance workflows.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-face-2mp-terminal",
+      "productId": "prod-face-recognition-cameras",
+      "categoryId": "cat-ai-cameras",
+      "name": "ELV-FACE-CAM 2MP Recognition Camera",
+      "segment": "AI Cameras",
+      "status": "Face AI",
+      "summary": "Face recognition camera for access points, watchlist alerts, and attendance workflows.",
+      "features": [
+        "Project-ready installation",
+        "Remote viewing support",
+        "Professional ELV documentation"
+      ],
+      "specs": [
+        "PoE network connection",
+        "ONVIF compatible",
+        "Weather-ready installation accessories"
+      ],
+      "prices": {
+        "l1": "1250",
+        "l2": "1120",
+        "l3": "990"
+      },
+      "image": "/assets/generated/product-cctv-system.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>Full-color low-light turret camera for villas, retail, and parking areas.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-color-t4",
+      "productId": "prod-low-light-cameras",
+      "categoryId": "cat-low-light-cameras",
+      "name": "ELV-COLOR-T4 4MP Low-Light Turret",
+      "segment": "Low-Light Cameras",
+      "status": "Color Night",
+      "summary": "Full-color low-light turret camera for villas, retail, and parking areas.",
+      "features": [
+        "Project-ready installation",
+        "Remote viewing support",
+        "Professional ELV documentation"
+      ],
+      "specs": [
+        "PoE network connection",
+        "ONVIF compatible",
+        "Weather-ready installation accessories"
+      ],
+      "prices": {
+        "l1": "560",
+        "l2": "490",
+        "l3": "430"
+      },
+      "image": "/assets/generated/product-cctv-system.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>ANPR camera for plate capture, gate opening, vehicle logs, and blacklist/whitelist alerts.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-anpr-4mp-lpr",
+      "productId": "prod-anpr-camera-family",
+      "categoryId": "cat-anpr-cameras",
+      "name": "ELV-ANPR-4MP License Plate Camera",
+      "segment": "Traffic Cameras",
+      "status": "ANPR",
+      "summary": "ANPR camera for plate capture, gate opening, vehicle logs, and blacklist/whitelist alerts.",
+      "features": [
+        "Project-ready installation",
+        "Remote viewing support",
+        "Professional ELV documentation"
+      ],
+      "specs": [
+        "PoE network connection",
+        "ONVIF compatible",
+        "Weather-ready installation accessories"
+      ],
+      "prices": {
+        "l1": "980",
+        "l2": "860",
+        "l3": "760"
+      },
+      "image": "/assets/generated/product-cctv-system.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>Bi-spectrum thermal bullet camera for perimeter detection and industrial monitoring.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-thermal-bullet-bi",
+      "productId": "prod-thermal-camera-family",
+      "categoryId": "cat-thermal-cameras",
+      "name": "ELV-THERM-BI Bi-Spectrum Thermal Bullet",
+      "segment": "Thermal Cameras",
+      "status": "Bi-Spectrum",
+      "summary": "Bi-spectrum thermal bullet camera for perimeter detection and industrial monitoring.",
+      "features": [
+        "Project-ready installation",
+        "Remote viewing support",
+        "Professional ELV documentation"
+      ],
+      "specs": [
+        "PoE network connection",
+        "ONVIF compatible",
+        "Weather-ready installation accessories"
+      ],
+      "prices": {
+        "l1": "2450",
+        "l2": "2180",
+        "l3": "1990"
+      },
+      "image": "/assets/generated/product-cctv-system.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "<p>Universal weatherproof junction box for dome, turret, and bullet camera cabling.</p>",
+      "gallery": [],
+      "datasheet": "",
+      "manual": "",
+      "model3d": "",
+      "cad": "",
+      "id": "model-junction-box-universal",
+      "productId": "prod-camera-mounting-accessories",
+      "categoryId": "cat-camera-accessories",
+      "name": "ELV-JB-UNI Universal Camera Junction Box",
+      "segment": "Camera Accessories",
+      "status": "Mounting",
+      "summary": "Universal weatherproof junction box for dome, turret, and bullet camera cabling.",
+      "features": [
+        "Project-ready installation",
+        "Remote viewing support",
+        "Professional ELV documentation"
+      ],
+      "specs": [
+        "PoE network connection",
+        "ONVIF compatible",
+        "Weather-ready installation accessories"
+      ],
+      "prices": {
+        "l1": "28",
+        "l2": "23",
+        "l3": "19"
+      },
+      "image": "/assets/generated/product-cctv-system.webp",
+      "similarModelIds": []
+    },
+    {
+      "summaryHtml": "sdfvbsadghjetrfyijktfghjkfghnmxvcbnsdfghjsfdghjsryjhewsryuh",
+      "gallery": [
+        "/uploads/upload-d13310cf56fe.webp",
+        "/uploads/upload-8306dbabcca9.png",
+        "/uploads/upload-fec4d62d38ec.webp",
+        "/uploads/upload-f7557cb736b4.webp",
+        "/uploads/upload-7487450d69f9.png",
+        "/uploads/upload-d6a38e617797.webp",
+        "/uploads/upload-de58004e5ba6.webp",
+        "/uploads/upload-0c6063a17fef.webp"
+      ],
+      "datasheet": "/uploads/upload-dc572ff3414e.pdf",
+      "manual": "/uploads/upload-21fe836079eb.pdf",
+      "model3d": "/uploads/upload-9b92413b1388.bin",
+      "cad": "/uploads/upload-d2d4b96775d7.pdf",
+      "id": "model-d6c97c1a9695",
+      "productId": "prod-61c8ba049169",
+      "categoryId": "cat-cctv",
+      "name": "Muhammad Ahmad",
+      "segment": "akjshd",
+      "status": "active",
+      "summary": "sdfvbsadghjetrfyijktfghjkfghnmxvcbnsdfghjsfdghjsryjhewsryuh",
+      "prices": {
+        "l1": "52",
+        "l2": "40",
+        "l3": "20"
+      },
+      "image": "/uploads/upload-e0e65c15f830.webp",
+      "similarModelIds": []
+    }
+  ],
+  "superCategories": [
+    {
+      "image": "/assets/generated/product-cctv-system.webp",
+      "id": "super-camera-products",
+      "name": "Camera Products",
+      "summary": "Network cameras, PTZ cameras, AI analytics cameras, ANPR cameras, thermal cameras, and camera accessories."
+    },
+    {
+      "image": "/assets/generated/hero-elv-control-room.webp",
+      "id": "super-recorders",
+      "name": "Video Recorders and Servers",
+      "summary": "NVR, PoE recorder, storage, server, and video management products."
+    },
+    {
+      "image": "/assets/generated/product-access-control.webp",
+      "id": "super-access-control",
+      "name": "Access Control",
+      "summary": "Door access, readers, credentials, locks, attendance, and entry management."
+    },
+    {
+      "image": "/assets/generated/product-access-control.webp",
+      "id": "super-video-intercom",
+      "name": "Video Intercom",
+      "summary": "Villa, apartment, office, and multi-tenant video intercom systems."
+    },
+    {
+      "image": "/assets/generated/product-vehicle-access.webp",
+      "id": "super-vehicle-access",
+      "name": "Parking Management",
+      "summary": "Traffic barriers, road blockers, bollards, loop detectors, and ANPR entrance control."
+    },
+    {
+      "image": "/assets/generated/hero-elv-control-room.webp",
+      "id": "super-networking",
+      "name": "Networking",
+      "summary": "Switching, PoE, racks, structured cabling, and connectivity products."
+    },
+    {
+      "image": "/assets/generated/hero-elv-control-room.webp",
+      "id": "super-alarm",
+      "name": "Alarm",
+      "summary": "Intrusion alarm panels, detectors, sirens, keypads, and alarm communication products."
+    },
+    {
+      "image": "/assets/generated/hero-elv-control-room.webp",
+      "id": "super-fire-products",
+      "name": "Fire Products",
+      "summary": "Fire alarm panels, detection, notification, emergency, and life-safety products."
+    },
+    {
+      "image": "/assets/generated/hero-elv-control-room.webp",
+      "id": "super-display-control",
+      "name": "Display and Control",
+      "summary": "Control room screens, display systems, workstations, and monitoring interfaces."
+    },
+    {
+      "image": "/assets/generated/hero-elv-control-room.webp",
+      "id": "super-audio-products",
+      "name": "Audio Products",
+      "summary": "PA, background music, paging, and audio system products for buildings."
+    }
+  ]
+}
