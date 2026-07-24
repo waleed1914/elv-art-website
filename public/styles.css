@@ -1524,6 +1524,61 @@ p {
   object-fit: cover;
 }
 
+.about-vision-section {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.about-vision-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #aebdd0;
+  border-radius: 14px;
+  padding: clamp(24px, 4vw, 38px);
+  background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+  box-shadow: 0 24px 70px rgba(16, 34, 56, 0.1);
+}
+
+.about-vision-card::after {
+  content: "";
+  position: absolute;
+  inset: auto -80px -110px auto;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(39, 170, 43, 0.16), transparent 68%);
+  pointer-events: none;
+}
+
+.about-vision-card.accent {
+  background:
+    linear-gradient(135deg, rgba(10, 63, 152, 0.08), rgba(39, 170, 43, 0.09)),
+    #ffffff;
+}
+
+.about-vision-card h2 {
+  margin-bottom: 16px;
+}
+
+.about-vision-card p {
+  color: #52657d;
+  line-height: 1.75;
+  margin: 0;
+}
+
+.about-vision-card ul {
+  margin: 16px 0 0;
+  padding-left: 20px;
+  color: #52657d;
+  line-height: 1.7;
+}
+
+.about-vision-card li + li {
+  margin-top: 8px;
+}
+
 .product-card {
   padding: 0;
   overflow: hidden;
@@ -3795,6 +3850,7 @@ textarea {
   .hero,
   .intro,
   .split-section,
+  .about-vision-section,
   .contact-section,
   .case-section.has-image,
   .product-detail-layout,
