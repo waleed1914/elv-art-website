@@ -440,6 +440,8 @@ function isMaintenanceAllowedPath(url) {
   if (!MAINTENANCE_MODE) return true;
   if (url.pathname === "/maintenance.html") return true;
   if (url.pathname === "/api/maintenance-login") return true;
+  if (url.pathname === "/verify.html" || url.pathname === "/reset-password.html") return true;
+  if (url.pathname === "/api/verify-email" || url.pathname === "/api/reset-password") return true;
   if (url.pathname === "/api/admin/login") return true;
   if (url.pathname.startsWith("/api/admin/")) return true;
   if (url.pathname === "/admin.html" || url.pathname === "/admin.css" || url.pathname === "/admin.js") return true;
