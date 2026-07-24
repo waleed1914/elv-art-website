@@ -843,21 +843,23 @@ function makeQuotePdf(rows) {
     const today = quoteDate.toLocaleDateString();
     const until = validUntil.toLocaleDateString();
     return [
-      color(0.96, 0.98, 1),
-      rect(32, 742, 531, 70, "f"),
+      color(0.06, 0.21, 0.46),
+      rect(32, 772, 531, 42, "f"),
+      color(0.95, 0.98, 1),
+      rect(32, 724, 531, 48, "f"),
       color(0.08, 0.28, 0.62),
-      rect(32, 742, 531, 70, "S"),
-      fillText("ELV", 50, 782, 28, "F2", 0.08, 0.28, 0.62),
-      fillText(".art", 105, 782, 28, "F2", 0.17, 0.64, 0.22),
-      fillText("Integrated ELV Solutions", 50, 764, 8, "F1", 0.36, 0.43, 0.52),
-      fillText("QUOTATION", 406, 786, 21, "F2", 0.08, 0.28, 0.62),
-      fillText("Quote #:", 406, 768, 8, "F1", 0.36, 0.43, 0.52),
-      fillText(quoteNumber, 456, 768, 8, "F1", 0.08, 0.13, 0.22),
-      fillText("Date:", 406, 754, 8, "F1", 0.36, 0.43, 0.52),
-      fillText(today, 456, 754, 8, "F1", 0.08, 0.13, 0.22),
-      fillText("Valid until:", 406, 740, 8, "F1", 0.36, 0.43, 0.52),
-      fillText(until, 456, 740, 8, "F1", 0.08, 0.13, 0.22),
-      fillText(`Page ${pageNumber} of ${totalPages}`, 500, 716, 8, "F1", 0.36, 0.43, 0.52)
+      rect(32, 724, 531, 90, "S"),
+      fillText("ELV", 50, 786, 28, "F2", 1, 1, 1),
+      fillText(".art", 105, 786, 28, "F2", 0.45, 0.93, 0.52),
+      fillText("Integrated ELV Solutions", 50, 744, 8, "F1", 0.36, 0.43, 0.52),
+      fillText("QUOTATION", 408, 790, 21, "F2", 1, 1, 1),
+      fillText("Quote #", 408, 758, 8, "F1", 0.36, 0.43, 0.52),
+      fillText(quoteNumber, 468, 758, 8, "F2", 0.08, 0.13, 0.22),
+      fillText("Date", 408, 744, 8, "F1", 0.36, 0.43, 0.52),
+      fillText(today, 468, 744, 8, "F2", 0.08, 0.13, 0.22),
+      fillText("Valid until", 408, 730, 8, "F1", 0.36, 0.43, 0.52),
+      fillText(until, 468, 730, 8, "F2", 0.08, 0.13, 0.22),
+      fillText(`Page ${pageNumber} of ${totalPages}`, 500, 706, 8, "F1", 0.36, 0.43, 0.52)
     ].join("\n");
   }
 
@@ -888,6 +890,8 @@ function makeQuotePdf(rows) {
     return [
       color(0.08, 0.28, 0.62),
       rect(32, y, 531, 24, "f"),
+      color(0.08, 0.28, 0.62),
+      line(32, y, 563, y),
       fillText("#", 42, y + 9, 8, "F2", 1, 1, 1),
       fillText("PRODUCT / DESCRIPTION", 72, y + 9, 8, "F2", 1, 1, 1),
       fillText("UNIT PRICE", 364, y + 9, 8, "F2", 1, 1, 1),
@@ -929,34 +933,37 @@ function makeQuotePdf(rows) {
     ].join("\n");
   }
 
-  function drawTerms() {
+  function drawTerms(y) {
     const note = "Prices can go up or down because of inflation, exchange rates, stock availability, and project scope.";
     return [
       color(0.08, 0.28, 0.62),
-      rect(32, 92, 531, 24, "f"),
-      fillText("TERMS AND NOTES", 44, 101, 9, "F2", 1, 1, 1),
+      rect(32, y, 531, 22, "f"),
+      fillText("TERMS AND NOTES", 44, y + 8, 9, "F2", 1, 1, 1),
       color(0.96, 0.98, 1),
-      rect(32, 34, 531, 58, "f"),
+      rect(32, y - 64, 531, 64, "f"),
       color(0.7, 0.79, 0.9),
-      rect(32, 34, 531, 58, "S"),
-      fillText("1. Taxes are not included in this quotation.", 44, 76, 8, "F1", 0.08, 0.13, 0.22),
-      fillText(`2. ${note}`, 44, 62, 8, "F1", 0.08, 0.13, 0.22),
-      fillText(`3. For an accurate estimate, contact ELV.art on WhatsApp: ${whatsapp}`, 44, 48, 8, "F1", 0.08, 0.13, 0.22)
+      rect(32, y - 64, 531, 64, "S"),
+      fillText("1. Taxes are not included in this quotation.", 44, y - 17, 8, "F1", 0.08, 0.13, 0.22),
+      fillText(`2. ${note}`, 44, y - 33, 8, "F1", 0.08, 0.13, 0.22),
+      fillText(`3. For an accurate estimate, contact ELV.art on WhatsApp: ${whatsapp}`, 44, y - 49, 8, "F1", 0.08, 0.13, 0.22),
+      fillText("Thank you for choosing ELV.art.", 224, y - 86, 9, "F2", 0.08, 0.28, 0.62)
     ].join("\n");
   }
 
   const pageContents = chunks.map((chunk, index) => {
     const firstPage = index === 0;
-    const tableHeaderY = firstPage ? 570 : 672;
+    const tableHeaderY = firstPage ? 558 : 672;
     const rowStartY = tableHeaderY;
     const rowsBottom = rowStartY - chunk.length * 28;
+    const totalsY = Math.max(rowsBottom - 22, 156);
+    const termsY = Math.max(totalsY - 92, 104);
     return [
       drawHeader(index + 1, chunks.length),
       firstPage ? drawCustomerBlock() : "",
       drawTableHeader(tableHeaderY),
       drawItemRows(chunk, rowStartY),
-      index === chunks.length - 1 ? drawTotals(Math.max(rowsBottom - 18, 152)) : "",
-      index === chunks.length - 1 ? drawTerms() : ""
+      index === chunks.length - 1 ? drawTotals(totalsY) : "",
+      index === chunks.length - 1 ? drawTerms(termsY) : ""
     ].filter(Boolean).join("\n");
   });
 
