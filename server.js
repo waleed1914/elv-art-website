@@ -782,7 +782,7 @@ async function saveImage(dataUrl) {
   return `/uploads/${fileName}`;
 }
 
-async function saveUpload(dataUrl) {
+async function saveUpload(dataUrl, field = "") {
   if (!dataUrl || typeof dataUrl !== "string" || !dataUrl.startsWith("data:")) return "";
   const match = dataUrl.match(/^data:([^;]+);base64,(.+)$/);
   if (!match) return "";
@@ -802,7 +802,7 @@ async function saveUpload(dataUrl) {
     "application/acad": "dwg",
     "image/vnd.dwg": "dwg"
   };
-  const ext = extByMime[mime] || "file";
+  const ext = field === "model3d" && mime === "application/octet-stream" ? "stl" : extByMime[mime] || "file";
   const fileName = `${cleanId("upload")}.${ext}`;
   fs.writeFileSync(path.join(uploadsDir, fileName), Buffer.from(match[2], "base64"));
   return `/uploads/${fileName}`;
@@ -812,11 +812,11 @@ async function normalizeUploads(item) {
   const uploadFields = ["image", "datasheet", "manual", "model3d", "cad"];
   for (const field of uploadFields) {
     if (item[field] && typeof item[field] === "string" && item[field].startsWith("data:")) {
-      item[field] = await saveUpload(item[field]);
+      item[field] = await saveUpload(item[field], field);
     }
   }
   if (Array.isArray(item.gallery)) {
-    item.gallery = (await Promise.all(item.gallery.map(file => (typeof file === "string" && file.startsWith("data:") ? saveUpload(file) : file)))).filter(Boolean);
+    item.gallery = (await Promise.all(item.gallery.map(file => (typeof file === "string" && file.startsWith("data:") ? saveUpload(file, "gallery") : file)))).filter(Boolean);
   }
   if (Array.isArray(item.hotspots)) {
     item.hotspots = item.hotspots.map(hotspot => ({
@@ -836,7 +836,7 @@ async function normalizeUploads(item) {
     })).filter(section => section.paragraph || section.image);
     for (const section of item.sections) {
       if (section.image && typeof section.image === "string" && section.image.startsWith("data:")) {
-        section.image = await saveUpload(section.image);
+        section.image = await saveUpload(section.image, "image");
       }
     }
   }
@@ -844,7 +844,7 @@ async function normalizeUploads(item) {
     item.documents = (await Promise.all(item.documents.map(async document => {
       const file = typeof document === "string" ? { name: path.basename(document), url: document } : { ...document };
       if (file.url && typeof file.url === "string" && file.url.startsWith("data:")) {
-        file.url = await saveUpload(file.url);
+        file.url = await saveUpload(file.url, "document");
       }
       file.name = String(file.name || path.basename(file.url || "Training document")).slice(0, 180);
       return file;

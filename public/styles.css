@@ -3326,6 +3326,27 @@ textarea {
   cursor: grabbing;
 }
 
+.viewer3d-static {
+  min-height: 260px;
+  display: grid;
+  align-content: center;
+  gap: 10px;
+  padding: 24px;
+  background:
+    linear-gradient(135deg, rgba(238, 246, 255, 0.96), rgba(233, 251, 238, 0.92));
+  border-bottom: 1px solid #d7e1ed;
+}
+
+.viewer3d-static strong {
+  color: #07172b;
+  font-size: 1rem;
+}
+
+.viewer3d-static span {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
 .viewer3d-caption {
   display: grid;
   gap: 4px;

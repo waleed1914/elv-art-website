@@ -1917,14 +1917,23 @@ function renderCadPreview(item) {
 function renderThreeDPreview(item) {
   const model = item.model3d || "";
   if (!model) return "";
+  const lower = model.toLowerCase();
+  const canPreview = lower.endsWith(".stl") || lower.startsWith("data:model/stl") || lower.startsWith("data:application/sla") || lower.startsWith("data:application/vnd.ms-pki.stl");
   return `
     <div class="viewer3d-card">
-      <canvas class="viewer3d-canvas" data-model-name="${escapeHtml(item.name)}" data-model-src="${escapeHtml(model)}"></canvas>
-      <div class="viewer3d-caption">
-        <strong>Interactive 3D Preview</strong>
-        <span>Drag to rotate. If the uploaded file is STL, the real model will preview here.</span>
-      </div>
-      <a class="button secondary" href="${escapeHtml(model)}" target="_blank" rel="noreferrer">Open 3D Model</a>
+      ${canPreview ? `
+        <canvas class="viewer3d-canvas" data-model-name="${escapeHtml(item.name)}" data-model-src="${escapeHtml(model)}"></canvas>
+        <div class="viewer3d-caption">
+          <strong>Interactive 3D Preview</strong>
+          <span>Drag to rotate. STL previews load only inside this panel.</span>
+        </div>
+      ` : `
+        <div class="viewer3d-static">
+          <strong>${escapeHtml(fileNameFromUrl(model, "3D model file"))}</strong>
+          <span>3D file attached. Preview is available only for STL files uploaded with a proper .stl extension.</span>
+        </div>
+      `}
+      <a class="button secondary" href="${escapeHtml(model)}" download>Download 3D Model</a>
     </div>
   `;
 }
@@ -1933,13 +1942,13 @@ function renderTechnicalLinks(item) {
   const files = [
     ["Datasheet PDF", item.datasheet],
     ["Product Manual", item.manual],
-    ["3D Model", item.model3d],
+    ["3D Model", item.model3d, true],
     ["CAD Drawings", item.cad]
   ].filter(([, url]) => Boolean(url));
   if (!files.length) return `<p class="file-preview-note">Technical files will appear here when uploaded.</p>`;
   return `
     <div class="download-links">
-      ${files.map(([label, url]) => `<a href="${escapeHtml(url)}" target="_blank" rel="noreferrer">${escapeHtml(label)}</a>`).join("")}
+      ${files.map(([label, url, forceDownload]) => `<a href="${escapeHtml(url)}" ${forceDownload ? "download" : "target=\"_blank\" rel=\"noreferrer\""}>${escapeHtml(label)}</a>`).join("")}
     </div>
   `;
 }
