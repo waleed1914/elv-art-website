@@ -5919,9 +5919,9 @@ select:focus {
   transition: max-height 450ms ease, opacity 350ms ease, padding 450ms ease;
 }
 
-.explorer-tab.active .explorer-tab-body { max-height: 240px; opacity: 1; padding: 0 18px 18px 67px; }
+.explorer-tab.active .explorer-tab-body { max-height: 240px; opacity: 1; padding: 0 18px 18px 78px; }
 
-.explorer-desc { display: block; margin-bottom: 12px; color: var(--muted); line-height: 1.55; font-size: 0.93rem; }
+.explorer-desc { display: block; max-width: 560px; margin: 0 0 12px; color: var(--muted); line-height: 1.55; font-size: 0.93rem; text-align: left; }
 
 .explorer-systems { display: flex; flex-wrap: wrap; gap: 8px; }
 
