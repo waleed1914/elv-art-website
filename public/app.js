@@ -1231,13 +1231,22 @@ function renderCategories() {
   const selectedSuper = params.get("super") || "";
   const search = ($("#productFamilySearch")?.value || "").trim().toLowerCase();
   const scope = $("#productFamilyScope")?.value || "";
-  const type = $("#productFamilyType")?.value || selectedSuper;
+  const filterValue = $("#productFamilyType")?.value || (selectedSuper ? `super:${selectedSuper}` : "");
+  const [filterKind, filterId] = filterValue.includes(":") ? filterValue.split(":") : ["super", filterValue];
   const fileFilter = $("#productFamilyFile")?.value || "";
   const superCategories = state.content.superCategories || [];
   const typeSelect = $("#productFamilyType");
-  if (typeSelect && typeSelect.options.length <= 1) {
-    typeSelect.innerHTML = `<option value="">All Products</option>${superCategories.map(item => `<option value="${escapeHtml(item.id)}">${escapeHtml(item.name)}</option>`).join("")}`;
-    if (selectedSuper) typeSelect.value = selectedSuper;
+  if (typeSelect) {
+    const previous = typeSelect.value || (selectedSuper ? `super:${selectedSuper}` : "");
+    const categories = state.content.categories || [];
+    const products = state.content.products || [];
+    typeSelect.innerHTML = `
+      <option value="">All Products</option>
+      ${superCategories.length ? `<optgroup label="Products">${superCategories.map(item => `<option value="super:${escapeHtml(item.id)}">${escapeHtml(item.name)}</option>`).join("")}</optgroup>` : ""}
+      ${categories.length ? `<optgroup label="Product Categories">${categories.map(item => `<option value="category:${escapeHtml(item.id)}">${escapeHtml(item.name)}</option>`).join("")}</optgroup>` : ""}
+      ${products.length ? `<optgroup label="Model Groups">${products.map(item => `<option value="product:${escapeHtml(item.id)}">${escapeHtml(item.name)}</option>`).join("")}</optgroup>` : ""}
+    `;
+    if ([...typeSelect.options].some(option => option.value === previous)) typeSelect.value = previous;
   }
   const superName = id => superCategories.find(item => item.id === id)?.name || "Product";
   const localCategory = id => state.content.categories.find(item => item.id === id);
@@ -1253,7 +1262,11 @@ function renderCategories() {
         summary: product.summary,
         image: product.image,
         url: `/products.html?super=${encodeURIComponent(product.id)}`,
+        itemId: product.id,
         productId: product.id,
+        superId: product.id,
+        categoryId: "",
+        modelGroupId: "",
         meta: [`${categoryCount} product categories`],
         action: "View Categories",
         fileState: { image: Boolean(product.image), files: false, price: false }
@@ -1269,6 +1282,10 @@ function renderCategories() {
         image: category.image,
         url: categoryUrl(category.id),
         productId: category.superCategoryId,
+        itemId: category.id,
+        superId: category.superCategoryId,
+        categoryId: category.id,
+        modelGroupId: "",
         meta: [superName(category.superCategoryId), `${modelCount} model groups`],
         fileState: { image: Boolean(category.image), files: false, price: false }
       };
@@ -1283,6 +1300,10 @@ function renderCategories() {
         image: product.image,
         url: productUrl(product.id),
         productId: category?.superCategoryId || "",
+        itemId: product.id,
+        superId: category?.superCategoryId || "",
+        categoryId: product.categoryId || "",
+        modelGroupId: product.id,
         meta: [category?.name || "Product Category", product.segment || product.status || "Model Group"],
         fileState: { image: Boolean(product.image), files: hasFiles(product), price: Boolean(product.prices?.l1) }
       };
@@ -1298,6 +1319,10 @@ function renderCategories() {
         image: model.image,
         url: modelUrl(model.id),
         productId: category?.superCategoryId || "",
+        itemId: model.id,
+        superId: category?.superCategoryId || "",
+        categoryId: model.categoryId || parent?.categoryId || "",
+        modelGroupId: model.productId || "",
         meta: [parent?.name || category?.name || "Model Group", model.segment || model.status || "Model"],
         fileState: { image: Boolean(model.image), files: hasFiles(model), price: Boolean(model.prices?.l1) }
       };
@@ -1313,6 +1338,10 @@ function renderCategories() {
         image: part.image,
         url: partUrl(part.id),
         productId: category?.superCategoryId || "",
+        itemId: part.id,
+        superId: category?.superCategoryId || "",
+        categoryId: part.categoryId || parent?.categoryId || "",
+        modelGroupId: part.productId || "",
         meta: [parent?.name || category?.name || "Model Group", part.segment || part.status || "Accessory"],
         fileState: { image: Boolean(part.image), files: hasFiles(part), price: Boolean(part.prices?.l1) }
       };
@@ -1321,9 +1350,15 @@ function renderCategories() {
     const haystack = [row.type, row.title, row.summary, row.meta.join(" ")].join(" ").toLowerCase();
     if (search && !haystack.includes(search)) return false;
     if (scope && row.kind !== scope) return false;
-    if (type && row.productId !== type) return false;
-    if (!search && !scope && !type && row.kind !== "super") return false;
-    if (!search && !scope && type && row.kind !== "category") return false;
+    if (filterId) {
+      if (filterKind === "super" && row.superId !== filterId) return false;
+      if (filterKind === "category" && row.categoryId !== filterId) return false;
+      if (filterKind === "product" && row.modelGroupId !== filterId) return false;
+    }
+    if (!search && !scope && !filterId && row.kind !== "super") return false;
+    if (!search && !scope && filterKind === "super" && filterId && row.kind !== "category") return false;
+    if (!search && !scope && filterKind === "category" && filterId && row.kind !== "product") return false;
+    if (!search && !scope && filterKind === "product" && filterId && row.kind !== "model") return false;
     if (fileFilter === "with-image" && !row.fileState.image) return false;
     if (fileFilter === "with-files" && !row.fileState.files) return false;
     if (fileFilter === "with-price" && !row.fileState.price) return false;
@@ -1332,32 +1367,56 @@ function renderCategories() {
   const stats = $("#productFamilyStats");
   if (stats) stats.innerHTML = `<strong>${rows.length}</strong><span>shown</span>`;
   const heading = document.querySelector("[data-product-page-title]");
-  if (heading) heading.textContent = type ? `${superName(type)} Categories` : "Products";
+  const selectedLabel = typeSelect?.selectedOptions?.[0]?.textContent || "";
+  if (heading) heading.textContent = filterId ? selectedLabel : "Products";
   grid.innerHTML = rows.map(row => productFlowCard(row)).join("") || `<p>No product results match your search.</p>`;
+}
 
-  const serviceSelect = $("#serviceSelect");
-  if (serviceSelect) {
-    const services = [
-      "CCTV Camera Installation",
-      "IP Cameras, NVR and Video Storage",
-      "Access Control System",
-      "Biometric, RFID and Attendance",
-      "ANPR Camera System",
-      "Vehicle Barriers, Road Blockers and Bollards",
-      "Video Intercom and Gate Automation",
-      "Structured Cabling and Network Rack",
-      "PoE Switching and Wi-Fi Network",
-      "Fire Alarm and Life Safety",
-      "Audio Visual and Meeting Room",
-      "Smart Home / Building Automation",
-      "Command Room / VMS Monitoring",
-      "AMC, Maintenance and Upgrade",
-      "Project BOQ / Site Survey"
-    ];
-    const categoryNames = (state.content.categories || []).map(category => category.name).filter(Boolean);
-    const options = [...new Set([...services, ...categoryNames])];
-    serviceSelect.innerHTML = `<option value="">Select a service</option>${options.map(service => `<option>${escapeHtml(service)}</option>`).join("")}`;
-  }
+function renderServicePicker() {
+  const picker = $("[data-service-picker]");
+  const trigger = $("#serviceSelect");
+  const menu = $("#servicePickerMenu");
+  const input = $("#serviceSelectValue");
+  if (!picker || !trigger || !menu || !input) return;
+  const services = [
+    "CCTV Camera Installation",
+    "IP Cameras, NVR and Video Storage",
+    "Access Control System",
+    "Biometric, RFID and Attendance",
+    "ANPR Camera System",
+    "Vehicle Barriers, Road Blockers and Bollards",
+    "Video Intercom and Gate Automation",
+    "Structured Cabling and Network Rack",
+    "PoE Switching and Wi-Fi Network",
+    "Fire Alarm and Life Safety",
+    "Audio Visual and Meeting Room",
+    "Smart Home / Building Automation",
+    "Command Room / VMS Monitoring",
+    "AMC, Maintenance and Upgrade",
+    "Project BOQ / Site Survey"
+  ];
+  const categoryNames = (state.content.categories || []).map(category => category.name).filter(Boolean);
+  const productNames = (state.content.products || []).map(product => product.name).filter(Boolean);
+  const options = [...new Set([...services, ...categoryNames, ...productNames])];
+  menu.innerHTML = options.map(service => `<button type="button" role="option" data-service-value="${escapeHtml(service)}">${escapeHtml(service)}</button>`).join("");
+  trigger.addEventListener("click", () => {
+    const open = picker.classList.toggle("open");
+    trigger.setAttribute("aria-expanded", String(open));
+  });
+  menu.querySelectorAll("[data-service-value]").forEach(option => {
+    option.addEventListener("click", () => {
+      input.value = option.dataset.serviceValue || "";
+      trigger.querySelector("span").textContent = input.value || "Select a service";
+      picker.classList.remove("open");
+      trigger.setAttribute("aria-expanded", "false");
+    });
+  });
+  document.addEventListener("click", event => {
+    if (!picker.contains(event.target)) {
+      picker.classList.remove("open");
+      trigger.setAttribute("aria-expanded", "false");
+    }
+  });
 }
 
 function renderProducts() {
@@ -2844,6 +2903,8 @@ function setupForms() {
     try {
       await api("/api/leads", { method: "POST", body: JSON.stringify(formData(form)) });
       if (form && typeof form.reset === "function") form.reset();
+      const serviceLabel = $("#serviceSelect span");
+      if (serviceLabel) serviceLabel.textContent = "Select a service";
       if (status) status.textContent = "Thank you. Your enquiry has been received.";
     } catch (error) {
       if (status) status.textContent = error.message;
@@ -3503,6 +3564,7 @@ async function init() {
   renderGlobalSearch();
   renderBackButton();
   renderCategories();
+  renderServicePicker();
   renderProducts();
   renderSolutions();
   renderSolutionDetail();

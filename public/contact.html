@@ -43,9 +43,13 @@
           <label>Email<input name="email" type="email" placeholder="you@example.com"></label>
           <label>Phone<input name="phone" required placeholder="+92 300 0000000"></label>
           <label>Service
-            <select name="service" id="serviceSelect" required>
-              <option value="">Select a service</option>
-            </select>
+            <div class="service-picker" data-service-picker>
+              <input type="hidden" name="service" id="serviceSelectValue" required>
+              <button class="service-picker-trigger" id="serviceSelect" type="button" aria-haspopup="listbox" aria-expanded="false">
+                <span>Select a service</span>
+              </button>
+              <div class="service-picker-menu" id="servicePickerMenu" role="listbox"></div>
+            </div>
           </label>
           <label class="full">Message<textarea name="message" rows="5" placeholder="Example: We need CCTV and access control for a warehouse in Lahore. Please guide product options, BOQ, and installation cost."></textarea></label>
           <button class="button primary full" type="submit">Send Enquiry</button>
