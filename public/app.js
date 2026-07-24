@@ -705,23 +705,30 @@ function pricingLabelForRows(rows) {
 
 function quoteText(rows) {
   const settings = state.content?.settings || {};
+  const customer = quoteCustomerDetails();
   const total = rows.reduce((sum, row) => sum + row.lineTotal, 0);
   const access = pricingLabelForRows(rows);
   return [
     `${settings.brand || "ELV.art"} Quotation`,
     `Date: ${new Date().toLocaleDateString()}`,
     `Pricing: ${access}`,
+    `Customer: ${customer.name}`,
+    customer.company ? `Company: ${customer.company}` : "",
+    customer.email ? `Email: ${customer.email}` : "",
+    customer.mobile ? `Mobile: ${customer.mobile}` : "",
     "",
     ...rows.map((row, index) => `${index + 1}. ${row.item.name} (${row.item.cartLabel}) - Qty ${row.qty} x ${row.price.label} = ${row.price.quoteOnly ? "Ask" : money(row.lineTotal)}`),
     "",
     `Total: ${money(total)}`,
     "",
-    "This quotation is generated from the website cart and is subject to final confirmation."
-  ].join("\n");
+    "Taxes are not included.",
+    `Prices can go up or down because of inflation, exchange rates, stock, and project scope. For an accurate estimate, contact us on WhatsApp: ${settings.whatsapp || settings.phone || ""}`
+  ].filter(Boolean).join("\n");
 }
 
 function quoteHtml(rows) {
   const settings = state.content?.settings || {};
+  const customer = quoteCustomerDetails();
   const total = rows.reduce((sum, row) => sum + row.lineTotal, 0);
   const access = pricingLabelForRows(rows);
   return `<!doctype html>
@@ -741,7 +748,7 @@ function quoteHtml(rows) {
 </head>
 <body>
   <header>
-    <div><h1>${escapeHtml(settings.brand || "ELV.art")} Quotation</h1><p class="muted">${escapeHtml(access)}</p></div>
+    <div><h1>${escapeHtml(settings.brand || "ELV.art")} Quotation</h1><p class="muted">${escapeHtml(access)}</p><p><strong>Customer:</strong> ${escapeHtml(customer.name)}${customer.company ? `, ${escapeHtml(customer.company)}` : ""}</p></div>
     <div class="right"><strong>${new Date().toLocaleDateString()}</strong><br>${escapeHtml(settings.phone || "")}<br>${escapeHtml(settings.email || "")}</div>
   </header>
   <table>
@@ -751,7 +758,7 @@ function quoteHtml(rows) {
     </tbody>
     <tfoot><tr><td colspan="5" class="right total">Total</td><td class="right total">${money(total)}</td></tr></tfoot>
   </table>
-  <footer>This quotation is generated from the website cart and is subject to final confirmation.</footer>
+  <footer>Taxes are not included. Prices can go up or down because of inflation, exchange rates, stock availability, and project scope. For an accurate estimate, contact ELV.art on WhatsApp: ${escapeHtml(settings.whatsapp || settings.phone || "")}</footer>
 </body>
 </html>`;
 }
@@ -782,44 +789,176 @@ function wrapPdfLine(value, max = 86) {
   return lines.length ? lines : [""];
 }
 
+function quoteCustomerDetails() {
+  const account = state.content?.account || state.account?.user || {};
+  return {
+    name: account.fullName || "Website Customer",
+    company: account.company || "",
+    email: account.email || "",
+    mobile: account.mobile || "",
+    city: account.city || "",
+    country: account.country || "",
+    domain: account.domain || "",
+    experience: account.experience || ""
+  };
+}
+
+function pdfMoney(value) {
+  return Number(value || 0).toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+
 function makeQuotePdf(rows) {
   const settings = state.content?.settings || {};
   const brand = settings.brand || "ELV.art";
-  const access = pricingLabelForRows(rows);
+  const customer = quoteCustomerDetails();
   const total = rows.reduce((sum, row) => sum + row.lineTotal, 0);
-  const sourceLines = [
-    { text: `${brand} Quotation`, size: 20, gap: 26 },
-    { text: `Date: ${new Date().toLocaleDateString()}`, size: 10, gap: 14 },
-    { text: `Pricing: ${access}`, size: 10, gap: 18 },
-    { text: settings.phone ? `Phone: ${settings.phone}` : "", size: 10, gap: 14 },
-    { text: settings.email ? `Email: ${settings.email}` : "", size: 10, gap: 22 },
-    { text: "Items", size: 15, gap: 20 },
-    ...rows.flatMap((row, index) => {
-      const lineTotal = row.price.quoteOnly ? "Ask" : money(row.lineTotal);
-      return [
-        { text: `${index + 1}. ${row.item.name}`, size: 12, gap: 15 },
-        { text: `Type: ${row.item.cartLabel} | Qty: ${row.qty} | Unit: ${row.price.label} | Total: ${lineTotal}`, size: 10, gap: 13 },
-        ...wrapPdfLine(row.item.summary || stripHtml(row.item.summaryHtml), 92).map(text => ({ text, size: 9, gap: 12 })),
-        { text: "", size: 9, gap: 8 }
-      ];
-    }),
-    { text: `Quotation Total: ${money(total)}`, size: 15, gap: 24 },
-    { text: "This quotation is generated from the website cart and is subject to final confirmation.", size: 9, gap: 12 }
-  ].filter(line => line.text !== "");
+  const quoteDate = new Date();
+  const quoteNumber = `ELV-${quoteDate.toISOString().slice(0, 10).replaceAll("-", "")}-${String(Date.now()).slice(-4)}`;
+  const validUntil = new Date(quoteDate.getTime() + 15 * 24 * 60 * 60 * 1000);
+  const whatsapp = settings.whatsapp || settings.phone || "+92 332 4816433";
+  const itemRows = rows.map((row, index) => ({
+    index: index + 1,
+    name: row.item.name,
+    type: row.item.cartLabel,
+    qty: row.qty,
+    unit: row.price.quoteOnly ? "Ask" : pdfMoney(row.price.amount),
+    amount: row.price.quoteOnly ? "Ask" : pdfMoney(row.lineTotal)
+  }));
+  const rowsPerFirstPage = 12;
+  const rowsPerNextPage = 18;
+  const chunks = [];
+  chunks.push(itemRows.slice(0, rowsPerFirstPage));
+  for (let index = rowsPerFirstPage; index < itemRows.length; index += rowsPerNextPage) {
+    chunks.push(itemRows.slice(index, index + rowsPerNextPage));
+  }
+  if (!chunks.length) chunks.push([]);
 
-  const pages = [];
-  let page = [];
-  let y = 790;
-  sourceLines.forEach(line => {
-    if (y - line.gap < 54 && page.length) {
-      pages.push(page);
-      page = [];
-      y = 790;
-    }
-    page.push({ ...line, y });
-    y -= line.gap;
+  const text = (value, x, y, size = 10, font = "F1") => `BT /${font} ${size} Tf ${x} ${y} Td (${pdfSafe(value)}) Tj ET`;
+  const color = (r, g, b) => `${r} ${g} ${b} rg ${r} ${g} ${b} RG`;
+  const rect = (x, y, w, h, mode = "S") => `${x} ${y} ${w} ${h} re ${mode}`;
+  const line = (x1, y1, x2, y2) => `${x1} ${y1} m ${x2} ${y2} l S`;
+  const fillText = (value, x, y, size, font, r, g, b) => `${color(r, g, b)}\n${text(value, x, y, size, font)}`;
+
+  function drawHeader(pageNumber, totalPages) {
+    const today = quoteDate.toLocaleDateString();
+    const until = validUntil.toLocaleDateString();
+    return [
+      color(0.96, 0.98, 1),
+      rect(32, 758, 531, 54, "f"),
+      color(0.08, 0.28, 0.62),
+      rect(32, 758, 531, 54, "S"),
+      fillText("ELV", 50, 780, 28, "F2", 0.08, 0.28, 0.62),
+      fillText(".art", 105, 780, 28, "F2", 0.17, 0.64, 0.22),
+      fillText("Integrated ELV Solutions", 50, 766, 8, "F1", 0.36, 0.43, 0.52),
+      fillText("QUOTATION", 416, 782, 21, "F2", 0.08, 0.28, 0.62),
+      fillText(`Quote #: ${quoteNumber}`, 416, 766, 8, "F1", 0.08, 0.13, 0.22),
+      fillText(`Date: ${today}`, 416, 754, 8, "F1", 0.08, 0.13, 0.22),
+      fillText(`Valid until: ${until}`, 416, 742, 8, "F1", 0.08, 0.13, 0.22),
+      fillText(`Page ${pageNumber} of ${totalPages}`, 502, 724, 8, "F1", 0.36, 0.43, 0.52)
+    ].join("\n");
+  }
+
+  function drawCustomerBlock() {
+    const address = [customer.city, customer.country].filter(Boolean).join(", ");
+    return [
+      color(0.08, 0.28, 0.62),
+      rect(32, 626, 250, 84, "S"),
+      rect(32, 694, 250, 16, "f"),
+      fillText("CUSTOMER", 42, 698, 9, "F2", 1, 1, 1),
+      fillText(customer.name, 42, 674, 11, "F2", 0.08, 0.13, 0.22),
+      customer.company ? fillText(customer.company, 42, 660, 9, "F1", 0.2, 0.28, 0.38) : "",
+      address ? fillText(address, 42, 647, 9, "F1", 0.2, 0.28, 0.38) : "",
+      customer.email ? fillText(customer.email, 42, 634, 9, "F1", 0.2, 0.28, 0.38) : "",
+      customer.mobile ? fillText(customer.mobile, 160, 634, 9, "F1", 0.2, 0.28, 0.38) : "",
+      color(0.88, 0.93, 0.99),
+      rect(306, 626, 257, 84, "f"),
+      color(0.7, 0.79, 0.9),
+      rect(306, 626, 257, 84, "S"),
+      fillText("Prepared by ELV.art", 322, 684, 12, "F2", 0.08, 0.13, 0.22),
+      fillText(settings.phone ? `Phone: ${settings.phone}` : "Phone: +92 332 4816433", 322, 666, 9, "F1", 0.2, 0.28, 0.38),
+      fillText(settings.email ? `Email: ${settings.email}` : "Email: info@elv.art", 322, 652, 9, "F1", 0.2, 0.28, 0.38),
+      fillText(`Pricing: ${pricingLabelForRows(rows)}`, 322, 638, 9, "F1", 0.2, 0.28, 0.38)
+    ].filter(Boolean).join("\n");
+  }
+
+  function drawTableHeader(y) {
+    return [
+      color(0.08, 0.28, 0.62),
+      rect(32, y, 531, 20, "f"),
+      fillText("#", 40, y + 7, 8, "F2", 1, 1, 1),
+      fillText("DESCRIPTION", 62, y + 7, 8, "F2", 1, 1, 1),
+      fillText("TYPE", 304, y + 7, 8, "F2", 1, 1, 1),
+      fillText("UNIT PRICE", 386, y + 7, 8, "F2", 1, 1, 1),
+      fillText("QTY", 462, y + 7, 8, "F2", 1, 1, 1),
+      fillText("AMOUNT", 508, y + 7, 8, "F2", 1, 1, 1)
+    ].join("\n");
+  }
+
+  function drawItemRows(chunk, startY) {
+    const ops = [];
+    let y = startY;
+    chunk.forEach((item, index) => {
+      const fill = index % 2 === 0 ? "0.97 0.98 1 rg" : "1 1 1 rg";
+      ops.push(fill, rect(32, y - 19, 531, 20, "f"));
+      ops.push(color(0.75, 0.82, 0.9), line(32, y - 19, 563, y - 19));
+      ops.push(fillText(String(item.index), 40, y - 6, 8, "F1", 0.08, 0.13, 0.22));
+      ops.push(fillText(String(item.name).slice(0, 44), 62, y - 6, 8, "F2", 0.08, 0.13, 0.22));
+      ops.push(fillText(String(item.type).slice(0, 18), 304, y - 6, 8, "F1", 0.2, 0.28, 0.38));
+      ops.push(fillText(item.unit === "Ask" ? "Ask" : `Rs ${item.unit}`, 386, y - 6, 8, "F1", 0.08, 0.13, 0.22));
+      ops.push(fillText(String(item.qty), 468, y - 6, 8, "F1", 0.08, 0.13, 0.22));
+      ops.push(fillText(item.amount === "Ask" ? "Ask" : `Rs ${item.amount}`, 508, y - 6, 8, "F1", 0.08, 0.13, 0.22));
+      y -= 20;
+    });
+    ops.push(color(0.08, 0.28, 0.62), rect(32, y, 531, startY - y, "S"));
+    return ops.join("\n");
+  }
+
+  function drawTotals(y) {
+    return [
+      color(0.96, 0.98, 1),
+      rect(372, y - 42, 191, 42, "f"),
+      color(0.08, 0.28, 0.62),
+      rect(372, y - 42, 191, 42, "S"),
+      fillText("Subtotal", 386, y - 16, 9, "F1", 0.2, 0.28, 0.38),
+      fillText(`Rs ${pdfMoney(total)}`, 482, y - 16, 10, "F2", 0.08, 0.13, 0.22),
+      fillText("Total", 386, y - 33, 12, "F2", 0.08, 0.13, 0.22),
+      fillText(`Rs ${pdfMoney(total)}`, 482, y - 33, 12, "F2", 0.08, 0.28, 0.62)
+    ].join("\n");
+  }
+
+  function drawTerms() {
+    const note = "Prices can go up or down because of inflation, exchange rates, stock availability, and project scope.";
+    return [
+      color(0.08, 0.28, 0.62),
+      rect(32, 92, 531, 24, "f"),
+      fillText("TERMS AND NOTES", 44, 101, 9, "F2", 1, 1, 1),
+      color(0.96, 0.98, 1),
+      rect(32, 34, 531, 58, "f"),
+      color(0.7, 0.79, 0.9),
+      rect(32, 34, 531, 58, "S"),
+      fillText("1. Taxes are not included in this quotation.", 44, 76, 8, "F1", 0.08, 0.13, 0.22),
+      fillText(`2. ${note}`, 44, 62, 8, "F1", 0.08, 0.13, 0.22),
+      fillText(`3. For an accurate estimate, contact ELV.art on WhatsApp: ${whatsapp}`, 44, 48, 8, "F1", 0.08, 0.13, 0.22)
+    ].join("\n");
+  }
+
+  const pageContents = chunks.map((chunk, index) => {
+    const firstPage = index === 0;
+    const tableHeaderY = firstPage ? 584 : 672;
+    const rowStartY = tableHeaderY - 20;
+    const rowsBottom = rowStartY - chunk.length * 20;
+    return [
+      drawHeader(index + 1, chunks.length),
+      firstPage ? drawCustomerBlock() : "",
+      drawTableHeader(tableHeaderY),
+      drawItemRows(chunk, rowStartY),
+      index === chunks.length - 1 ? drawTotals(Math.max(rowsBottom - 18, 152)) : "",
+      index === chunks.length - 1 ? drawTerms() : ""
+    ].filter(Boolean).join("\n");
   });
-  if (page.length) pages.push(page);
 
   const objects = [];
   const addObject = value => {
@@ -830,24 +969,12 @@ function makeQuotePdf(rows) {
   const catalogId = addObject("");
   const pagesId = addObject("");
   const fontId = addObject("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>");
+  const fontBoldId = addObject("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>");
   const pageIds = [];
 
-  pages.forEach((lines, index) => {
-    const content = [
-      "BT",
-      "50 790 Td",
-      ...lines.flatMap((line, lineIndex) => {
-        const move = lineIndex === 0 ? "" : `0 -${lines[lineIndex - 1].gap} Td`;
-        return [
-          move,
-          `/F1 ${line.size} Tf`,
-          `(${pdfSafe(line.text)}) Tj`
-        ].filter(Boolean);
-      }),
-      "ET"
-    ].join("\n");
+  pageContents.forEach(content => {
     const contentId = addObject(`<< /Length ${content.length} >>\nstream\n${content}\nendstream`);
-    const pageId = addObject(`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 ${fontId} 0 R >> >> /Contents ${contentId} 0 R >>`);
+    const pageId = addObject(`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 ${fontId} 0 R /F2 ${fontBoldId} 0 R >> >> /Contents ${contentId} 0 R >>`);
     pageIds.push(pageId);
   });
 
@@ -867,6 +994,48 @@ function makeQuotePdf(rows) {
   });
   pdf += `trailer\n<< /Size ${objects.length + 1} /Root ${catalogId} 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
   return new Blob([pdf], { type: "application/pdf" });
+}
+
+function quotePdfFileName() {
+  return `ELV-art-quotation-${new Date().toISOString().slice(0, 10)}.pdf`;
+}
+
+function downloadQuotePdf(rows) {
+  const blob = makeQuotePdf(rows);
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = quotePdfFileName();
+  link.click();
+  URL.revokeObjectURL(url);
+  return blob;
+}
+
+async function shareQuoteOnWhatsApp(rows) {
+  if (!rows.length) return;
+  const settings = state.content?.settings || {};
+  const blob = makeQuotePdf(rows);
+  const file = new File([blob], quotePdfFileName(), { type: "application/pdf" });
+  const total = rows.reduce((sum, row) => sum + row.lineTotal, 0);
+  const message = [
+    "Hello ELV.art, I want to discuss this quotation.",
+    `Items: ${rows.reduce((sum, row) => sum + row.qty, 0)}`,
+    `Total: ${money(total)}`,
+    "Please confirm the latest price and availability."
+  ].join("\n");
+
+  if (navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
+    await navigator.share({
+      title: `${settings.brand || "ELV.art"} quotation`,
+      text: message,
+      files: [file]
+    });
+    return;
+  }
+
+  downloadQuotePdf(rows);
+  window.open(whatsappLink(1), "_blank", "noopener,noreferrer");
+  alert("Your quotation PDF has been downloaded. Attach that PDF in the WhatsApp chat that just opened.");
 }
 
 function renderCartNav() {
@@ -2407,7 +2576,7 @@ function renderCartPage() {
         <div class="cart-summary-line"><span>Items</span><strong>${cartCount()}</strong></div>
         <div class="cart-summary-line total"><span>Total</span><strong>${money(total)}</strong></div>
         <button class="button primary" id="downloadQuoteButton" type="button" ${rows.length ? "" : "disabled"}>${icon("file-down")}Download Quotation</button>
-        <a class="button secondary" href="${escapeHtml(whatsappLink(1))}" target="_blank" rel="noreferrer">${icon("message-circle")}Send to WhatsApp</a>
+        <button class="button secondary" id="whatsappQuoteButton" type="button" ${rows.length ? "" : "disabled"}>${icon("message-circle")}WhatsApp Quotation PDF</button>
       </aside>
     </section>
   `;
@@ -2561,13 +2730,24 @@ function setupForms() {
   if (downloadQuoteButton) downloadQuoteButton.addEventListener("click", () => {
     const rows = cartRows();
     if (!rows.length) return;
-    const blob = makeQuotePdf(rows);
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `ELV-art-quotation-${new Date().toISOString().slice(0, 10)}.pdf`;
-    link.click();
-    URL.revokeObjectURL(url);
+    downloadQuotePdf(rows);
+  });
+
+  const whatsappQuoteButton = $("#whatsappQuoteButton");
+  if (whatsappQuoteButton) whatsappQuoteButton.addEventListener("click", async () => {
+    const rows = cartRows();
+    if (!rows.length) return;
+    whatsappQuoteButton.disabled = true;
+    const original = whatsappQuoteButton.innerHTML;
+    whatsappQuoteButton.innerHTML = `${icon("message-circle")}Preparing PDF...`;
+    try {
+      await shareQuoteOnWhatsApp(rows);
+    } catch (error) {
+      alert(error.message || "Could not share quotation. Please download the PDF and attach it on WhatsApp.");
+    } finally {
+      whatsappQuoteButton.disabled = false;
+      whatsappQuoteButton.innerHTML = original;
+    }
   });
 
   ["#productFamilySearch", "#productFamilyScope", "#productFamilyType", "#productFamilyFile"].forEach(selector => {
