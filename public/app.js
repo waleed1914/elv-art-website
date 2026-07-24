@@ -945,7 +945,7 @@ function makeQuotePdf(rows) {
   const pageContents = chunks.map((chunk, index) => {
     const firstPage = index === 0;
     const tableHeaderY = firstPage ? 570 : 672;
-    const rowStartY = tableHeaderY - 28;
+    const rowStartY = tableHeaderY;
     const rowsBottom = rowStartY - chunk.length * 28;
     return [
       drawHeader(index + 1, chunks.length),
