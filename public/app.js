@@ -851,9 +851,12 @@ function makeQuotePdf(rows) {
       fillText(".art", 105, 782, 28, "F2", 0.17, 0.64, 0.22),
       fillText("Integrated ELV Solutions", 50, 764, 8, "F1", 0.36, 0.43, 0.52),
       fillText("QUOTATION", 406, 786, 21, "F2", 0.08, 0.28, 0.62),
-      fillText(`Quote #: ${quoteNumber}`, 406, 768, 8, "F1", 0.08, 0.13, 0.22),
-      fillText(`Date: ${today}`, 406, 752, 8, "F1", 0.08, 0.13, 0.22),
-      fillText(`Valid until: ${until}`, 406, 736, 8, "F1", 0.08, 0.13, 0.22),
+      fillText("Quote #:", 406, 768, 8, "F1", 0.36, 0.43, 0.52),
+      fillText(quoteNumber, 456, 768, 8, "F1", 0.08, 0.13, 0.22),
+      fillText("Date:", 406, 754, 8, "F1", 0.36, 0.43, 0.52),
+      fillText(today, 456, 754, 8, "F1", 0.08, 0.13, 0.22),
+      fillText("Valid until:", 406, 740, 8, "F1", 0.36, 0.43, 0.52),
+      fillText(until, 456, 740, 8, "F1", 0.08, 0.13, 0.22),
       fillText(`Page ${pageNumber} of ${totalPages}`, 500, 716, 8, "F1", 0.36, 0.43, 0.52)
     ].join("\n");
   }
