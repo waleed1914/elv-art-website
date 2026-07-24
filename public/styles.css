@@ -2682,6 +2682,84 @@ p {
   background: var(--white);
 }
 
+.contact-page-hero {
+  background:
+    linear-gradient(90deg, rgba(7, 23, 43, 0.92), rgba(7, 23, 43, 0.48)),
+    url("/assets/generated/hero-elv-control-room.webp") center / cover no-repeat;
+}
+
+.contact-modern-section {
+  align-items: stretch;
+}
+
+.contact-intro-card,
+.contact-form-card {
+  border: 1px solid #aebdd0;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #ffffff, #f7fbff);
+  box-shadow: 0 24px 70px rgba(16, 34, 56, 0.1);
+}
+
+.contact-intro-card {
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  padding: clamp(24px, 4vw, 36px);
+}
+
+.contact-intro-card h2 {
+  color: #07172b;
+}
+
+.contact-intro-card p {
+  margin: 0;
+  color: #52657d;
+  line-height: 1.75;
+}
+
+.contact-proof-list {
+  display: grid;
+  gap: 12px;
+  margin: 4px 0 6px;
+}
+
+.contact-proof-list span {
+  display: grid;
+  gap: 4px;
+  border: 1px solid #c1d0e2;
+  border-radius: 10px;
+  padding: 14px;
+  background: var(--white);
+  color: #5d7088;
+  line-height: 1.45;
+}
+
+.contact-proof-list strong {
+  color: var(--ink);
+}
+
+.contact-form-card {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: clamp(22px, 4vw, 34px);
+}
+
+.contact-form-card .full {
+  grid-column: 1 / -1;
+}
+
+.contact-form-card label {
+  font-weight: 900;
+  color: #14243a;
+}
+
+.contact-form-card input,
+.contact-form-card select,
+.contact-form-card textarea {
+  margin-top: 7px;
+  border-color: #9eb0c7;
+  background: #fbfdff;
+}
+
 .auth-page-hero {
   padding-bottom: clamp(58px, 7vw, 92px);
 }
@@ -3738,6 +3816,10 @@ textarea {
   }
 
   .intro-proof-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-form-card {
     grid-template-columns: 1fr;
   }
 

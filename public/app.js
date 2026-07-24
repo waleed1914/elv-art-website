@@ -1337,9 +1337,26 @@ function renderCategories() {
 
   const serviceSelect = $("#serviceSelect");
   if (serviceSelect) {
-    serviceSelect.innerHTML = state.content.categories
-      .map(category => `<option>${escapeHtml(category.name)}</option>`)
-      .join("");
+    const services = [
+      "CCTV Camera Installation",
+      "IP Cameras, NVR and Video Storage",
+      "Access Control System",
+      "Biometric, RFID and Attendance",
+      "ANPR Camera System",
+      "Vehicle Barriers, Road Blockers and Bollards",
+      "Video Intercom and Gate Automation",
+      "Structured Cabling and Network Rack",
+      "PoE Switching and Wi-Fi Network",
+      "Fire Alarm and Life Safety",
+      "Audio Visual and Meeting Room",
+      "Smart Home / Building Automation",
+      "Command Room / VMS Monitoring",
+      "AMC, Maintenance and Upgrade",
+      "Project BOQ / Site Survey"
+    ];
+    const categoryNames = (state.content.categories || []).map(category => category.name).filter(Boolean);
+    const options = [...new Set([...services, ...categoryNames])];
+    serviceSelect.innerHTML = `<option value="">Select a service</option>${options.map(service => `<option>${escapeHtml(service)}</option>`).join("")}`;
   }
 }
 
