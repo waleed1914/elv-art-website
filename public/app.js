@@ -7,6 +7,41 @@ const state = {
 const $ = selector => document.querySelector(selector);
 const $$ = selector => Array.from(document.querySelectorAll(selector));
 
+const preloaderStartedAt = performance.now();
+
+function showPreloader() {
+  if (document.querySelector(".elv-preloader")) return;
+  document.body.classList.add("preloader-active");
+  document.body.insertAdjacentHTML("afterbegin", `
+    <div class="elv-preloader" role="status" aria-live="polite" aria-label="Loading ELV.art">
+      <div class="preloader-grid" aria-hidden="true"></div>
+      <div class="preloader-card">
+        <div class="preloader-logo-wrap">
+          <img src="/assets/logo-nav.jpeg" alt="ELV.art">
+          <span class="preloader-scan"></span>
+        </div>
+        <div class="preloader-signal">
+          <span></span><span></span><span></span>
+        </div>
+        <p>Scanning ELV systems</p>
+        <div class="preloader-progress"><span></span></div>
+      </div>
+    </div>
+  `);
+}
+
+function hidePreloader() {
+  const loader = document.querySelector(".elv-preloader");
+  if (!loader) return;
+  const elapsed = performance.now() - preloaderStartedAt;
+  const delay = Math.max(0, 900 - elapsed);
+  window.setTimeout(() => {
+    loader.classList.add("is-hidden");
+    document.body.classList.remove("preloader-active");
+    window.setTimeout(() => loader.remove(), 520);
+  }, delay);
+}
+
 function escapeHtml(value) {
   return String(value || "")
     .replaceAll("&", "&amp;")
@@ -3556,6 +3591,7 @@ function setupDataViz() {
 }
 
 async function init() {
+  showPreloader();
   injectFonts();
   await setupEmailVerificationPage();
   state.content = await api("/api/content");
@@ -3594,8 +3630,10 @@ async function init() {
   setupHeroInteractive();
   setupSiteExplorer();
   setupDataViz();
+  hidePreloader();
 }
 
 init().catch(error => {
+  hidePreloader();
   document.body.insertAdjacentHTML("afterbegin", `<p class="form-status">${escapeHtml(error.message)}</p>`);
 });
