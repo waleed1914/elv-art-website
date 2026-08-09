@@ -478,6 +478,10 @@ function productForm(item = {}) {
       ${field("status", "Badge", item.status || "", "text", "", "required placeholder=\"Featured / New\"")}
       <label class="check-row full"><input name="homeFeatured" type="checkbox" ${item.homeFeatured ? "checked" : ""}> Show this model on home page</label>
       <label>Model Picture<input name="imageFile" type="file" accept="image/*" ${item.image ? "" : "required"}><span class="file-note">${item.image ? "Current picture will stay if you do not upload a new one." : "Required for new model."}</span></label>
+      <label>Datasheet Upload<input name="datasheetFile" type="file" accept=".pdf,application/pdf"><span class="file-note">${item.datasheet ? "Existing datasheet will stay if you do not upload a new one." : "Optional PDF"}</span></label>
+      <label>User Manual Upload<input name="manualFile" type="file" accept=".pdf,application/pdf"><span class="file-note">${item.manual ? "Existing manual will stay if you do not upload a new one." : "Optional PDF"}</span></label>
+      <label>3D Model Upload (STL)<input name="model3dFile" type="file" accept=".stl,model/stl"><span class="file-note">${item.model3d ? "Existing 3D model will stay if you do not upload a new one." : "Optional STL file"}</span></label>
+      <label>CAD Drawing Upload<input name="cadFile" type="file" accept=".dwg,.dxf,.pdf,application/pdf"><span class="file-note">${item.cad ? "Existing CAD file will stay if you do not upload a new one." : "Optional CAD/PDF file"}</span></label>
       ${field("l1", "Public Price", item.prices?.l1 || "", "number", "", "required min=\"0\" step=\"0.01\" placeholder=\"Visible to all visitors\"")}
       ${field("l2", "Account Price", item.prices?.l2 || "", "number", "", "required min=\"0\" step=\"0.01\" placeholder=\"Visible after admin gives account access\"")}
       ${field("l3", "Admin Only Price", item.prices?.l3 || "", "number", "", "required min=\"0\" step=\"0.01\" placeholder=\"Only admin can see this\"")}
@@ -486,6 +490,7 @@ function productForm(item = {}) {
       </label>
       ${textarea("featuresText", "Key Features (one per line)", (item.features || []).join("\n"), "full", "placeholder=\"Smart detection\nPoE installation\nMobile viewing\"")}
       ${textarea("specsText", "Product Specifications (one per line)", (item.specs || []).join("\n"), "full", "placeholder=\"IP67 outdoor housing\nH.265 compression\nONVIF compatible\"")}
+      <label class="full">Multiple Model Images<input name="galleryFiles" type="file" accept="image/*" multiple><span class="file-note">${(item.gallery || []).length} existing gallery image(s) will be kept.</span></label>
       <button class="button primary full" type="submit">Save Model</button>
     </form>
   `, async event => {
@@ -502,9 +507,15 @@ function productForm(item = {}) {
     data.specs = linesFromText(data.specsText);
     data.prices = { l1: cleanPrice(data.l1), l2: cleanPrice(data.l2), l3: cleanPrice(data.l3) };
     data.image = await fileData(form.imageFile.files[0]) || item.image || "";
+    data.datasheet = await fileData(form.datasheetFile.files[0]) || item.datasheet || "";
+    data.manual = await fileData(form.manualFile.files[0]) || item.manual || "";
+    data.model3d = await fileData(form.model3dFile.files[0]) || item.model3d || "";
+    data.cad = await fileData(form.cadFile.files[0]) || item.cad || "";
+    data.gallery = [...(item.gallery || []), ...(await filesData(form.galleryFiles.files))];
     data.homeFeatured = form.homeFeatured.checked;
     delete data.l1; delete data.l2; delete data.l3;
-    delete data.featuresText; delete data.specsText; delete data.imageFile;
+    delete data.featuresText; delete data.specsText;
+    delete data.imageFile; delete data.datasheetFile; delete data.manualFile; delete data.model3dFile; delete data.cadFile; delete data.galleryFiles;
     await api("/api/admin/products", { method: "POST", body: JSON.stringify(data) });
     closeModal();
     await loadAdmin(false);
