@@ -143,7 +143,7 @@ function switchPanel(name) {
   $$(".admin-tabs button").forEach(item => item.classList.toggle("active", item.dataset.tab === name));
   $$(".admin-panel").forEach(panel => panel.classList.toggle("active", panel.dataset.panel === name));
   const tab = $(`.admin-tabs button[data-tab="${name}"]`);
-  const fallback = { models: "Models", parts: "Accessories", products: "Model Groups", categories: "Product Categories", superCategories: "Products", projects: "Case Study" };
+  const fallback = { models: "Related Models", parts: "Accessories", products: "Models", categories: "Product Categories", superCategories: "Products", projects: "Case Study" };
   $("#adminTitle").textContent = tab ? tab.textContent : (fallback[name] || name);
   hideSearchResults();
 }
@@ -193,8 +193,8 @@ function priceMeta(item) {
 
 function catalogTargetOptions(value = "") {
   const groups = [
-    ["Model Groups", admin.db.products || [], "product"],
-    ["Models", admin.db.models || [], "model"],
+    ["Models", admin.db.products || [], "product"],
+    ["Related Models", admin.db.models || [], "model"],
     ["Accessories", admin.db.parts || [], "part"]
   ];
   return `<option value="">Select linked catalog item</option>${groups.map(([label, items, type]) => `
@@ -246,7 +246,7 @@ function buildSearchIndex() {
     }
   }));
   (admin.db.products || []).forEach(item => rows.push({
-    type: "Model Group",
+    type: "Model",
     title: item.name,
     summary: item.summary,
     id: item.id,
@@ -442,13 +442,13 @@ function categoryForm(item = {}) {
 
 function renderProducts() {
   const category = categoryById(admin.selectedCategoryId);
-  $("#productPanelTitle").textContent = category ? `${category.name} Model Groups` : "Select a product category";
+  $("#productPanelTitle").textContent = category ? `${category.name} Models` : "Select a product category";
   $("#productCrumb").textContent = category ? `Catalog / ${category.name}` : "Products";
   $("#addProductButton").disabled = !category;
   $("#backToCategoriesButton").classList.toggle("hidden", !category);
 
   if (!category) {
-    $("#productList").innerHTML = `<p>Open Product Categories and press View to manage model groups.</p>`;
+    $("#productList").innerHTML = `<p>Open Product Categories and press View to manage models.</p>`;
     return;
   }
 
@@ -459,41 +459,41 @@ function renderProducts() {
     <button class="button secondary mini" data-product-edit="${escapeHtml(product.id)}" type="button">Edit</button>
     <button class="button primary mini" data-product-view="${escapeHtml(product.id)}" type="button">Models</button>
     <button class="button secondary mini danger" data-delete="products" data-id="${escapeHtml(product.id)}" type="button">Delete</button>
-  `, [product.segment || "Product family", product.status || "Badge", product.homeFeatured ? "Home page" : "", ...priceMeta(product), `${modelCount} models`].filter(Boolean));
-  }).join("") || `<p>No model groups in this product category yet.</p>`;
+  `, [product.segment || "Model family", product.status || "Badge", product.homeFeatured ? "Home page" : "", ...priceMeta(product), `${modelCount} related models`].filter(Boolean));
+  }).join("") || `<p>No models in this product category yet.</p>`;
 }
 
 function productForm(item = {}) {
   const category = categoryById(admin.selectedCategoryId) || categoryById(item.categoryId);
   if (!category) {
-    alert("Please view a product category first, then add a model group inside it.");
+    alert("Please view a product category first, then add a model inside it.");
     return;
   }
-  openModal(item.id ? "Edit Model Group" : `Add Model Group${category ? ` in ${category.name}` : ""}`, `
+  openModal(item.id ? "Edit Model" : `Add Model${category ? ` in ${category.name}` : ""}`, `
     <form class="admin-form two-col">
       ${hidden("id", item.id || "")}
       ${hidden("categoryId", item.categoryId || admin.selectedCategoryId || "")}
-      ${field("name", "Model Group Name", item.name || "", "text", "", "required minlength=\"2\"")}
-      ${field("segment", "Group Segment / Family", item.segment || "", "text", "", "required placeholder=\"Network Cameras / Access Control\"")}
+      ${field("name", "Model Name", item.name || "", "text", "", "required minlength=\"2\"")}
+      ${field("segment", "Segment / Series", item.segment || "", "text", "", "required placeholder=\"Network Cameras / Access Control\"")}
       ${field("status", "Badge", item.status || "", "text", "", "required placeholder=\"Featured / New\"")}
-      <label class="check-row full"><input name="homeFeatured" type="checkbox" ${item.homeFeatured ? "checked" : ""}> Show this model group on home page</label>
-      <label>Model Group Picture<input name="imageFile" type="file" accept="image/*" ${item.image ? "" : "required"}><span class="file-note">${item.image ? "Current picture will stay if you do not upload a new one." : "Required for new model group."}</span></label>
+      <label class="check-row full"><input name="homeFeatured" type="checkbox" ${item.homeFeatured ? "checked" : ""}> Show this model on home page</label>
+      <label>Model Picture<input name="imageFile" type="file" accept="image/*" ${item.image ? "" : "required"}><span class="file-note">${item.image ? "Current picture will stay if you do not upload a new one." : "Required for new model."}</span></label>
       ${field("l1", "Public Price", item.prices?.l1 || "", "number", "", "required min=\"0\" step=\"0.01\" placeholder=\"Visible to all visitors\"")}
       ${field("l2", "Account Price", item.prices?.l2 || "", "number", "", "required min=\"0\" step=\"0.01\" placeholder=\"Visible after admin gives account access\"")}
       ${field("l3", "Admin Only Price", item.prices?.l3 || "", "number", "", "required min=\"0\" step=\"0.01\" placeholder=\"Only admin can see this\"")}
       <label class="full">Summary Editor
-        <div id="summaryEditor" class="rich-editor" contenteditable="true" data-placeholder="Write model group summary...">${item.summaryHtml || item.summary || ""}</div>
+        <div id="summaryEditor" class="rich-editor" contenteditable="true" data-placeholder="Write model summary...">${item.summaryHtml || item.summary || ""}</div>
       </label>
       ${textarea("featuresText", "Key Features (one per line)", (item.features || []).join("\n"), "full", "placeholder=\"Smart detection\nPoE installation\nMobile viewing\"")}
       ${textarea("specsText", "Product Specifications (one per line)", (item.specs || []).join("\n"), "full", "placeholder=\"IP67 outdoor housing\nH.265 compression\nONVIF compatible\"")}
-      <button class="button primary full" type="submit">Save Model Group</button>
+      <button class="button primary full" type="submit">Save Model</button>
     </form>
   `, async event => {
     event.preventDefault();
     const form = event.currentTarget;
     if (!form.reportValidity()) return;
-    if (!item.image && !requireFile(form.imageFile, "Please upload a model group picture.")) return;
-    if (!requireRichText($("#summaryEditor"), "Please add a model group summary with at least 10 characters.")) return;
+    if (!item.image && !requireFile(form.imageFile, "Please upload a model picture.")) return;
+    if (!requireRichText($("#summaryEditor"), "Please add a model summary with at least 10 characters.")) return;
     const formData = new FormData(form);
     const data = objectFromForm(form);
     data.summaryHtml = $("#summaryEditor").innerHTML.trim();
@@ -514,11 +514,11 @@ function productForm(item = {}) {
 function renderModels() {
   const product = productById(admin.selectedProductId);
   $("#modelPanelTitle").textContent = product ? `${product.name} Models` : "Select a product";
-  $("#modelCrumb").textContent = product ? `Catalog / Model Groups / ${product.name}` : "Models";
+  $("#modelCrumb").textContent = product ? `Catalog / Models / ${product.name}` : "Related Models";
   $("#addModelButton").disabled = !product;
 
   if (!product) {
-    $("#modelList").innerHTML = `<p>Open a model group and press Models to manage models.</p>`;
+    $("#modelList").innerHTML = `<p>Open a model and press Related Models to manage model variants, or use Accessories for compatible parts.</p>`;
     return;
   }
 

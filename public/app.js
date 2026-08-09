@@ -407,7 +407,7 @@ function buildGlobalSearchItems() {
       keywords: itemSearchText([item.name, item.summary])
     })),
     ...(content.products || []).map(item => ({
-      type: "Model Group",
+      type: "Model",
       title: item.name,
       summary: item.summary || item.summaryHtml,
       url: productUrl(item.id),
@@ -721,7 +721,7 @@ function money(value) {
 function allSellableItems() {
   if (!state.content) return [];
   return [
-    ...(state.content.products || []).map(item => ({ ...item, cartType: "product", cartLabel: "Model Group", url: productUrl(item.id) })),
+    ...(state.content.products || []).map(item => ({ ...item, cartType: "product", cartLabel: "Model", url: productUrl(item.id) })),
     ...(state.content.models || []).map(item => ({ ...item, cartType: "model", cartLabel: "Model", url: modelUrl(item.id) })),
     ...(state.content.parts || []).map(item => ({ ...item, cartType: "part", cartLabel: "Accessory", url: partUrl(item.id) }))
   ];
@@ -1279,7 +1279,7 @@ function renderCategories() {
       <option value="">All Products</option>
       ${superCategories.length ? `<optgroup label="Products">${superCategories.map(item => `<option value="super:${escapeHtml(item.id)}">${escapeHtml(item.name)}</option>`).join("")}</optgroup>` : ""}
       ${categories.length ? `<optgroup label="Product Categories">${categories.map(item => `<option value="category:${escapeHtml(item.id)}">${escapeHtml(item.name)}</option>`).join("")}</optgroup>` : ""}
-      ${products.length ? `<optgroup label="Model Groups">${products.map(item => `<option value="product:${escapeHtml(item.id)}">${escapeHtml(item.name)}</option>`).join("")}</optgroup>` : ""}
+      ${products.length ? `<optgroup label="Models">${products.map(item => `<option value="product:${escapeHtml(item.id)}">${escapeHtml(item.name)}</option>`).join("")}</optgroup>` : ""}
     `;
     if ([...typeSelect.options].some(option => option.value === previous)) typeSelect.value = previous;
   }
@@ -1321,7 +1321,7 @@ function renderCategories() {
         superId: category.superCategoryId,
         categoryId: category.id,
         modelGroupId: "",
-        meta: [superName(category.superCategoryId), `${modelCount} model groups`],
+        meta: [superName(category.superCategoryId), `${modelCount} models`],
         fileState: { image: Boolean(category.image), files: false, price: false }
       };
     }),
@@ -1329,7 +1329,7 @@ function renderCategories() {
       const category = localCategory(product.categoryId);
       return {
         kind: "product",
-        type: "Model Group",
+        type: "Model",
         title: product.name,
         summary: product.summary,
         image: product.image,
@@ -1339,7 +1339,7 @@ function renderCategories() {
         superId: category?.superCategoryId || "",
         categoryId: product.categoryId || "",
         modelGroupId: product.id,
-        meta: [category?.name || "Product Category", product.segment || product.status || "Model Group"],
+        meta: [category?.name || "Product Category", product.segment || product.status || "Model"],
         fileState: { image: Boolean(product.image), files: hasFiles(product), price: Boolean(product.prices?.l1) }
       };
     }),
@@ -1358,7 +1358,7 @@ function renderCategories() {
         superId: category?.superCategoryId || "",
         categoryId: model.categoryId || parent?.categoryId || "",
         modelGroupId: model.productId || "",
-        meta: [parent?.name || category?.name || "Model Group", model.segment || model.status || "Model"],
+        meta: [parent?.name || category?.name || "Model", model.segment || model.status || "Model"],
         fileState: { image: Boolean(model.image), files: hasFiles(model), price: Boolean(model.prices?.l1) }
       };
     }),
@@ -1377,7 +1377,7 @@ function renderCategories() {
         superId: category?.superCategoryId || "",
         categoryId: part.categoryId || parent?.categoryId || "",
         modelGroupId: part.productId || "",
-        meta: [parent?.name || category?.name || "Model Group", part.segment || part.status || "Accessory"],
+        meta: [parent?.name || category?.name || "Model", part.segment || part.status || "Accessory"],
         fileState: { image: Boolean(part.image), files: hasFiles(part), price: Boolean(part.prices?.l1) }
       };
     })
@@ -1388,12 +1388,12 @@ function renderCategories() {
     if (filterId) {
       if (filterKind === "super" && row.superId !== filterId) return false;
       if (filterKind === "category" && row.categoryId !== filterId) return false;
-      if (filterKind === "product" && row.modelGroupId !== filterId) return false;
+      if (filterKind === "product" && row.modelGroupId !== filterId && !(row.kind === "product" && row.itemId === filterId)) return false;
     }
     if (!search && !scope && !filterId && row.kind !== "super") return false;
     if (!search && !scope && filterKind === "super" && filterId && row.kind !== "category") return false;
     if (!search && !scope && filterKind === "category" && filterId && row.kind !== "product") return false;
-    if (!search && !scope && filterKind === "product" && filterId && row.kind !== "model") return false;
+    if (!search && !scope && filterKind === "product" && filterId && row.kind !== "product") return false;
     if (fileFilter === "with-image" && !row.fileState.image) return false;
     if (fileFilter === "with-files" && !row.fileState.files) return false;
     if (fileFilter === "with-price" && !row.fileState.price) return false;
@@ -1466,7 +1466,7 @@ function renderProducts() {
   }
   products = limit ? products.slice(0, limit) : products;
   grid.innerHTML = products.map(product => productFlowCard({
-    type: product.segment || product.status || "Model Group",
+    type: product.segment || product.status || "Model",
     title: product.name,
     summary: product.summary,
     image: product.image,
@@ -1556,7 +1556,7 @@ function renderCategoryDetail() {
   const products = state.content.products.filter(product => product.categoryId === category.id);
   setSeo({
     title: `${category.name} products in Pakistan`,
-    description: `${category.summary} Browse related ELV model groups, prices, datasheets, manuals, and project-ready product options across Pakistan.`,
+    description: `${category.summary} Browse related ELV models, prices, datasheets, manuals, and project-ready product options across Pakistan.`,
     image: category.image || "/assets/generated/product-cctv-system.webp",
     url: categoryUrl(category.id),
     schema: {
@@ -1575,12 +1575,12 @@ function renderCategoryDetail() {
     </section>
     <section class="section">
       <div class="section-head">
-        <div><p class="eyebrow">Model Groups</p><h2>Products in this category</h2></div>
+        <div><p class="eyebrow">Models</p><h2>Models in this category</h2></div>
         <a class="button secondary" href="/products.html">All Categories</a>
       </div>
       <div class="product-grid">
         ${products.map(product => productFlowCard({
-          type: product.segment || product.status || "Model Group",
+          type: product.segment || product.status || "Model",
           title: product.name,
           summary: product.summary,
           image: product.image,
@@ -1588,7 +1588,7 @@ function renderCategoryDetail() {
           meta: [product.status || "Available"],
           priceItem: product,
           action: "View Details"
-        })).join("") || "<p>No products in this category yet.</p>"}
+        })).join("") || "<p>No models in this product category yet.</p>"}
       </div>
     </section>
   `;
@@ -2154,7 +2154,7 @@ function renderProductStory(product) {
         <article>
           <span>03</span>
           <h3>Easy Comparison</h3>
-          <p>Models and accessories below this product help customers move from a product family into exact models and compatible parts.</p>
+          <p>Accessories below this model help customers move from the main model into compatible parts and support items.</p>
         </article>
       </div>
     </section>
@@ -2482,7 +2482,7 @@ function renderProductDetail() {
     description: `${product.summary || stripHtml(product.summaryHtml)} Available for CCTV, access control, network, vehicle access, and ELV projects across Pakistan.`,
     image: product.image || "/assets/generated/product-cctv-system.webp",
     url: productUrl(product.id),
-    schema: productSchema(product, productUrl(product.id), product.segment || "Model Group")
+    schema: productSchema(product, productUrl(product.id), product.segment || "Model")
   });
   detail.innerHTML = `
     <section class="page-hero product-detail-hero">
@@ -2523,11 +2523,11 @@ function renderProductDetail() {
     ${renderProductStory(product)}
     ${catalogRows.length ? `
     <section class="section">
-      <div class="section-head"><div><p class="eyebrow">Models & Accessories</p><h2>Choose what you need</h2></div></div>
+      <div class="section-head"><div><p class="eyebrow">Accessories</p><h2>Compatible accessories and related items</h2></div></div>
       <button class="filter-toggle" type="button" data-filter-toggle="modelGroupFilterPanel" aria-expanded="false">Show Search & Filters</button>
       <div id="modelGroupFilterPanel" class="catalog-toolbar model-group-toolbar">
         <label>Search<input id="modelGroupSearch" type="search" placeholder="Search models, accessories, specs"></label>
-        <label>Show<select id="modelGroupScope"><option value="">Models and Accessories</option><option value="model">Models</option><option value="part">Accessories</option></select></label>
+        <label>Show<select id="modelGroupScope"><option value="">All Related Items</option><option value="model">Related Models</option><option value="part">Accessories</option></select></label>
         <label>Series / Badge<select id="modelGroupStatus"><option value="">Any Series or Badge</option></select></label>
         <label>Filter<select id="modelGroupFile"><option value="">Any</option><option value="with-image">With Picture</option><option value="with-files">With Files</option><option value="with-price">With Price</option></select></label>
         <p id="modelGroupStats" class="catalog-result-count"></p>
@@ -2538,7 +2538,7 @@ function renderProductDetail() {
     <section class="section product-band">
       <div class="section-head"><div><p class="eyebrow">Similar Products</p><h2>Related models</h2></div></div>
       <div class="product-grid">${similar.map(item => productFlowCard({
-        type: item.segment || item.status || "Model Group",
+        type: item.segment || item.status || "Model",
         title: item.name,
         summary: item.summary,
         image: item.image,
