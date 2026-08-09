@@ -1056,8 +1056,12 @@ function validateCatalogItem(db, collection, item) {
     if (collection === "models" && !db.products.some(product => product.id === item.productId)) {
       return "Model must belong to an existing product";
     }
-    if (collection === "parts" && !db.models.some(model => model.id === item.modelId)) {
-      return "Part must belong to an existing model";
+    if (collection === "parts") {
+      const hasNestedModel = item.modelId && db.models.some(model => model.id === item.modelId);
+      const hasProductModel = item.productId && db.products.some(product => product.id === item.productId);
+      if (!hasNestedModel && !hasProductModel) {
+        return "Part must belong to an existing model";
+      }
     }
   }
 

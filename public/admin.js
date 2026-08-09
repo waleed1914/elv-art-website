@@ -143,7 +143,7 @@ function switchPanel(name) {
   $$(".admin-tabs button").forEach(item => item.classList.toggle("active", item.dataset.tab === name));
   $$(".admin-panel").forEach(panel => panel.classList.toggle("active", panel.dataset.panel === name));
   const tab = $(`.admin-tabs button[data-tab="${name}"]`);
-  const fallback = { models: "Related Models", parts: "Accessories", products: "Models", categories: "Product Categories", superCategories: "Products", projects: "Case Study" };
+  const fallback = { models: "Model Variants", parts: "Accessories", products: "Models", categories: "Product Categories", superCategories: "Products", projects: "Case Study" };
   $("#adminTitle").textContent = tab ? tab.textContent : (fallback[name] || name);
   hideSearchResults();
 }
@@ -194,7 +194,6 @@ function priceMeta(item) {
 function catalogTargetOptions(value = "") {
   const groups = [
     ["Models", admin.db.products || [], "product"],
-    ["Related Models", admin.db.models || [], "model"],
     ["Accessories", admin.db.parts || [], "part"]
   ];
   return `<option value="">Select linked catalog item</option>${groups.map(([label, items, type]) => `
@@ -256,26 +255,8 @@ function buildSearchIndex() {
       admin.selectedCategoryId = item.categoryId;
       admin.selectedProductId = item.id;
       admin.selectedModelId = "";
-      switchPanel("models");
-      renderProducts();
-      renderModels();
-      bindCatalogActions();
-    }
-  }));
-  (admin.db.models || []).forEach(item => rows.push({
-    type: "Model",
-    title: item.name,
-    summary: item.summary,
-    id: item.id,
-    action: () => {
-      const product = productById(item.productId);
-      const category = categoryById(item.categoryId || product?.categoryId);
-      admin.selectedSuperCategoryId = category?.superCategoryId || "";
-      admin.selectedCategoryId = item.categoryId || product?.categoryId || "";
-      admin.selectedProductId = item.productId;
-      admin.selectedModelId = item.id;
       switchPanel("parts");
-      renderModels();
+      renderProducts();
       renderParts();
       bindCatalogActions();
     }
@@ -454,12 +435,12 @@ function renderProducts() {
 
   const categoryProducts = (admin.db.products || []).filter(product => product.categoryId === category.id);
   $("#productList").innerHTML = categoryProducts.map(product => {
-    const modelCount = (admin.db.models || []).filter(model => model.productId === product.id).length;
+    const accessoryCount = (admin.db.parts || []).filter(part => part.productId === product.id).length;
     return renderCard(product, `
     <button class="button secondary mini" data-product-edit="${escapeHtml(product.id)}" type="button">Edit</button>
-    <button class="button primary mini" data-product-view="${escapeHtml(product.id)}" type="button">Models</button>
+    <button class="button primary mini" data-product-view="${escapeHtml(product.id)}" type="button">Accessories</button>
     <button class="button secondary mini danger" data-delete="products" data-id="${escapeHtml(product.id)}" type="button">Delete</button>
-  `, [product.segment || "Model family", product.status || "Badge", product.homeFeatured ? "Home page" : "", ...priceMeta(product), `${modelCount} related models`].filter(Boolean));
+  `, [product.segment || "Model", product.status || "Badge", product.homeFeatured ? "Home page" : "", ...priceMeta(product), `${accessoryCount} accessories`].filter(Boolean));
   }).join("") || `<p>No models in this product category yet.</p>`;
 }
 
@@ -525,11 +506,11 @@ function productForm(item = {}) {
 function renderModels() {
   const product = productById(admin.selectedProductId);
   $("#modelPanelTitle").textContent = product ? `${product.name} Models` : "Select a product";
-  $("#modelCrumb").textContent = product ? `Catalog / Models / ${product.name}` : "Related Models";
+  $("#modelCrumb").textContent = product ? `Catalog / Models / ${product.name}` : "Model Variants";
   $("#addModelButton").disabled = !product;
 
   if (!product) {
-    $("#modelList").innerHTML = `<p>Open a model and press Related Models to manage model variants, or use Accessories for compatible parts.</p>`;
+    $("#modelList").innerHTML = `<p>Open a model and press Accessories to manage compatible items.</p>`;
     return;
   }
 
@@ -1008,38 +989,42 @@ function bindBlogBlockRemovers() {
 }
 
 function renderParts() {
-  const model = modelById(admin.selectedModelId);
-  $("#partPanelTitle").textContent = model ? `${model.name} Accessories` : "Select a model";
-  $("#partCrumb").textContent = model ? `Catalog / Models / ${model.name}` : "Accessories";
-  $("#addPartButton").disabled = !model;
+  const nestedModel = modelById(admin.selectedModelId);
+  const product = nestedModel ? productById(nestedModel.productId) : productById(admin.selectedProductId);
+  const parent = nestedModel || product;
+  $("#partPanelTitle").textContent = parent ? `${parent.name} Accessories` : "Select a model";
+  $("#partCrumb").textContent = parent ? `Catalog / Models / ${parent.name}` : "Accessories";
+  $("#addPartButton").disabled = !parent;
 
-  if (!model) {
+  if (!parent) {
     $("#partList").innerHTML = `<p>Open a model and press Accessories to manage accessories.</p>`;
     return;
   }
 
-  const parts = (admin.db.parts || []).filter(part => part.modelId === model.id);
+  const parts = (admin.db.parts || []).filter(part => nestedModel ? part.modelId === nestedModel.id : part.productId === product.id);
   $("#partList").innerHTML = parts.map(part => renderCard(part, `
     <button class="button secondary mini" data-part-edit="${escapeHtml(part.id)}" type="button">Edit</button>
     <button class="button primary mini" data-part-view="${escapeHtml(part.id)}" type="button">View</button>
     <button class="button secondary mini danger" data-delete="parts" data-id="${escapeHtml(part.id)}" type="button">Delete</button>
-  `, [part.segment || model.segment || "Accessory", ...priceMeta(part)])).join("") || `<p>No accessories added for this model yet.</p>`;
+  `, [part.segment || parent.segment || "Accessory", ...priceMeta(part)])).join("") || `<p>No accessories added for this model yet.</p>`;
 }
 
 function partForm(item = {}) {
-  const model = modelById(admin.selectedModelId) || modelById(item.modelId);
-  if (!model) {
+  const nestedModel = modelById(admin.selectedModelId) || modelById(item.modelId);
+  const product = nestedModel ? productById(nestedModel.productId) : productById(admin.selectedProductId) || productById(item.productId);
+  const parent = nestedModel || product;
+  if (!parent || !product) {
     alert("Please view a model first, then add accessories inside it.");
     return;
   }
-  openModal(item.id ? "Edit Accessory" : `Add Accessory for ${model.name}`, `
+  openModal(item.id ? "Edit Accessory" : `Add Accessory for ${parent.name}`, `
     <form class="admin-form two-col">
       ${hidden("id", item.id || "")}
       ${hidden("modelId", item.modelId || admin.selectedModelId || "")}
-      ${hidden("productId", item.productId || model.productId || "")}
-      ${hidden("categoryId", item.categoryId || model.categoryId || "")}
+      ${hidden("productId", item.productId || product.id || "")}
+      ${hidden("categoryId", item.categoryId || product.categoryId || nestedModel?.categoryId || "")}
       ${field("name", "Accessory Name", item.name || "", "text", "", "required minlength=\"2\"")}
-      ${field("segment", "Segment", item.segment || model.segment || "", "text", "", "required")}
+      ${field("segment", "Segment", item.segment || parent.segment || "", "text", "", "required")}
       ${field("status", "Badge", item.status || "Accessory", "text", "", "required")}
       <label>Accessory Picture<input name="imageFile" type="file" accept="image/*" ${item.image ? "" : "required"}><span class="file-note">${item.image ? "Current picture will stay if you do not upload a new one." : "Required for new accessory."}</span></label>
       <label>Datasheet Upload<input name="datasheetFile" type="file" accept=".pdf,application/pdf"></label>
@@ -1454,8 +1439,8 @@ function bindCatalogActions() {
   $$("[data-product-view]").forEach(button => button.onclick = () => {
     admin.selectedProductId = button.dataset.productView;
     admin.selectedModelId = "";
-    switchPanel("models");
-    renderModels();
+    switchPanel("parts");
+    renderParts();
     bindCatalogActions();
   });
   $$("[data-model-edit]").forEach(button => button.onclick = () => modelForm(modelById(button.dataset.modelEdit)));
@@ -1520,7 +1505,7 @@ function setupEvents() {
   $("#backToSuperCategoriesButton").onclick = () => switchPanel("superCategories");
   $("#backToCategoriesButton").onclick = () => switchPanel("categories");
   $("#backToProductFamiliesButton").onclick = () => switchPanel("products");
-  $("#backToModelsButton").onclick = () => switchPanel("models");
+  $("#backToModelsButton").onclick = () => switchPanel(admin.selectedModelId ? "models" : "products");
   $("#closeAdminModal").onclick = closeModal;
   $("#adminModal").addEventListener("click", event => {
     if (event.target.id === "adminModal") closeModal();

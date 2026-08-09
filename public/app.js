@@ -722,7 +722,6 @@ function allSellableItems() {
   if (!state.content) return [];
   return [
     ...(state.content.products || []).map(item => ({ ...item, cartType: "product", cartLabel: "Model", url: productUrl(item.id) })),
-    ...(state.content.models || []).map(item => ({ ...item, cartType: "model", cartLabel: "Model", url: modelUrl(item.id) })),
     ...(state.content.parts || []).map(item => ({ ...item, cartType: "part", cartLabel: "Accessory", url: partUrl(item.id) }))
   ];
 }
@@ -1343,25 +1342,6 @@ function renderCategories() {
         fileState: { image: Boolean(product.image), files: hasFiles(product), price: Boolean(product.prices?.l1) }
       };
     }),
-    ...(state.content.models || []).map(model => {
-      const parent = localProduct(model.productId);
-      const category = localCategory(model.categoryId || parent?.categoryId);
-      return {
-        kind: "model",
-        type: "Model",
-        title: model.name,
-        summary: model.summary,
-        image: model.image,
-        url: modelUrl(model.id),
-        productId: category?.superCategoryId || "",
-        itemId: model.id,
-        superId: category?.superCategoryId || "",
-        categoryId: model.categoryId || parent?.categoryId || "",
-        modelGroupId: model.productId || "",
-        meta: [parent?.name || category?.name || "Model", model.segment || model.status || "Model"],
-        fileState: { image: Boolean(model.image), files: hasFiles(model), price: Boolean(model.prices?.l1) }
-      };
-    }),
     ...(state.content.parts || []).map(part => {
       const parent = localProduct(part.productId);
       const category = localCategory(part.categoryId || parent?.categoryId);
@@ -1480,36 +1460,20 @@ function renderProducts() {
 }
 
 function modelGroupRows(product) {
-  const models = (state.content.models || []).filter(model => model.productId === product.id);
-  const modelIds = new Set(models.map(model => model.id));
-  const accessories = (state.content.parts || []).filter(part => part.productId === product.id && modelIds.has(part.modelId));
+  const accessories = (state.content.parts || []).filter(part => part.productId === product.id);
   const hasFiles = item => ["datasheet", "manual", "model3d", "cad"].some(field => item[field]);
-  return [
-    ...models.map(model => ({
-      kind: "model",
-      type: "Model",
-      title: model.name,
-      summary: model.summary || stripHtml(model.summaryHtml),
-      image: model.image,
-      url: modelUrl(model.id),
-      meta: [model.segment || product.segment || "Model", model.status || "Available"],
-      specs: model.specs || [],
-      priceItem: model,
-      fileState: { image: Boolean(model.image), files: hasFiles(model), price: Boolean(model.prices?.l1) }
-    })),
-    ...accessories.map(part => ({
-      kind: "part",
-      type: "Accessory",
-      title: part.name,
-      summary: part.summary || stripHtml(part.summaryHtml),
-      image: part.image,
-      url: partUrl(part.id),
-      meta: [part.segment || "Accessory", part.status || "Compatible"],
-      specs: part.specs || [],
-      priceItem: part,
-      fileState: { image: Boolean(part.image), files: hasFiles(part), price: Boolean(part.prices?.l1) }
-    }))
-  ];
+  return accessories.map(part => ({
+    kind: "part",
+    type: "Accessory",
+    title: part.name,
+    summary: part.summary || stripHtml(part.summaryHtml),
+    image: part.image,
+    url: partUrl(part.id),
+    meta: [part.segment || "Accessory", part.status || "Compatible"],
+    specs: part.specs || [],
+    priceItem: part,
+    fileState: { image: Boolean(part.image), files: hasFiles(part), price: Boolean(part.prices?.l1) }
+  }));
 }
 
 function renderModelGroupCatalog(product) {
@@ -1542,8 +1506,8 @@ function renderModelGroupCatalog(product) {
     action: `View ${row.type}`
   })).join("") || `
     <div class="catalog-empty-state">
-      <h3>No models added yet</h3>
-      <p>Accessories will appear here only after they are added under a model in the admin panel.</p>
+      <h3>No accessories added yet</h3>
+      <p>Accessories will appear here after they are added under this model in the admin panel.</p>
     </div>
   `;
 }
@@ -2523,11 +2487,10 @@ function renderProductDetail() {
     ${renderProductStory(product)}
     ${catalogRows.length ? `
     <section class="section">
-      <div class="section-head"><div><p class="eyebrow">Accessories</p><h2>Compatible accessories and related items</h2></div></div>
+      <div class="section-head"><div><p class="eyebrow">Accessories</p><h2>Compatible accessories</h2></div></div>
       <button class="filter-toggle" type="button" data-filter-toggle="modelGroupFilterPanel" aria-expanded="false">Show Search & Filters</button>
       <div id="modelGroupFilterPanel" class="catalog-toolbar model-group-toolbar">
-        <label>Search<input id="modelGroupSearch" type="search" placeholder="Search models, accessories, specs"></label>
-        <label>Show<select id="modelGroupScope"><option value="">All Related Items</option><option value="model">Related Models</option><option value="part">Accessories</option></select></label>
+        <label>Search<input id="modelGroupSearch" type="search" placeholder="Search accessories, specs"></label>
         <label>Series / Badge<select id="modelGroupStatus"><option value="">Any Series or Badge</option></select></label>
         <label>Filter<select id="modelGroupFile"><option value="">Any</option><option value="with-image">With Picture</option><option value="with-files">With Files</option><option value="with-price">With Price</option></select></label>
         <p id="modelGroupStats" class="catalog-result-count"></p>
